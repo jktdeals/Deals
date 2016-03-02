@@ -2,19 +2,22 @@
 
 **Deals** is an android app that allows a user to explore and enter/share deals near their current location, both crowdsourced deals and deals entered by participating businesses. 
 
-## User Stories
+## Preliminary User Stories
 
 * [ ] User can register as a shopper or a store
 * [ ] User can sign into existing account
 * [ ] User can create deals
 * [ ] User can manage self-created deals
+  * [ ] User can list all of their created deals and their statuses
+  * [ ] User can edit or delete deals
+* [ ] User can see all deals near them displayed by location on a map
+* [ ] User can see all deals displayed in a list format
+* [ ] Floating notifications widget (like Facebook Messenger) alerts user to deals as they are added or user location brings user into proximity with different deals
+* [ ] User can configure notifications
 
+## Wireframes
 
-## Video Walkthrough 
-
-Here's a walkthrough of implemented user stories:
-
-<img src='put gif url here' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+Here are [some preliminary wireframes for our app](https://jktdeals.mybalsamiq.com/projects/jktdeals/grid).
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
