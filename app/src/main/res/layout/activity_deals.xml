@@ -5,14 +5,22 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    // TODO: This is for demo of ParseInterface only please remove it
+
+    <TextView
+        android:id="@+id/texty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!" />
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:tabTextColor="#B3FFFFFF"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@android:color/white"
-        app:tabMode="scrollable" />
+        app:tabTextColor="#B3FFFFFF" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vpPager"
