@@ -1,24 +1,35 @@
 package com.jktdeals.deals.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.jktdeals.deals.R;
+import com.jktdeals.deals.models.DealModel;
+import com.jktdeals.deals.parse.ParseInterface;
 
-public class AlertsFragment extends Fragment {
+import java.util.ArrayList;
+
+public class AlertsFragment extends DealsListFragment {
+    private ParseInterface pi;
+    ArrayList<DealModel> dealsAlerts;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Initialize Parse
+        pi = ParseInterface.getInstance(getActivity());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_alerts, container, false);
-        return view;
+    // getDeals
+    public void getDeals() {
+        final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
+            @Override
+            public void notifyLoad(int noOfItems) {
+                addAll(dealsAlerts);
+            }
+        };
+
+        dealsAlerts = new ArrayList<>();
+        pi.getDeals(dealsAlerts, nfy);
     }
+
 }

@@ -1,24 +1,48 @@
 package com.jktdeals.deals.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.models.DealModel;
+import com.jktdeals.deals.parse.ParseInterface;
 
-public class NearMeFragment extends Fragment {
+import java.util.ArrayList;
+
+public class NearMeFragment extends DealsListFragment {
+    private ParseInterface pi;
+    ArrayList<DealModel> dealsNearMe;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Initialize Parse
+        pi = ParseInterface.getInstance(getActivity());
     }
 
+    // add map to layout
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_near_me, container, false);
-        return view;
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frmMap);
+        View map =  ((LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.item_map, null, false);
+        frameLayout.addView(map);
     }
+
+    // getDeals
+    public void getDeals() {
+        final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
+            @Override
+            public void notifyLoad(int noOfItems) {
+                addAll(dealsNearMe);
+            }
+        };
+
+        dealsNearMe = new ArrayList<>();
+        pi.getDeals(dealsNearMe, nfy);
+    }
+
 }
