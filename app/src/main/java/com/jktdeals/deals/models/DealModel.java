@@ -2,8 +2,12 @@ package com.jktdeals.deals.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
+import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import org.json.JSONArray;
 
 /**
  * Created by kartikkulkarni on 3/4/16.
@@ -13,7 +17,6 @@ public class DealModel extends ParseObject {
 
     //User Related
     public static final String USER_ID_KEY = "userId";
-
     // Deal Related
     public static final String DEAL_VALUE = "dealValue";
     public static final String DEAL_ABSTRACT = "dealAbstract";
@@ -21,33 +24,28 @@ public class DealModel extends ParseObject {
     public static final String DEAL_RESTRICTIONS = "dealRestrictions";
     public static final String DEAL_EXPIRY = "dealExpiry";
     public static final String DEAL_PIC = "dealPic";
+    public static final String LAT_LANG = "latLang";
+    //Store Related
+    public static final String STORE_NAME = "storeName";
 
 
     //Location related
-
-    public static final String LAT_LANG = "latLang";
-
-
-    //Store Related
-    public static final String STORE_NAME = "storeName";
     public static final String STORE_ABSTRACT = "storeAbstract";
     public static final String STORE_DESCRIPTION = "storeDescription";
-
     public static final String STORE_LOGO = "storeLogo";
     public static final String STORE_PIC = "storePic";
-
     //Likes
     public static final String LIKES_COUNT = "likes";
+    // Category Related
+    public static String CATEGORIES = "categories";
 
-
-    public String getUserIdKey() {
-        return getString(USER_ID_KEY);
+    public ParseUser getUser() {
+        return getParseUser(USER_ID_KEY);
     }
 
-    public void setUserId(String userId) {
-        put(USER_ID_KEY, userId);
+    public void setUser(ParseUser parseUser) {
+        put(USER_ID_KEY, parseUser);
     }
-
 
     public String getDealValue() {
         return getString(DEAL_VALUE);
@@ -57,7 +55,6 @@ public class DealModel extends ParseObject {
     public void setDealValue(String dealValue) {
         put(DEAL_VALUE, dealValue);
     }
-
 
     public String getDealAbstract() {
         return getString(DEAL_ABSTRACT);
@@ -92,13 +89,13 @@ public class DealModel extends ParseObject {
         put(DEAL_EXPIRY, dealExpiry);
     }
 
-    public String getDealPic() {
-        return getString(DEAL_PIC);
+    public ParseFile getDealPic() {
+        return getParseFile(DEAL_PIC);
 
     }
 
-    public void setDealPic(String dealPic) {
-        put(DEAL_PIC, dealPic);
+    public void setDealPic(String dealPicName, ParseFile parseFile) {
+        put(DEAL_PIC, parseFile);
     }
 
     public LatLng getLatLang() {
@@ -112,7 +109,6 @@ public class DealModel extends ParseObject {
         ParseGeoPoint geoPoint = new ParseGeoPoint(latLang.latitude, latLang.longitude);
         put(LAT_LANG, geoPoint);
     }
-
 
     public String getStoreAbstract() {
         return getString(STORE_ABSTRACT);
@@ -148,7 +144,6 @@ public class DealModel extends ParseObject {
         put(STORE_PIC, storePic);
     }
 
-
     public String getStoreLogo() {
         return getString(STORE_LOGO);
 
@@ -156,6 +151,20 @@ public class DealModel extends ParseObject {
 
     public void setStoreLogo(String storeLogo) {
         put(STORE_LOGO, storeLogo);
+    }
+
+    public void setCategory(Category category) {
+        JSONArray currentCategories = getCategories();
+        if (currentCategories == null) {
+            currentCategories = new JSONArray();
+        }
+        currentCategories.put(category);
+        put(CATEGORIES, currentCategories);
+    }
+
+    public JSONArray getCategories() {
+        return getJSONArray(CATEGORIES);
+
     }
 
     public int getLikesCount() {
@@ -166,6 +175,11 @@ public class DealModel extends ParseObject {
     public int incrementLikes() {
         put(LIKES_COUNT, getInt(LIKES_COUNT) + 1);
         return getInt(LIKES_COUNT);
+
+    }
+
+    public enum Category {
+        Cafe, Bar, Restaurant, Hotel, Beauty, Entertainment, Pets, Activities, Massage, Apparell, Groceries, Local_Services, Home_Services, Health
 
     }
 

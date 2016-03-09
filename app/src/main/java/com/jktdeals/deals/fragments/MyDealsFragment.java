@@ -8,8 +8,8 @@ import com.jktdeals.deals.parse.ParseInterface;
 import java.util.ArrayList;
 
 public class MyDealsFragment extends DealsListFragment {
-    private ParseInterface pi;
     ArrayList<DealModel> dealsMy;
+    private ParseInterface pi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class MyDealsFragment extends DealsListFragment {
         };
 
         dealsMy = new ArrayList<>();
-        pi.getDeals(dealsMy, nfy);
+        pi.getMyDeals(dealsMy, nfy);
     }
 
 }
