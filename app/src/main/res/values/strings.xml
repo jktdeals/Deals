@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Deals</string>
+    <string-array name="deals_category">
+        <item>Restaurant</item>
+        <item>Drinks</item>
+        <item>Electronics</item>
+        <item>Automobiles</item>
+        <item>Service</item>
+        <item>Yard Sale</item>
+        <item>Movies</item>
+        <item>Concert</item>
+        <item>Entertainment</item>
+    </string-array>
+    <string-array name="photo_action">
+        <item>Take Picture</item>
+        <item>Load Picture</item>
+    </string-array>
 </resources>
