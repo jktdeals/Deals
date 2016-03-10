@@ -32,6 +32,18 @@ dependencies {
     compile 'com.parse:parse-android:1.13.0'
     compile 'com.parse:parseinterceptors:0.0.2'
     // for logging API calls to LogCat
+    compile 'com.parse:parseinterceptors:0.0.2' // for logging API calls to LogCat
+
+    // Module dependency on ParseUI libraries sources
+    compile 'com.parse:parseui-login-android:0.0.1'
+    compile 'com.parse:parseui-widget-android:0.0.1'
+
+    // Uncomment if using Facebook or Twitter Login (optional Maven dependency)
+    //compile 'com.facebook.android:facebook-android-sdk:4.6.0'
+    //compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
+    // compile 'com.parse:parsetwitterutils-android:1.10.3'
+
+
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.android.support:recyclerview-v7:23.2.0'

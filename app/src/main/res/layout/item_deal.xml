@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:padding="8dp"
+    android:layout_marginBottom="8dp" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deal name"
+        android:id="@+id/tvDealName"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deal description"
+        android:id="@+id/tvDealDescription"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tvDealName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deal restrictions"
+        android:id="@+id/tvDealRestrictions"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:layout_below="@+id/tvDealDescription" />
+
+</RelativeLayout>
