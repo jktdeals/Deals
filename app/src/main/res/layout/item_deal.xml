@@ -2,8 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:padding="8dp"
-    android:layout_marginBottom="8dp" >
+    android:padding="10dp"
+    android:layout_marginBottom="10dp" >
+
+    <ImageView
+        android:id="@+id/ivDealImage"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="120dp"
+        android:layout_height="90dp"
+        android:padding="3dp"
+        android:background="@drawable/frame"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp"
+        android:scaleType="centerCrop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Store Name"
+        android:textSize="14sp"
+        android:id="@+id/tvStoreName"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@+id/ivDealImage"
+        android:layout_alignParentTop="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,9 +34,31 @@
         android:text="Deal name"
         android:id="@+id/tvDealName"
         android:textStyle="bold"
+        android:textSize="16sp"
         android:textColor="@color/colorPrimary"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginBottom="5dp"
+        android:layout_toRightOf="@+id/ivDealImage"
+        android:layout_below="@id/tvStoreName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.2 mi"
+        android:id="@+id/tvDealDistance"
+        android:textSize="12sp"
+        android:layout_toRightOf="@+id/ivDealImage"
+        android:layout_alignBottom="@id/ivDealImage" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Expiration"
+        android:id="@+id/tvDealExpiration"
+        android:textSize="12sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/ivDealImage" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +66,8 @@
         android:text="Deal description"
         android:id="@+id/tvDealDescription"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvDealName" />
+        android:visibility="gone"
+        android:layout_below="@+id/ivDealImage" />
 
     <TextView
         android:layout_width="wrap_content"

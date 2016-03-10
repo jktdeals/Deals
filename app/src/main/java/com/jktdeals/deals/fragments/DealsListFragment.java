@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
@@ -44,15 +45,21 @@ public abstract class DealsListFragment extends Fragment {
         adapter.setOnItemClickListener(new DealsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
                 TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
-                if (tvDealRestrictions.getVisibility() == View.GONE) {
+                if (tvDealDescription.getVisibility() == View.GONE) {
+                    tvDealDescription.setVisibility(View.VISIBLE);
                     tvDealRestrictions.setVisibility(View.VISIBLE);
                 } else {
+                    tvDealDescription.setVisibility(View.GONE);
                     tvDealRestrictions.setVisibility(View.GONE);
                 }
             }
         });
 
+        // display progress indicator while retrieving deals
+        ProgressBar pb = (ProgressBar) view.findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.VISIBLE);
         getDeals();
         return view;
     }
@@ -64,5 +71,9 @@ public abstract class DealsListFragment extends Fragment {
         final int previousDealsLength = deals.size();
         deals.addAll(initialOrOlderDeals);
         adapter.notifyItemRangeInserted(previousDealsLength, initialOrOlderDeals.size());
+
+        // get rid of progress indicator after retrieving deals
+        ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
+        pb.setVisibility(ProgressBar.GONE);
     }
 }
