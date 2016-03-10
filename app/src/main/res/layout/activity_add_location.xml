@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.jktdeals.deals.models.AddLocationActivity">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/etAutoComplete"
+        android:drawableLeft="@android:drawable/ic_search_category_default"
+        android:hint="Search Place"
+        android:singleLine="true"
+        android:background="@drawable/search_place_write_text"/>
+
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/etAutoComplete"
+        android:layout_marginTop="10dp"
+        android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>
