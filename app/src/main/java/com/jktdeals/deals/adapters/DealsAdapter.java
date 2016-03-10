@@ -40,14 +40,18 @@ public class DealsAdapter extends
     public class ViewHolder extends RecyclerView.ViewHolder {
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
+        public TextView tvStoreName;
         public TextView tvDealName;
+        public TextView tvDealExpiration;
         public TextView tvDealDescription;
         public TextView tvDealRestrictions;
         private Context context;
 
         public ViewHolder(final View itemView) {
             super(itemView);
+            this.tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
             this.tvDealName = (TextView) itemView.findViewById(R.id.tvDealName);
+            this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
             this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
             this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
             // Setup the click listener
@@ -91,12 +95,16 @@ public class DealsAdapter extends
         DealModel deal = mDeals.get(position);
 
         // Set item views based on the data model
+        TextView tvStoreName = viewHolder.tvStoreName;
         TextView tvDealName = viewHolder.tvDealName;
+        TextView tvDealExpiration = viewHolder.tvDealExpiration;
         TextView tvDealDescription = viewHolder.tvDealDescription;
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
+        tvStoreName.setText(deal.getStoreName());
         tvDealName.setText(deal.getDealAbstract());
+        tvDealExpiration.setText("Expires: " + deal.getDealExpiry());
         tvDealDescription.setText(deal.getDealDescription());
-        tvDealRestrictions.setText(deal.getDealRestrictions());
+        tvDealRestrictions.setText("Restrictions: " + deal.getDealRestrictions());
     }
 
     // Return the total count of items

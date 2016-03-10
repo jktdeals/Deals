@@ -1,11 +1,15 @@
 package com.jktdeals.deals.activities;
 
 import android.content.Intent;
-import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,7 +23,10 @@ import com.jktdeals.deals.parse.ParseInterface;
 import java.util.ArrayList;
 
 public class DealsActivity extends AppCompatActivity {
-
+    private DrawerLayout mDrawer;
+    private NavigationView nvDrawer;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle drawerToggle;
     private ParseInterface pi;
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
@@ -30,8 +37,18 @@ public class DealsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deals);
 
+        // Set a Toolbar to replace the ActionBar.
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         // get rid of actionbar drop shadow
         getSupportActionBar().setElevation(0);
+
+        // Find our drawer view
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle = setupDrawerToggle();
+        nvDrawer = (NavigationView) findViewById(R.id.nvView);
+        // Setup drawer view
+        setupDrawerContent(nvDrawer);
 
         // Get the ViewPager and set its PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.vpPager);
@@ -50,8 +67,15 @@ public class DealsActivity extends AppCompatActivity {
 
         // Allocate Deal List
         dealModelArrayList = new ArrayList<>();
+    }
 
-
+    // `onPostCreate` called when activity start-up is complete after `onStart()`
+    // NOTE! Make sure to override the method with only a single `Bundle` argument
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        drawerToggle.syncState();
     }
 
     private void createSampleDeals() {
@@ -107,6 +131,9 @@ public class DealsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         switch (item.getItemId()){
             case R.id.action_create_deal:
                 Intent intent = new Intent(DealsActivity.this, CreatDealActivity.class);
@@ -117,6 +144,38 @@ public class DealsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private ActionBarDrawerToggle setupDrawerToggle() {
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+    }
+
+    private void setupDrawerContent(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
+    }
+
+    public void selectDrawerItem(MenuItem menuItem) {
+        switch(menuItem.getItemId()) {
+            case R.id.nav_settings:
+                break;
+            case R.id.nav_logout:
+                break;
+            default:
+        }
+        mDrawer.closeDrawers();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggles
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
 
 }
 
