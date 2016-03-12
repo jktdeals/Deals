@@ -19,6 +19,7 @@ import com.jktdeals.deals.adapters.DealsFragmentPagerAdapter;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
+import com.parse.ParseFacebookUtils;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,15 @@ public class DealsActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == ParseInterface.RESULT_CODE_FACEBOOK) {
+            ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+        }
+
+        //ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+    }
     private void createSampleDeals() {
 
 

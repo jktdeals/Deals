@@ -15,8 +15,10 @@ import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
@@ -34,6 +36,8 @@ import java.util.List;
  */
 public class ParseInterface {
 
+    public static int RESULT_CODE_FACEBOOK = 27;
+    public static int RESULT_CODE_LOGIN = 28;
     private static ParseInterface singleton = null;
     private String TAG = "Parse";
     private DealsActivity context;
@@ -69,13 +73,16 @@ public class ParseInterface {
                 .addNetworkInterceptor(new ParseLogInterceptor())
                 .server("https://crowdeal.herokuapp.com/parse/").build());
 
+        ParseFacebookUtils.initialize(context, RESULT_CODE_FACEBOOK);
+
 
         // User login
-        //ParseUser.logOut();
+        ParseUser.logOut();
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
         } else { // If not logged in, login as a new anonymous user
             loginNonAnonymous();
+            //loginFBLink(new ParseUser());
         }
 
     }
@@ -113,6 +120,10 @@ public class ParseInterface {
 
     public void publishDeal(DealModel dealObject) {
 
+        ParseACL acl = new ParseACL();
+        acl.setPublicReadAccess(true);
+        dealObject.setACL(acl);
+
         dealObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -130,7 +141,42 @@ public class ParseInterface {
     private void loginNonAnonymous() {
 
         ParseLoginBuilder builder = new ParseLoginBuilder(context);
-        context.startActivityForResult(builder.build(), 7);
+        builder.setFacebookLoginEnabled(true);
+        context.startActivityForResult(builder.build(), RESULT_CODE_LOGIN);
+    }
+
+    private void loginFB() {
+
+
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(context, null, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                } else if (user.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                } else {
+                    Log.d("MyApp", "User logged in through Facebook!");
+                }
+            }
+        });
+    }
+
+    private void loginFBLink(ParseUser user) {
+
+
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(context, null, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException err) {
+                if (user == null) {
+                    Log.d("MyApp", "Uh oh. The user cancelled the Facebook login.");
+                } else if (user.isNew()) {
+                    Log.d("MyApp", "User signed up and logged in through Facebook!");
+                } else {
+                    Log.d("MyApp", "User logged in through Facebook!");
+                }
+            }
+        });
     }
 
     // Create an anonymous user using ParseAnonymousUtils and set sUserId
