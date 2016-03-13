@@ -1,81 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="#FFFFFF"
-    android:padding="16dp"
-    android:layout_marginBottom="10dp" >
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp" >
 
-    <ImageView
-        android:id="@+id/ivDealImage"
-        android:src="@drawable/bake_sale"
-        android:layout_width="120dp"
-        android:layout_height="90dp"
-        android:padding="4dp"
-        android:background="@drawable/frame"
-        android:layout_marginRight="10dp"
-        android:scaleType="centerCrop"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Store Name"
-        android:textSize="14sp"
-        android:id="@+id/tvStoreName"
-        android:layout_marginBottom="5dp"
-        android:layout_toRightOf="@+id/ivDealImage"
-        android:layout_alignParentTop="true" />
+        android:layout_marginBottom="10dp"
+        android:background="#FFFFFF"
+        android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deal name"
-        android:id="@+id/tvDealName"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@color/colorPrimary"
-        android:maxLines="2"
-        android:ellipsize="end"
-        android:layout_marginBottom="5dp"
-        android:layout_toRightOf="@+id/ivDealImage"
-        android:layout_below="@id/tvStoreName" />
+        <ImageView
+            android:id="@+id/ivDealImage"
+            android:layout_width="120dp"
+            android:layout_height="90dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/frame"
+            android:padding="4dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bake_sale" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0.2 mi"
-        android:id="@+id/tvDealDistance"
-        android:textSize="12sp"
-        android:layout_toRightOf="@+id/ivDealImage"
-        android:layout_alignBottom="@id/ivDealImage" />
+        <TextView
+            android:id="@+id/tvStoreName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@+id/ivDealImage"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Store Name"
+            android:textSize="14sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Expiration"
-        android:id="@+id/tvDealExpiration"
-        android:textSize="12sp"
-        android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/ivDealImage" />
+        <TextView
+            android:id="@+id/tvDealValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/colorAccent"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingBottom="1dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="Deal value"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deal description"
-        android:id="@+id/tvDealDescription"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        android:layout_below="@+id/ivDealImage" />
+        <TextView
+            android:id="@+id/tvDealName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvStoreName"
+            android:layout_marginBottom="5dp"
+            android:layout_toRightOf="@+id/ivDealImage"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Deal name"
+            android:textColor="@color/colorPrimary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Deal restrictions"
-        android:id="@+id/tvDealRestrictions"
-        android:layout_alignParentLeft="true"
-        android:visibility="gone"
-        android:layout_below="@+id/tvDealDescription" />
+        <TextView
+            android:id="@+id/tvDealDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ivDealImage"
+            android:layout_toRightOf="@+id/ivDealImage"
+            android:text="0.2 mi"
+            android:textSize="12sp" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tvDealExpiration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/ivDealImage"
+            android:layout_alignParentRight="true"
+            android:text="Expiration"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvDealDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ivDealImage"
+            android:layout_marginTop="10dp"
+            android:text="Deal description"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvDealRestrictions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvDealDescription"
+            android:text="Deal restrictions"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

@@ -47,6 +47,7 @@ public class DealsAdapter extends
         // Your holder should contain a member variable
         // for any view that will be set as you render a row
         public TextView tvStoreName;
+        public TextView tvDealValue;
         public TextView tvDealName;
         public TextView tvDealExpiration;
         public TextView tvDealDescription;
@@ -56,6 +57,7 @@ public class DealsAdapter extends
         public ViewHolder(final View itemView) {
             super(itemView);
             this.tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
+            this.tvDealValue = (TextView) itemView.findViewById(R.id.tvDealValue);
             this.tvDealName = (TextView) itemView.findViewById(R.id.tvDealName);
             this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
             this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
@@ -102,11 +104,18 @@ public class DealsAdapter extends
 
         // Set item views based on the data model
         TextView tvStoreName = viewHolder.tvStoreName;
+        TextView tvDealValue = viewHolder.tvDealValue;
         TextView tvDealName = viewHolder.tvDealName;
         TextView tvDealExpiration = viewHolder.tvDealExpiration;
         TextView tvDealDescription = viewHolder.tvDealDescription;
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
         tvStoreName.setText(deal.getStoreName());
+        String tempValue = deal.getDealValue();
+//        if (tempValue == null) {
+//            tvDealValue.setText("null");
+//        } else {
+            tvDealValue.setText(tempValue + " off");
+//        }
         tvDealName.setText(deal.getDealAbstract());
         String tempDate = deal.getDealExpiry();
         Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d\\d$");

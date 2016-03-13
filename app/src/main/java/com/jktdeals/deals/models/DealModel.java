@@ -182,7 +182,7 @@ public class DealModel extends ParseObject {
     }
 
     public enum Category {
-        Cafe, Bar, Restaurant, Hotel, Beauty, Entertainment, Pets, Activities, Massage, Apparell, Groceries, Local_Services, Home_Services, Health
+        Cafe, Bar, Restaurant, Hotel, Beauty, Entertainment, Pets, Activities, Massage, Apparel, Groceries, Local_Services, Home_Services, Health
 
     }
 
