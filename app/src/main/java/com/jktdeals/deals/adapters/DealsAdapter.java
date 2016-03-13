@@ -10,7 +10,13 @@ import android.widget.TextView;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.models.DealModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 // based on http://guides.codepath.com/android/Using-the-RecyclerView
 
@@ -102,7 +108,35 @@ public class DealsAdapter extends
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
         tvStoreName.setText(deal.getStoreName());
         tvDealName.setText(deal.getDealAbstract());
-        tvDealExpiration.setText("Expires: " + deal.getDealExpiry());
+        String tempDate = deal.getDealExpiry();
+        Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d\\d$");
+        Matcher m = p.matcher(tempDate);
+        if (m.matches()) {
+            // if the expiration date uses the yy/mm/dd format from Jose's
+            // CreatDealActivity, parse it
+            Date date;
+            long dateMillis = 0;
+            date = new Date(dateMillis);
+            String yymmddFormat = "yy/MM/DD";
+            SimpleDateFormat sf = new SimpleDateFormat(yymmddFormat, Locale.ENGLISH);
+            sf.setLenient(true);
+
+            try {
+                dateMillis = sf.parse(tempDate).getTime();
+                date = new Date(dateMillis);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            String moreFriendlyDateFormat = "MMM d, yyyy";
+            SimpleDateFormat mfdf = new SimpleDateFormat(moreFriendlyDateFormat, Locale.ENGLISH);
+            mfdf.setLenient(true);
+
+            tvDealExpiration.setText("Expires: " + mfdf.format(date));
+        } else {
+            // otherwise just put whatever value is there
+            tvDealExpiration.setText("Expires: " + tempDate);
+        }
         tvDealDescription.setText(deal.getDealDescription());
         tvDealRestrictions.setText("Restrictions: " + deal.getDealRestrictions());
     }
