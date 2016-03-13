@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="#FFFFFF"
-    android:padding="10dp"
+    android:padding="16dp"
     android:layout_marginBottom="10dp" >
 
     <ImageView
         android:id="@+id/ivDealImage"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/bake_sale"
         android:layout_width="120dp"
         android:layout_height="90dp"
-        android:padding="3dp"
+        android:padding="4dp"
         android:background="@drawable/frame"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginRight="10dp"
         android:scaleType="centerCrop"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
@@ -66,6 +65,7 @@
         android:text="Deal description"
         android:id="@+id/tvDealDescription"
         android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
         android:visibility="gone"
         android:layout_below="@+id/ivDealImage" />
 
