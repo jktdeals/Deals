@@ -8,8 +8,8 @@ import com.jktdeals.deals.parse.ParseInterface;
 import java.util.ArrayList;
 
 public class AlertsFragment extends DealsListFragment {
-    private ParseInterface pi;
     ArrayList<DealModel> dealsAlerts;
+    private ParseInterface pi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,7 @@ public class AlertsFragment extends DealsListFragment {
         final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
             @Override
             public void notifyLoad(int noOfItems) {
-                addAll(dealsAlerts);
+                addAll(dealsAlerts, false);
             }
         };
 

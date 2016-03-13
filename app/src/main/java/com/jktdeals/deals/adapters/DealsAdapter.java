@@ -2,13 +2,17 @@ package com.jktdeals.deals.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.models.DealModel;
+import com.jktdeals.deals.parse.ParseInterface;
+import com.parse.ParseImageView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,61 +29,23 @@ import java.util.regex.Pattern;
 public class DealsAdapter extends
         RecyclerView.Adapter<DealsAdapter.ViewHolder> {
 
+    String TAG = "DealsAdapter";
     /*****
      * Creating OnItemClickListener
      *****/
     // Define listener member variable
     private OnItemClickListener listener;
-
-    // Define the listener interface
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int position);
-    }
-
-    // Define the method that allows the parent activity or fragment to define the listener
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-
-    // Provide a direct reference to each of the views within a data item
-    // Used to cache the views within the item layout for fast access
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        // Your holder should contain a member variable
-        // for any view that will be set as you render a row
-        public TextView tvStoreName;
-        public TextView tvDealValue;
-        public TextView tvDealName;
-        public TextView tvDealExpiration;
-        public TextView tvDealDescription;
-        public TextView tvDealRestrictions;
-        private Context context;
-
-        public ViewHolder(final View itemView) {
-            super(itemView);
-            this.tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
-            this.tvDealValue = (TextView) itemView.findViewById(R.id.tvDealValue);
-            this.tvDealName = (TextView) itemView.findViewById(R.id.tvDealName);
-            this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
-            this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
-            this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
-            // Setup the click listener
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Triggers click upwards to the adapter on click
-                    if (listener != null)
-                        listener.onItemClick(itemView, getLayoutPosition());
-                }
-            });
-        }
-    }
-
     // Store a member variable for the tweets
     private List<DealModel> mDeals;
 
     // Pass in the tweet array into the constructor
     public DealsAdapter(List<DealModel> deals) {
         mDeals = deals;
+    }
+
+    // Define the method that allows the parent activity or fragment to define the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     // Usually involves inflating a layout from XML and returning the holder
@@ -101,6 +67,9 @@ public class DealsAdapter extends
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         // Get the data model based on position
         DealModel deal = mDeals.get(position);
+        Log.d(TAG, "onBindViewHolder position: " + position);
+        Log.d(TAG, "onBindViewHolder getItemCount: " + mDeals.size());
+
 
         // Set item views based on the data model
         TextView tvStoreName = viewHolder.tvStoreName;
@@ -109,12 +78,14 @@ public class DealsAdapter extends
         TextView tvDealExpiration = viewHolder.tvDealExpiration;
         TextView tvDealDescription = viewHolder.tvDealDescription;
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
+        ImageView tvDealImage = viewHolder.tvDealImage;
+
         tvStoreName.setText(deal.getStoreName());
         String tempValue = deal.getDealValue();
 //        if (tempValue == null) {
 //            tvDealValue.setText("null");
 //        } else {
-            tvDealValue.setText(tempValue + " off");
+        tvDealValue.setText(tempValue + " off");
 //        }
         tvDealName.setText(deal.getDealAbstract());
         String tempDate = deal.getDealExpiry();
@@ -148,12 +119,61 @@ public class DealsAdapter extends
         }
         tvDealDescription.setText(deal.getDealDescription());
         tvDealRestrictions.setText("Restrictions: " + deal.getDealRestrictions());
+
+        if (deal.getDealPic() != null) {
+            ParseInterface.populateImageView(tvDealImage, deal.getDealPic());
+            //ParseInterface.populateImageView(tvDealImage,new ParseFile(R.mipmap.ic_launcher));
+        } else {
+            tvDealImage.setImageResource(R.mipmap.ic_launcher);
+
+        }
     }
 
     // Return the total count of items
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: " + mDeals.size());
         return mDeals.size();
+    }
+
+    // Define the listener interface
+    public interface OnItemClickListener {
+        void onItemClick(View itemView, int position);
+    }
+
+    // Provide a direct reference to each of the views within a data item
+    // Used to cache the views within the item layout for fast access
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        // Your holder should contain a member variable
+        // for any view that will be set as you render a row
+        public TextView tvStoreName;
+        public TextView tvDealValue;
+        public TextView tvDealName;
+        public TextView tvDealExpiration;
+        public TextView tvDealDescription;
+        public TextView tvDealRestrictions;
+        private Context context;
+        private ParseImageView tvDealImage;
+
+        public ViewHolder(final View itemView) {
+            super(itemView);
+            this.tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
+            this.tvDealValue = (TextView) itemView.findViewById(R.id.tvDealValue);
+            this.tvDealName = (TextView) itemView.findViewById(R.id.tvDealName);
+            this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
+            this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
+            this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
+            this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
+            // Setup the click listener
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the adapter on click
+                    if (listener != null)
+                        listener.onItemClick(itemView, getLayoutPosition());
+                }
+            });
+        }
     }
 
 }

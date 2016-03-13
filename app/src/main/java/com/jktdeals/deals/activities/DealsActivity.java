@@ -85,6 +85,7 @@ public class DealsActivity extends AppCompatActivity {
         if (resultCode == ParseInterface.RESULT_CODE_FACEBOOK) {
             ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
         }
+        //createSampleDeals();
 
         //ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }

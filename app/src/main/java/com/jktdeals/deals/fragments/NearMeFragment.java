@@ -13,14 +13,15 @@ import com.jktdeals.deals.parse.ParseInterface;
 import java.util.ArrayList;
 
 public class NearMeFragment extends DealsListFragment {
-    private ParseInterface pi;
     ArrayList<DealModel> dealsNearMe;
+    private ParseInterface pi;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Initialize Parse
         pi = ParseInterface.getInstance(getActivity());
+        dealsNearMe = new ArrayList<>();
     }
 
     // add map to layout
@@ -37,11 +38,11 @@ public class NearMeFragment extends DealsListFragment {
         final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
             @Override
             public void notifyLoad(int noOfItems) {
-                addAll(dealsNearMe);
+                addAll(dealsNearMe, false);
             }
         };
 
-        dealsNearMe = new ArrayList<>();
+
         pi.getDeals(dealsNearMe, nfy);
     }
 

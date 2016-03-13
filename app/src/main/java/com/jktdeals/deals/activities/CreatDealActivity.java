@@ -35,21 +35,16 @@ import java.util.Date;
 
 public class CreatDealActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener{
 
-    public final String APP_TAG = "MyCustomApp";
     public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
-    public String photoFileName = "photo.jpg";
-
+    public static final int CANCEL_CODE = 9;
     private static final int TAKE_PHOTO_CODE = 1;
     private static final int PICK_PHOTO_CODE = 2;
     private static final int CROP_PHOTO_CODE = 3;
     private static final int POST_PHOTO_CODE = 4;
-
-    private Uri photoUri;
-    private Bitmap photoBitmap;
-
+    public final String APP_TAG = "MyCustomApp";
+    public String photoFileName = "photo.jpg";
     ParseInterface client;
     GPSHelper gpsHelper;
-
     EditText etDealName;
     EditText etDealValue;
     EditText etDealRestrictions;
@@ -58,6 +53,8 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
     Spinner spDealCategory;
     Date expirationDate;
+    private Uri photoUri;
+    private Bitmap photoBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +68,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
         client = ParseInterface.getInstance(this);
         gpsHelper = new GPSHelper(getApplicationContext());
+        photoBitmap = null;
 
         etDealName = (EditText) findViewById(R.id.etDealName);
         etDealValue = (EditText) findViewById(R.id.etDealValue);
@@ -105,6 +103,24 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
             public void onClick(View arg0) {
                 // TODO Auto-generated method stub
                 ad.show();
+            }
+        });
+
+        final Button btn1 = (Button) findViewById(R.id.btPostDeal);
+        btn1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                onPostDeal();
+            }
+        });
+
+        final Button btn2 = (Button) findViewById(R.id.btCancelDeal);
+        btn2.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                onCancel();
             }
         });
 
@@ -178,7 +194,15 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         this.expirationDate = c.getTime();
     }
 
-    public void onPostDeal(View view) {
+    public void onCancel () {
+
+        Intent cancelIntent = new Intent(this, DealsActivity.class);
+        startActivity(cancelIntent);
+
+
+    }
+
+    public void onPostDeal() {
 
         DealModel newDeal = new DealModel();
         newDeal.setDealAbstract(etDealName.getText().toString());
@@ -187,6 +211,8 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealRestrictions(etDealRestrictions.getText().toString());
         newDeal.setDealExpiry(tvExpirationDateDisplay.getText().toString());
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic
+        if (photoBitmap != null) client.updateDealImage(newDeal,"dealpic",photoBitmap);
+
         if(gpsHelper.isGPSenabled()){
             gpsHelper.getMyLocation();
 
@@ -200,6 +226,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         catch(Exception ex){
             Toast.makeText(this, "failed to post deal", Toast.LENGTH_SHORT).show();
         }
+        onCancel();
     }
 
     public Uri getPhotoFileUri(String fileName) {

@@ -23,7 +23,7 @@ public class DealModel extends ParseObject {
     public static final String DEAL_DESCRIPTION = "dealDescription";
     public static final String DEAL_RESTRICTIONS = "dealRestrictions";
     public static final String DEAL_EXPIRY = "dealExpiry";
-    public static final String DEAL_PIC = "dealPic";
+    public static final String DEAL_PIC = "dealPic1";
 
     //Location related
     public static final String LAT_LANG = "latLang";

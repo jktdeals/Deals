@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public abstract class DealsListFragment extends Fragment {
     RecyclerView rvDeals;
     ArrayList<DealModel> deals;
     DealsAdapter adapter;
+    String TAG = "DealsList";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,10 +69,21 @@ public abstract class DealsListFragment extends Fragment {
     // Abstract methods to be overridden by fragments extending them
     protected abstract void getDeals();
 
-    public void addAll(List<DealModel> initialOrOlderDeals) {
+    public void addAll(List<DealModel> initialOrOlderDeals, boolean append) {
         final int previousDealsLength = deals.size();
-        deals.addAll(initialOrOlderDeals);
-        adapter.notifyItemRangeInserted(previousDealsLength, initialOrOlderDeals.size());
+        if (append) {
+            deals.addAll(initialOrOlderDeals);
+            adapter.notifyItemRangeInserted(previousDealsLength, deals.size());
+
+
+        } else {
+            deals.clear();
+            deals.addAll(initialOrOlderDeals);
+            adapter.notifyDataSetChanged();
+
+        }
+        rvDeals.setAdapter(adapter);
+        Log.d(TAG, "notified: " + deals.size());
 
         // get rid of progress indicator after retrieving deals
         ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);

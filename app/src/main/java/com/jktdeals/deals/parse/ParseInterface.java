@@ -39,7 +39,7 @@ public class ParseInterface {
     public static int RESULT_CODE_FACEBOOK = 27;
     public static int RESULT_CODE_LOGIN = 28;
     private static ParseInterface singleton = null;
-    private String TAG = "Parse";
+    private static String TAG = "ParseInterface";
     private DealsActivity context;
     private int MAX_CHAT_MESSAGES_TO_SHOW = 50;
 
@@ -56,6 +56,28 @@ public class ParseInterface {
             singleton = new ParseInterface(context);
         }
         return singleton;
+
+    }
+
+    public static void populateImageView(ImageView imageView, ParseFile photoFile) {
+
+        final ParseImageView parseImageView = (ParseImageView) imageView;
+        parseImageView.setVisibility(View.INVISIBLE);
+
+
+        if (photoFile != null) {
+            parseImageView.setParseFile(photoFile);
+            parseImageView.loadInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] data, ParseException e) {
+                    parseImageView.setVisibility(View.VISIBLE);
+                    if (e != null) {
+                        Log.e(TAG, "Failed loading image: " + e);
+
+                    }
+                }
+            });
+        }
 
     }
 
@@ -83,6 +105,7 @@ public class ParseInterface {
         } else { // If not logged in, login as a new anonymous user
             loginNonAnonymous();
             //loginFBLink(new ParseUser());
+            //loginAnonymous();
         }
 
     }
@@ -123,6 +146,8 @@ public class ParseInterface {
         ParseACL acl = new ParseACL();
         acl.setPublicReadAccess(true);
         dealObject.setACL(acl);
+        dealObject.setUser(ParseUser.getCurrentUser());
+
 
         dealObject.saveInBackground(new SaveCallback() {
             @Override
@@ -136,7 +161,6 @@ public class ParseInterface {
         });
 
     }
-
 
     private void loginNonAnonymous() {
 
@@ -238,15 +262,28 @@ public class ParseInterface {
         query.findInBackground(new FindCallback<DealModel>() {
             public void done(List<DealModel> deals, ParseException e) {
                 if (e == null) {
+
+
                     dealList.clear();
                     dealList.addAll(deals);
+                    Log.d(TAG, "loaded: " + deals.size());
                     nfy.notifyLoad(deals.size());
+
 
                 } else {
                     Log.e(TAG, "Error Loading Messages" + e);
                 }
             }
         });
+    }
+
+    public void updateDealImage(DealModel obj, String imageName, Bitmap bmp) {
+
+        ParseFile photoFile = saveScaledPhoto(imageName, bmp);
+
+        obj.setDealPic(imageName, photoFile);
+        publishDeal(obj);
+
     }
 
     public void updateDealImage(DealModel obj, String imageName, byte[] imageBytes) {
@@ -259,27 +296,46 @@ public class ParseInterface {
 
     }
 
-    public void populateImageView(ImageView imageView, ParseFile photoFile) {
+    /*
+  * ParseQueryAdapter loads ParseFiles into a ParseImageView at whatever size
+  * they are saved. Since we never need a full-size image in our app, we'll
+  * save a scaled one right away.
+  */
+    private ParseFile saveScaledPhoto(final String imageName, Bitmap bmp) {
 
-        final ParseImageView parseImageView = (ParseImageView) imageView;
-        parseImageView.setVisibility(View.INVISIBLE);
+        // Resize photo from camera byte array
+        Bitmap mealImage = bmp;
+        Bitmap mealImageScaled = Bitmap.createScaledBitmap(mealImage, 200, 200
+                * mealImage.getHeight() / mealImage.getWidth(), false);
 
+        // Override Android default landscape orientation and save portrait
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        Bitmap rotatedScaledMealImage = Bitmap.createBitmap(mealImageScaled, 0,
+                0, mealImageScaled.getWidth(), mealImageScaled.getHeight(),
+                matrix, true);
 
-        if (photoFile != null) {
-            parseImageView.setParseFile(photoFile);
-            parseImageView.loadInBackground(new GetDataCallback() {
-                @Override
-                public void done(byte[] data, ParseException e) {
-                    parseImageView.setVisibility(View.VISIBLE);
-                    if (e != null) {
-                        Log.e(TAG, "Failed loading image: " + e);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        rotatedScaledMealImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
 
-                    }
+        byte[] scaledData = bos.toByteArray();
+
+        // Save the scaled image to Parse
+        ParseFile photoFile = new ParseFile(imageName, scaledData);
+        photoFile.saveInBackground(new SaveCallback() {
+
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Failed saving image: " + imageName + " " + e);
+
+                } else {
+                    Log.d(TAG, "Succesfully saved image: " + imageName);
                 }
-            });
-        }
-
+            }
+        });
+        return photoFile;
     }
+
 
     /*
      * ParseQueryAdapter loads ParseFiles into a ParseImageView at whatever size
