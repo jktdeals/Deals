@@ -1,5 +1,7 @@
 package com.jktdeals.deals.models;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
@@ -8,6 +10,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Created by kartikkulkarni on 3/4/16.
@@ -24,14 +27,10 @@ public class DealModel extends ParseObject {
     public static final String DEAL_RESTRICTIONS = "dealRestrictions";
     public static final String DEAL_EXPIRY = "dealExpiry";
     public static final String DEAL_PIC = "dealPic1";
-
     //Location related
     public static final String LAT_LANG = "latLang";
-
     //Store Related
     public static final String STORE_NAME = "storeName";
-
-
     //Location related
     public static final String STORE_ABSTRACT = "storeAbstract";
     public static final String STORE_DESCRIPTION = "storeDescription";
@@ -39,8 +38,10 @@ public class DealModel extends ParseObject {
     public static final String STORE_PIC = "storePic";
     //Likes
     public static final String LIKES_COUNT = "likes";
+    public static final String LIKED_DEALS = "likedDeals";
     // Category Related
     public static String CATEGORIES = "categories";
+    private static String TAG = "DealModel";
 
     public ParseUser getUser() {
         return getParseUser(USER_ID_KEY);
@@ -179,6 +180,43 @@ public class DealModel extends ParseObject {
         put(LIKES_COUNT, getInt(LIKES_COUNT) + 1);
         return getInt(LIKES_COUNT);
 
+    }
+
+    public void setLikedDeal() {
+        JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(LIKED_DEALS);
+        if (currentLikedDeals == null) {
+            currentLikedDeals = new JSONArray();
+        }
+        currentLikedDeals.put(this.getObjectId());
+        ParseUser.getCurrentUser().put(LIKED_DEALS, currentLikedDeals);
+        Log.d(TAG, currentLikedDeals.toString());
+    }
+
+    public int likeIt() {
+        setLikedDeal();
+        return incrementLikes();
+    }
+
+    public boolean isLiked() {
+        JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(LIKED_DEALS);
+        if (currentLikedDeals != null) {
+            Log.d(TAG, currentLikedDeals.toString());
+
+            for (int i = 0; i < currentLikedDeals.length(); i++) {
+                try {
+                    String objId = null;
+                    objId = currentLikedDeals.getString(i);
+                    if (this.getObjectId().equals(objId)) {
+                        return true;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }
+        return false;
     }
 
     public enum Category {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
@@ -66,9 +67,10 @@ public class DealsAdapter extends
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        DealModel deal = mDeals.get(position);
+        final DealModel deal = mDeals.get(position);
         Log.d(TAG, "onBindViewHolder position: " + position);
         Log.d(TAG, "onBindViewHolder getItemCount: " + mDeals.size());
+        final Context context = viewHolder.context;
 
 
         // Set item views based on the data model
@@ -79,13 +81,39 @@ public class DealsAdapter extends
         TextView tvDealDescription = viewHolder.tvDealDescription;
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
         ImageView tvDealImage = viewHolder.tvDealImage;
+        final RadioButton tvLikeButton = viewHolder.tvLikeButton;
 
         tvStoreName.setText(deal.getStoreName());
+
+        tvLikeButton.setText("Likes: " + deal.getLikesCount());
+        tvLikeButton.setEnabled(true);
+
+        if (deal.isLiked()) {
+            tvLikeButton.setChecked(true);
+            tvLikeButton.setEnabled(false);
+
+        } else {
+            tvLikeButton.setChecked(false);
+            tvLikeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tvLikeButton.setChecked(true);
+                    tvLikeButton.setEnabled(false);
+                    ParseInterface.getInstance(context).likeDeal(deal);
+                    tvLikeButton.setText("Likes: " + deal.getLikesCount());
+
+                }
+            });
+        }
+
+
         String tempValue = deal.getDealValue();
 //        if (tempValue == null) {
 //            tvDealValue.setText("null");
 //        } else {
         tvDealValue.setText(tempValue + " off");
+
+
 //        }
         tvDealName.setText(deal.getDealAbstract());
         String tempDate = deal.getDealExpiry();
@@ -152,8 +180,9 @@ public class DealsAdapter extends
         public TextView tvDealExpiration;
         public TextView tvDealDescription;
         public TextView tvDealRestrictions;
+        public ParseImageView tvDealImage;
+        public RadioButton tvLikeButton;
         private Context context;
-        private ParseImageView tvDealImage;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -164,6 +193,7 @@ public class DealsAdapter extends
             this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
             this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
             this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
+            this.tvLikeButton = (RadioButton) itemView.findViewById(R.id.likeButton);
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

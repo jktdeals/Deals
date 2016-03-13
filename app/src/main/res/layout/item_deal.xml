@@ -109,5 +109,14 @@
             android:text="Deal restrictions"
             android:visibility="gone" />
 
+        <RadioButton
+            android:id="@+id/likeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tvDealValue"
+            android:layout_below="@+id/tvDealValue"
+            android:checked="false"
+            android:text="Like" />
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

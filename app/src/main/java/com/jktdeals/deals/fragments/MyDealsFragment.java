@@ -19,11 +19,11 @@ public class MyDealsFragment extends DealsListFragment {
     }
 
     // getDeals
-    public void getDeals() {
+    public void getDeals(final boolean append) {
         final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
             @Override
             public void notifyLoad(int noOfItems) {
-                addAll(dealsMy, false);
+                addAll(dealsMy, append);
             }
         };
 

@@ -19,16 +19,17 @@ public class FavoritesFragment extends DealsListFragment {
     }
 
     // getDeals
-    public void getDeals() {
+    public void getDeals(final boolean append) {
         final ParseInterface.dealLoadNotifier nfy = new ParseInterface.dealLoadNotifier() {
             @Override
             public void notifyLoad(int noOfItems) {
-                addAll(dealsFavorites, false);
+                addAll(dealsFavorites, append);
             }
         };
 
         dealsFavorites = new ArrayList<>();
-        pi.getDeals(dealsFavorites, nfy);
+        pi.getDealsPaged(dealsFavorites, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page);
+        this.current_page++;
     }
 
 }

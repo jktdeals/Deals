@@ -148,7 +148,6 @@ public class ParseInterface {
         dealObject.setACL(acl);
         dealObject.setUser(ParseUser.getCurrentUser());
 
-
         dealObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
@@ -156,6 +155,7 @@ public class ParseInterface {
                 //        Toast.LENGTH_SHORT).show();
 
                 Log.d(TAG, "successfully saved");
+
             }
 
         });
@@ -241,6 +241,34 @@ public class ParseInterface {
                     dealList.clear();
                     dealList.addAll(deals);
                     nfy.notifyLoad(deals.size());
+
+                } else {
+                    Log.e(TAG, "Error Loading Messages" + e);
+                }
+            }
+        });
+    }
+
+    // Query messages from Parse so we can load them into the chat adapter
+    public void getDealsPaged(final List<DealModel> dealList, final dealLoadNotifier nfy, int pageSize, int pageNumber) {
+
+        // Construct query to execute
+        ParseQuery<DealModel> query = ParseQuery.getQuery(DealModel.class);
+        // Configure limit and sort order
+        query.setLimit(pageSize);
+        query.orderByDescending("createdAt");
+        query.setSkip(pageSize * pageNumber);
+        // Execute query to fetch all messages from Parse asynchronously
+        // This is equivalent to a SELECT query with SQL
+        query.findInBackground(new FindCallback<DealModel>() {
+            public void done(List<DealModel> deals, ParseException e) {
+                if (e == null) {
+
+                    dealList.clear();
+                    dealList.addAll(deals);
+                    Log.d(TAG, "loaded: " + deals.size());
+                    nfy.notifyLoad(deals.size());
+
 
                 } else {
                     Log.e(TAG, "Error Loading Messages" + e);
@@ -374,6 +402,11 @@ public class ParseInterface {
                 }
             }
         });
+    }
+
+    public void likeDeal(DealModel deal) {
+        deal.likeIt();
+        publishDeal(deal);
     }
 
 

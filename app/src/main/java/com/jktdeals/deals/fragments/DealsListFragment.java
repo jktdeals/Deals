@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DealsListFragment extends Fragment {
+    public static int DEFULT_PAGE_SIZE = 10;
+    protected int current_page = 0;
     RecyclerView rvDeals;
     ArrayList<DealModel> deals;
     DealsAdapter adapter;
@@ -62,12 +64,13 @@ public abstract class DealsListFragment extends Fragment {
         // display progress indicator while retrieving deals
         ProgressBar pb = (ProgressBar) view.findViewById(R.id.pbLoading);
         pb.setVisibility(ProgressBar.VISIBLE);
-        getDeals();
+        this.current_page = 0;
+        getDeals(false);
         return view;
     }
 
     // Abstract methods to be overridden by fragments extending them
-    protected abstract void getDeals();
+    protected abstract void getDeals(boolean append);
 
     public void addAll(List<DealModel> initialOrOlderDeals, boolean append) {
         final int previousDealsLength = deals.size();
