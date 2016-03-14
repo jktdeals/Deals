@@ -14,6 +14,7 @@ import com.jktdeals.deals.R;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.parse.ParseImageView;
+import com.parse.ParseUser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,6 +81,10 @@ public class DealsAdapter extends
         TextView tvDealExpiration = viewHolder.tvDealExpiration;
         TextView tvDealDescription = viewHolder.tvDealDescription;
         TextView tvDealRestrictions = viewHolder.tvDealRestrictions;
+        final TextView tvLikes = viewHolder.tvLikes;
+        final ImageView ivLikes = viewHolder.ivLikes;
+        ImageView ivEdit = viewHolder.ivEdit;
+        ImageView ivDelete = viewHolder.ivDelete;
         ImageView tvDealImage = viewHolder.tvDealImage;
         final RadioButton tvLikeButton = viewHolder.tvLikeButton;
 
@@ -88,12 +93,20 @@ public class DealsAdapter extends
         tvLikeButton.setText("Likes: " + deal.getLikesCount());
         tvLikeButton.setEnabled(true);
 
+        int likesCount = deal.getLikesCount();
+        if (likesCount > 0) {
+            tvLikes.setText(likesCount + "");
+        } else {
+            tvLikes.setText("");
+        }
+
         if (deal.isLiked()) {
             tvLikeButton.setChecked(true);
             tvLikeButton.setEnabled(false);
-
+            ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
         } else {
             tvLikeButton.setChecked(false);
+            ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
             tvLikeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -101,10 +114,34 @@ public class DealsAdapter extends
                     tvLikeButton.setEnabled(false);
                     ParseInterface.getInstance(context).likeDeal(deal);
                     tvLikeButton.setText("Likes: " + deal.getLikesCount());
-
+                    ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
+                    tvLikes.setText(deal.getLikesCount() + "");
                 }
             });
         }
+
+        // Setup the click listener for the heart icon
+        ivLikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (deal.isLiked()) {
+                    // if it was previously liked, unlike it
+                    // commented out right now, though, due to no unlikeDeal method yet
+//               ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
+//               int likesCount = deal.getLikesCount();
+//               if (likesCount != 0) {
+//                   tvLikes.setText(likesCount + "");
+//               } else {
+//                   tvLikes.setText("");
+//               }
+                } else {
+                    // if it was previously not liked, like it
+                    ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
+                    ParseInterface.getInstance(context).likeDeal(deal);
+                    tvLikes.setText(deal.getLikesCount() + "");
+                }
+            }
+        });
 
 
         String tempValue = deal.getDealValue();
@@ -155,6 +192,23 @@ public class DealsAdapter extends
             tvDealImage.setImageResource(R.mipmap.ic_launcher);
 
         }
+
+        // show the edit and delete icons only for deals the user has created
+        ParseUser u;
+        u = deal.getUser();
+        if (!u.isDataAvailable()) {
+            try {
+                u = u.fetchIfNeeded();
+            } catch (com.parse.ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (u.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+            ivEdit.setVisibility(View.VISIBLE);
+            ivDelete.setVisibility(View.VISIBLE);
+        }
+
     }
 
     // Return the total count of items
@@ -180,6 +234,10 @@ public class DealsAdapter extends
         public TextView tvDealExpiration;
         public TextView tvDealDescription;
         public TextView tvDealRestrictions;
+        public TextView tvLikes;
+        public ImageView ivLikes;
+        public ImageView ivEdit;
+        public ImageView ivDelete;
         public ParseImageView tvDealImage;
         public RadioButton tvLikeButton;
         private Context context;
@@ -192,6 +250,10 @@ public class DealsAdapter extends
             this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
             this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
             this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
+            this.tvLikes = (TextView) itemView.findViewById(R.id.tvLikes);
+            this.ivLikes = (ImageView) itemView.findViewById(R.id.ivLikes);
+            this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
+            this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
             this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
             this.tvLikeButton = (RadioButton) itemView.findViewById(R.id.likeButton);
             // Setup the click listener

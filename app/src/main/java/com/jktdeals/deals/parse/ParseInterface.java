@@ -409,7 +409,6 @@ public class ParseInterface {
         publishDeal(deal);
     }
 
-
     public interface dealLoadNotifier {
 
         void notifyLoad(int noOfItems);
