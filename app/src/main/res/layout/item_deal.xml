@@ -7,7 +7,7 @@
     android:layout_marginRight="10dp"
     android:layout_marginTop="10dp"
     card_view:cardCornerRadius="4dp"
-    card_view:cardElevation="4dp" >
+    card_view:cardElevation="4dp">
 
 
     <RelativeLayout
@@ -15,7 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="#FFFFFF"
-        android:padding="16dp">
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="16dp">
 
         <com.parse.ParseImageView
             android:id="@+id/ivDealImage"
@@ -117,6 +119,45 @@
             android:layout_below="@+id/tvDealValue"
             android:checked="false"
             android:text="Like" />
+
+        <ImageView
+            android:id="@+id/ivLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tvDealRestrictions"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_favorite_outline_grey600_18dp" />
+
+        <TextView
+            android:id="@+id/tvLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDealRestrictions"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="11dp"
+            android:layout_toRightOf="@+id/ivLikes"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvDealRestrictions"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_edit"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvDealRestrictions"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_delete_grey600_18dp"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

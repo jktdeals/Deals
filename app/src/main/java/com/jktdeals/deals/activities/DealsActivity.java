@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
@@ -20,6 +22,7 @@ import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 
@@ -79,6 +82,20 @@ public class DealsActivity extends AppCompatActivity {
         drawerToggle.syncState();
     }
 
+    private void setHeaderUserData() {
+        com.parse.ParseUser user = ParseUser.getCurrentUser();
+        // Lookup navigation view
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nvView);
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
+        String userName = user.getUsername();
+        if (userName == null) {
+            tvUserName.setText("(Anonymous user)");
+        } else {
+            tvUserName.setText(user.getUsername());
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -88,6 +105,8 @@ public class DealsActivity extends AppCompatActivity {
         //createSampleDeals();
 
         //ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+        // Put username on navigation drawer header
+        setHeaderUserData();
     }
     private void createSampleDeals() {
 
@@ -175,6 +194,9 @@ public class DealsActivity extends AppCompatActivity {
             case R.id.nav_settings:
                 break;
             case R.id.nav_logout:
+                // com.parse.ParseUser user = ParseUser.getCurrentUser();
+                // user.logOut();
+                // pi.loginNonAnonymous();
                 break;
             default:
         }
