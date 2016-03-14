@@ -7,15 +7,20 @@
     <string name="my_deals_none">There are no current deals that you created.</string>
     <string name="facebook_app_id">1024827677577646</string>
     <string-array name="deals_category">
+        <item>Cafe</item>
+        <item>Bar</item>
         <item>Restaurant</item>
-        <item>Drinks</item>
-        <item>Electronics</item>
-        <item>Automobiles</item>
-        <item>Service</item>
-        <item>Yard Sale</item>
-        <item>Movies</item>
-        <item>Concert</item>
+        <item>Hotel</item>
+        <item>Beauty</item>
         <item>Entertainment</item>
+        <item>Pets</item>
+        <item>Activities</item>
+        <item>Massage</item>
+        <item>Apparel</item>
+        <item>Groceries</item>
+        <item>Local_Services</item>
+        <item>Home_Services</item>
+        <item>Health</item>
     </string-array>
     <string-array name="photo_action">
         <item>Take Picture</item>

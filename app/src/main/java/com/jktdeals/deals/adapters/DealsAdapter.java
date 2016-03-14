@@ -1,6 +1,8 @@
 package com.jktdeals.deals.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.activities.CreatDealActivity;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.parse.ParseImageView;
@@ -35,6 +38,9 @@ public class DealsAdapter extends
     /*****
      * Creating OnItemClickListener
      *****/
+
+    private Context mContext;
+
     // Define listener member variable
     private OnItemClickListener listener;
     // Store a member variable for the tweets
@@ -54,6 +60,7 @@ public class DealsAdapter extends
     @Override
     public DealsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
+        this.mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
@@ -119,6 +126,26 @@ public class DealsAdapter extends
                 }
             });
         }
+
+        ivEdit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent = new Intent(mContext, CreatDealActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putParcelable("latLng", deal.getLatLang());
+                bundle.putString("storeName", deal.getStoreName());
+                bundle.putString("value", deal.getDealValue());
+                bundle.putString("abstract", deal.getDealAbstract());
+                bundle.putString("restriction", deal.getDealRestrictions());
+                bundle.putString("description", deal.getDealDescription());
+                bundle.putString("expirationDate", deal.getDealExpiry());
+                //need to add categories.
+                intent.putExtras(bundle);
+                mContext.startActivity(intent);
+                //bundle.putParcelable("DealModel", deal);
+            }
+        });
 
         // Setup the click listener for the heart icon
         ivLikes.setOnClickListener(new View.OnClickListener() {

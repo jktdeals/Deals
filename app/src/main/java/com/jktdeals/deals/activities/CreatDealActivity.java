@@ -43,6 +43,24 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private static final int POST_PHOTO_CODE = 4;
     public final String APP_TAG = "MyCustomApp";
     public String photoFileName = "photo.jpg";
+    private static final int SET_LOCATION_REQUEST = 50;
+    private static final int SET_LOCATION_RESULT = 100;
+
+    //private Uri photoUri;
+    //private Bitmap photoBitmap;
+
+    // Location propertioes
+    private boolean locationSet = false;
+    private LatLng latLng;
+    private String placeName;
+    private String placeAddress;
+    private String placeUri;
+    private String placePhoneNumber;
+    private float placeRatings;
+
+    private String method = "newDeal";
+    private DealModel dealToBeEdited;
+
     ParseInterface client;
     GPSHelper gpsHelper;
     EditText etDealName;
@@ -56,12 +74,59 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private Uri photoUri;
     private Bitmap photoBitmap;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creat_deal);
 
         loadDisplaySettings();
+
+        //will check if its a edit or  ========================
+
+        Bundle bundle = this.getIntent().getExtras();
+        if(bundle != null){
+            this.method = "editDeal";
+            //dealToBeEdited = bundle.getParcelable("DealModel");
+
+            this.latLng = bundle.getParcelable("latLng");
+            this.placeName = bundle.getString("storeName");
+            this.locationSet = true; //will get loc properties from current dealtobeedited
+
+            etDealName.setText(bundle.getString("abstract"));
+            etDealValue.setText(bundle.getString("value"));
+            etDealRestrictions.setText(bundle.getString("restriction"));
+
+            etDealDescriptions.setText(bundle.getString("description"));
+            tvExpirationDateDisplay.setText(bundle.getString("expirationDate"));
+
+            //Bitmap pic = dealToBeEdited.getDealPic();
+            //spDealCategory.setSelection(this.getCotegoryIndex(dealToBeEdited.getCategories().get(0).toString()));
+
+        }
+
+    }
+
+    private int getCotegoryIndex(String value){
+        switch (value){
+            case "Cafe": return 0;
+            case "Bar": return 1;
+            case "Restaurant": return 2;
+            case "Hotel": return 3;
+            case "Beauty": return 4;
+            case "Entertainment": return 5;
+            case "Pets": return 6;
+            case "Activities": return 7;
+            case "Massage": return 8;
+            case "Apparel": return 9;
+            case "Groceries": return 10;
+            case "Local_Services": return 11;
+            case "Home_Services": return 12;
+            case "Health": return 13;
+
+        }
+
+        return 0;
     }
 
     private void loadDisplaySettings(){
@@ -123,7 +188,6 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                 onCancel();
             }
         });
-
     }
 
     public void onTakePicture(){
@@ -174,6 +238,31 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                 //startPreviewPhotoActivity();
             } else if (requestCode == POST_PHOTO_CODE) {
                 //reloadPhotos();
+            }else if (requestCode == SET_LOCATION_REQUEST){
+
+
+            }
+
+        }
+        else if(resultCode == SET_LOCATION_RESULT){ //will suggested google place properties
+            switch (requestCode){
+                case SET_LOCATION_REQUEST:
+                    try{
+                        Bundle bundle = data.getExtras();
+                        latLng = bundle.getParcelable("latLng");
+                        placeName = bundle.getString("name");
+                        placeAddress = bundle.getString("address");
+                        placeUri = bundle.getString("uri");
+                        placePhoneNumber = bundle.getString("phoneNumber");
+                        placeRatings = bundle.getFloat("ratings");
+                        locationSet = true;
+                    }
+                    catch (Exception ex){
+                        Log.v("Execption", ex.getMessage().toString());
+                    }
+
+                    break;
+
             }
         }
     }
@@ -211,17 +300,35 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealRestrictions(etDealRestrictions.getText().toString());
         newDeal.setDealExpiry(tvExpirationDateDisplay.getText().toString());
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic
-        if (photoBitmap != null) client.updateDealImage(newDeal,"dealpic",photoBitmap);
+        if (photoBitmap != null){
+            client.updateDealImage(newDeal,"dealpic",photoBitmap);
+        }
 
-        if(gpsHelper.isGPSenabled()){
-            gpsHelper.getMyLocation();
+        if(locationSet){
+            newDeal.setLatLang(latLng);
+            newDeal.setStoreName(placeName);
+        }else {
+            if(gpsHelper.isGPSenabled()){
+                gpsHelper.getMyLocation();
 
-            LatLng latlng = new LatLng(gpsHelper.getLatitude(), gpsHelper.getLongitude());
-            newDeal.setLatLang(latlng);
+                LatLng latlng = new LatLng(gpsHelper.getLatitude(), gpsHelper.getLongitude());
+                newDeal.setLatLang(latlng);
+            }
         }
 
         try{
-            client.publishDeal(newDeal);
+
+            switch (this.method){
+                case "editDeal":
+                    //need to add logic to update deal
+                    // either revome current deal
+                    // and post edit deal as new deal
+                    break;
+                case "newDeal":
+                    client.publishDeal(newDeal);
+                    break;
+            }
+
         }
         catch(Exception ex){
             Toast.makeText(this, "failed to post deal", Toast.LENGTH_SHORT).show();
@@ -270,5 +377,10 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         cropIntent.putExtra("return-data", true);
         //start the activity - we handle returning in onActivityResult
         startActivityForResult(cropIntent, CROP_PHOTO_CODE);
+    }
+
+    public void onLocationSearch(View view) {
+        Intent i = new Intent(this, SuggestedPlaces.class );
+        startActivityForResult(i, SET_LOCATION_REQUEST);
     }
 }

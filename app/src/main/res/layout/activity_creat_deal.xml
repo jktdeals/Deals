@@ -162,6 +162,7 @@
                 android:id="@+id/btDealSetLocation"
                 android:layout_weight="1"
                 android:layout_margin="5dp"
+                android:onClick="onLocationSearch"
                 android:drawableLeft="@android:drawable/ic_dialog_map"/>
 
             <Button

@@ -43,6 +43,7 @@ public class DealModel extends ParseObject {
     public static String CATEGORIES = "categories";
     private static String TAG = "DealModel";
 
+
     public ParseUser getUser() {
         return getParseUser(USER_ID_KEY);
     }
@@ -55,6 +56,7 @@ public class DealModel extends ParseObject {
         return getString(DEAL_VALUE);
 
     }
+
 
     public void setDealValue(String dealValue) {
         put(DEAL_VALUE, dealValue);
@@ -218,6 +220,8 @@ public class DealModel extends ParseObject {
         }
         return false;
     }
+
+
 
     public enum Category {
         Cafe, Bar, Restaurant, Hotel, Beauty, Entertainment, Pets, Activities, Massage, Apparel, Groceries, Local_Services, Home_Services, Health

@@ -16,4 +16,7 @@
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always|collapseActionView" />
 
+        android:title="Create Deal" />
+    <item android:id="@+id/action_settings" android:title="Settings"
+        android:orderInCategory="100" app:showAsAction="never" />
 </menu>
