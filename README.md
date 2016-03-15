@@ -25,6 +25,8 @@ Here are [some preliminary wireframes for our app](https://jktdeals.mybalsamiq.c
 
 ## Open-source libraries used
 
+- [Parse](https://github.com/ParsePlatform/parse-server) - Mobile Backend as a Service
+
 ## License
 
     Copyright 2016 Jose Villanueva, Kartik Kulkarni, and Tané Tachyon

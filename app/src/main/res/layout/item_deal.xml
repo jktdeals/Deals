@@ -19,15 +19,24 @@
         android:paddingRight="16dp"
         android:paddingTop="16dp">
 
-        <com.parse.ParseImageView
-            android:id="@+id/ivDealImage"
+        <ImageView
             android:layout_width="120dp"
             android:layout_height="90dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/frame"
-            android:padding="4dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/frame" />
+
+        <com.parse.ParseImageView
+            android:id="@+id/ivDealImage"
+            android:layout_width="112dp"
+            android:layout_height="82dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="14dp"
             android:scaleType="centerCrop"
             android:src="@drawable/bake_sale" />
 
@@ -110,15 +119,6 @@
             android:layout_below="@+id/tvDealDescription"
             android:text="Deal restrictions"
             android:visibility="gone" />
-
-        <RadioButton
-            android:id="@+id/likeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/tvDealValue"
-            android:layout_below="@+id/tvDealValue"
-            android:checked="false"
-            android:text="Like" />
 
         <ImageView
             android:id="@+id/ivLikes"

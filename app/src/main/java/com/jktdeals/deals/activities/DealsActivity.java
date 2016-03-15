@@ -35,6 +35,7 @@ public class DealsActivity extends AppCompatActivity {
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
 
+
     // ActivityOne.java, time to handle the result of the sub-activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -194,10 +195,15 @@ public class DealsActivity extends AppCompatActivity {
             case R.id.nav_settings:
                 break;
             case R.id.nav_logout:
-                // com.parse.ParseUser user = ParseUser.getCurrentUser();
-                // user.logOut();
-                // pi.loginNonAnonymous();
-                break;
+                // log user out
+                com.parse.ParseUser user = ParseUser.getCurrentUser();
+                user.logOut();
+                // restart the app to bring up the login/register activity and reload
+                // the deals lists for the next user
+                Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
+                System.exit(0);
             default:
         }
         mDrawer.closeDrawers();
