@@ -93,12 +93,8 @@ public class DealsAdapter extends
         ImageView ivEdit = viewHolder.ivEdit;
         ImageView ivDelete = viewHolder.ivDelete;
         ImageView tvDealImage = viewHolder.tvDealImage;
-        final RadioButton tvLikeButton = viewHolder.tvLikeButton;
 
         tvStoreName.setText(deal.getStoreName());
-
-        tvLikeButton.setText("Likes: " + deal.getLikesCount());
-        tvLikeButton.setEnabled(true);
 
         int likesCount = deal.getLikesCount();
         if (likesCount > 0) {
@@ -108,23 +104,9 @@ public class DealsAdapter extends
         }
 
         if (deal.isLiked()) {
-            tvLikeButton.setChecked(true);
-            tvLikeButton.setEnabled(false);
             ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
         } else {
-            tvLikeButton.setChecked(false);
             ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
-            tvLikeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    tvLikeButton.setChecked(true);
-                    tvLikeButton.setEnabled(false);
-                    ParseInterface.getInstance(context).likeDeal(deal);
-                    tvLikeButton.setText("Likes: " + deal.getLikesCount());
-                    ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
-                    tvLikes.setText(deal.getLikesCount() + "");
-                }
-            });
         }
 
         ivEdit.setOnClickListener(new View.OnClickListener(){
@@ -189,7 +171,7 @@ public class DealsAdapter extends
             Date date;
             long dateMillis = 0;
             date = new Date(dateMillis);
-            String yymmddFormat = "yy/MM/DD";
+            String yymmddFormat = "yy/MM/dd";
             SimpleDateFormat sf = new SimpleDateFormat(yymmddFormat, Locale.ENGLISH);
             sf.setLenient(true);
 
@@ -282,7 +264,6 @@ public class DealsAdapter extends
             this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
             this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
             this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
-            this.tvLikeButton = (RadioButton) itemView.findViewById(R.id.likeButton);
             // Setup the click listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
