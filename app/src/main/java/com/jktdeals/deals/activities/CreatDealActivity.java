@@ -333,7 +333,10 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         catch(Exception ex){
             Toast.makeText(this, "failed to post deal", Toast.LENGTH_SHORT).show();
         }
-        onCancel();
+
+        Intent intent = new Intent(this, DealsActivity.class);
+        setResult(RESULT_OK, intent);
+        this.finish();
     }
 
     public Uri getPhotoFileUri(String fileName) {
