@@ -5,6 +5,7 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="my_deals_none">There are no current deals that you created.</string>
+    <string name="favorite_deals_none">There are no current deals that you have favorited.</string>
     <string name="facebook_app_id">1024827677577646</string>
     <string-array name="deals_category">
         <item>Cafe</item>
