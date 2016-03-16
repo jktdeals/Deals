@@ -12,6 +12,8 @@ import com.parse.ParseUser;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+
 /**
  * Created by kartikkulkarni on 3/4/16.
  */
@@ -130,7 +132,7 @@ public class DealModel extends ParseObject {
     }
 
     public void setStoreName(String storeName) {
-        put(STORE_NAME, storeName);
+        if (storeName != null) put(STORE_NAME, storeName);
     }
 
     public String getStoreDescription() {
@@ -160,6 +162,9 @@ public class DealModel extends ParseObject {
     }
 
     public void setCategory(Category category) {
+        if (belongsToCategory(category)) {
+            return;
+        }
         JSONArray currentCategories = getCategories();
         if (currentCategories == null) {
             currentCategories = new JSONArray();
@@ -170,6 +175,42 @@ public class DealModel extends ParseObject {
 
     public JSONArray getCategories() {
         return getJSONArray(CATEGORIES);
+    }
+
+    public boolean belongsToCategory(Category category) {
+        ArrayList<Category> list = getCategoriesList();
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                if (category.equals(list.get(i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<Category> getCategoriesList() {
+        ArrayList<Category> list = new ArrayList<Category>();
+        JSONArray jsonArray = getJSONArray(CATEGORIES);
+        if (jsonArray != null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+
+                    Category c = (Category) jsonArray.get(i);
+                    if (c != null) {
+                        list.add((Category) jsonArray.get(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+        } else {
+            return null;
+        }
+
+        return list;
 
     }
 
