@@ -24,6 +24,7 @@ public abstract class DealsListFragment extends Fragment {
     RecyclerView rvDeals;
     ArrayList<DealModel> deals;
     DealsAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
     String TAG = "DealsList";
 
     @Override
@@ -42,7 +43,7 @@ public abstract class DealsListFragment extends Fragment {
         rvDeals = (RecyclerView) view.findViewById(R.id.rvDeals);
         rvDeals.setAdapter(adapter);
         // Set layout manager to position the items
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager = new LinearLayoutManager(getContext());
         rvDeals.setLayoutManager(linearLayoutManager);
 
         // hook up listener for deal tap to view deal detail
@@ -92,4 +93,13 @@ public abstract class DealsListFragment extends Fragment {
         ProgressBar pb = (ProgressBar) getView().findViewById(R.id.pbLoading);
         pb.setVisibility(ProgressBar.GONE);
     }
+
+    public void insertNewDeal(DealModel newDeal) {
+        deals.add(0, newDeal);
+        // notify the adapter
+        adapter.notifyItemInserted(0);
+        // and scroll up to display the new deal
+        linearLayoutManager.scrollToPositionWithOffset(0, 0);
+    }
+
 }

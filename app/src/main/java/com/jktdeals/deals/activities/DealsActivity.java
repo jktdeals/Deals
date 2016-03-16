@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.adapters.DealsFragmentPagerAdapter;
+import com.jktdeals.deals.fragments.MyDealsFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
@@ -34,6 +35,9 @@ public class DealsActivity extends AppCompatActivity {
     private ParseInterface pi;
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
+    private final int REQUEST_CODE_CREATE_DEAL = 20;
+    private ViewPager viewPager;
+    private DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
 
 
     // ActivityOne.java, time to handle the result of the sub-activity
@@ -56,9 +60,10 @@ public class DealsActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
 
         // Get the ViewPager and set its PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.vpPager);
-        viewPager.setAdapter(new DealsFragmentPagerAdapter(getSupportFragmentManager(),
-                DealsActivity.this));
+        viewPager = (ViewPager) findViewById(R.id.vpPager);
+        dealsFragmentPagerAdapter = new DealsFragmentPagerAdapter(getSupportFragmentManager(),
+                DealsActivity.this);
+        viewPager.setAdapter(dealsFragmentPagerAdapter);
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -97,17 +102,26 @@ public class DealsActivity extends AppCompatActivity {
         }
     }
 
+    public void updateMyDeals(DealModel newDeal) {
+        MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
+        myDealsFragment.insertNewDeal(newDeal);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == ParseInterface.RESULT_CODE_FACEBOOK) {
             ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
         }
-        //createSampleDeals();
 
+        if (requestCode == ParseInterface.RESULT_CODE_LOGIN || requestCode == ParseInterface.RESULT_CODE_FACEBOOK) {
+            // Put username on navigation drawer header now that user is logged in
+            setHeaderUserData();
+        }
+
+        //createSampleDeals();
         //ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
-        // Put username on navigation drawer header
-        setHeaderUserData();
+
     }
     private void createSampleDeals() {
 
@@ -168,7 +182,7 @@ public class DealsActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.action_create_deal:
                 Intent intent = new Intent(DealsActivity.this, CreatDealActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_CODE_CREATE_DEAL);
                 return true;
         }
 
@@ -176,7 +190,7 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {

@@ -141,7 +141,7 @@ public class ParseInterface {
         return dealObject;
     }
 
-    public void publishDeal(DealModel dealObject) {
+    public void publishDeal(final DealModel dealObject) {
 
         ParseACL acl = new ParseACL();
         acl.setPublicReadAccess(true);
@@ -155,6 +155,10 @@ public class ParseInterface {
                 //        Toast.LENGTH_SHORT).show();
 
                 Log.d(TAG, "successfully saved");
+
+                // when a deal is created, update My Deals
+                DealsActivity dealsActivity = context;
+                dealsActivity.updateMyDeals(dealObject);
 
             }
 
