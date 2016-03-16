@@ -158,7 +158,7 @@ public class ParseInterface {
 
                 // when a deal is created, update My Deals
                 DealsActivity dealsActivity = context;
-                dealsActivity.updateMyDeals(dealObject);
+                dealsActivity.refreshMyDeals();
 
             }
 

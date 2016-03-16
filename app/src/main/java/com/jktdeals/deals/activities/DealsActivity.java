@@ -102,9 +102,9 @@ public class DealsActivity extends AppCompatActivity {
         }
     }
 
-    public void updateMyDeals(DealModel newDeal) {
+    public void refreshMyDeals() {
         MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
-        myDealsFragment.insertNewDeal(newDeal);
+        myDealsFragment.getDeals(false);
     }
 
     @Override
