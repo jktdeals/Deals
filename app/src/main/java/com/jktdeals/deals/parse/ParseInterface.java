@@ -295,7 +295,9 @@ public class ParseInterface {
 
     public void getDealsLiked(final List<DealModel> dealList, final dealLoadNotifier nfy, int pageSize, int pageNumber) {
         JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(DealModel.LIKED_DEALS);
-        if (currentLikedDeals == null) return;
+        if (currentLikedDeals == null) {
+            currentLikedDeals = new JSONArray();
+        }
         ArrayList<String> whereList = new ArrayList();
 
         for (int i = 0; i < currentLikedDeals.length(); i++) {
@@ -349,6 +351,8 @@ public class ParseInterface {
 
                 } else {
                     Log.e(TAG, "Error Loading Messages" + e);
+                    nfy.notifyLoad(0);
+
                 }
             }
         });
