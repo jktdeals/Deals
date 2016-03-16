@@ -28,6 +28,7 @@ public class MyDealsFragment extends DealsListFragment {
             public void notifyLoad(int noOfItems) {
                 TextView tvMyDealsNone = (TextView) getView().findViewById(R.id.tvMyDealsNone);
                 if (dealsMy.size() == 0) {
+                    tvMyDealsNone.setText(R.string.my_deals_none);
                     tvMyDealsNone.setVisibility(View.VISIBLE);
                 } else {
                     tvMyDealsNone.setVisibility(View.GONE);
