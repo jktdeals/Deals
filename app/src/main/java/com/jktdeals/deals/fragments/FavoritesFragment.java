@@ -28,7 +28,7 @@ public class FavoritesFragment extends DealsListFragment {
         };
 
         dealsFavorites = new ArrayList<>();
-        pi.getDealsPaged(dealsFavorites, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page);
+        pi.getDealsLiked(dealsFavorites, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page);
         this.current_page++;
     }
 

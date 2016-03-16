@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 import static android.support.v4.content.PermissionChecker.checkSelfPermission;
@@ -85,5 +87,10 @@ public class GPSHelper {
      */
     public double getLongitude() {
         return longitude;
+    }
+
+    public LatLng getLatLng() {
+        getMyLocation();
+        return new LatLng(latitude, longitude);
     }
 }

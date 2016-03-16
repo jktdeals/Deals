@@ -41,26 +41,13 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private static final int PICK_PHOTO_CODE = 2;
     private static final int CROP_PHOTO_CODE = 3;
     private static final int POST_PHOTO_CODE = 4;
-    public final String APP_TAG = "MyCustomApp";
-    public String photoFileName = "photo.jpg";
     private static final int SET_LOCATION_REQUEST = 50;
     private static final int SET_LOCATION_RESULT = 100;
+    public final String APP_TAG = "MyCustomApp";
+    public String photoFileName = "photo.jpg";
 
     //private Uri photoUri;
     //private Bitmap photoBitmap;
-
-    // Location propertioes
-    private boolean locationSet = false;
-    private LatLng latLng;
-    private String placeName;
-    private String placeAddress;
-    private String placeUri;
-    private String placePhoneNumber;
-    private float placeRatings;
-
-    private String method = "newDeal";
-    private DealModel dealToBeEdited;
-
     ParseInterface client;
     GPSHelper gpsHelper;
     EditText etDealName;
@@ -71,6 +58,16 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
     Spinner spDealCategory;
     Date expirationDate;
+    // Location propertioes
+    private boolean locationSet = false;
+    private LatLng latLng;
+    private String placeName;
+    private String placeAddress;
+    private String placeUri;
+    private String placePhoneNumber;
+    private float placeRatings;
+    private String method = "newDeal";
+    private DealModel dealToBeEdited;
     private Uri photoUri;
     private Bitmap photoBitmap;
 
@@ -325,7 +322,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                     // and post edit deal as new deal
                     break;
                 case "newDeal":
-                    client.publishDeal(newDeal);
+                    client.publishDealonCreate(newDeal);
                     break;
             }
 

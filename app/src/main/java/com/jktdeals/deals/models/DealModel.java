@@ -184,20 +184,55 @@ public class DealModel extends ParseObject {
 
     }
 
-    public void setLikedDeal() {
+    public int decrementLikes() {
+        put(LIKES_COUNT, getInt(LIKES_COUNT) - 1);
+        return getInt(LIKES_COUNT);
+
+    }
+
+    public void setLikedDeal(boolean like) {
         JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(LIKED_DEALS);
         if (currentLikedDeals == null) {
             currentLikedDeals = new JSONArray();
         }
-        currentLikedDeals.put(this.getObjectId());
+
+        if (like) {
+            currentLikedDeals.put(this.getObjectId());
+        } else {
+
+            for (int i = 0; i < currentLikedDeals.length(); i++) {
+                try {
+                    String objId = null;
+                    objId = currentLikedDeals.getString(i);
+                    if (this.getObjectId().equals(objId)) {
+                        currentLikedDeals.put(i, null);
+                        break;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
         ParseUser.getCurrentUser().put(LIKED_DEALS, currentLikedDeals);
         Log.d(TAG, currentLikedDeals.toString());
     }
 
     public int likeIt() {
-        setLikedDeal();
+        if (!isLiked()) {
+            setLikedDeal(true);
+        }
         return incrementLikes();
     }
+
+    public int unLikeIt() {
+        if (isLiked()) {
+            setLikedDeal(false);
+        }
+        return incrementLikes();
+    }
+
 
     public boolean isLiked() {
         JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(LIKED_DEALS);

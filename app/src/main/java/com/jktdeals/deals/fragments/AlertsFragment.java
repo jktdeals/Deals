@@ -29,7 +29,8 @@ public class AlertsFragment extends DealsListFragment {
         };
 
         dealsAlerts = new ArrayList<>();
-        pi.getDeals(dealsAlerts, nfy);
+        pi.getDealsPaged(dealsAlerts, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page);
+
     }
 
 }

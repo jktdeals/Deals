@@ -73,7 +73,7 @@ public class DealsAdapter extends
 
     // Involves populating data into the item through holder
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         // Get the data model based on position
         final DealModel deal = mDeals.get(position);
         Log.d(TAG, "onBindViewHolder position: " + position);
@@ -129,24 +129,34 @@ public class DealsAdapter extends
             }
         });
 
+        ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDeals.remove(position);
+                ParseInterface.getInstance(context).deleteDeal(deal);
+                notifyItemChanged(position);
+            }
+        });
+
         // Setup the click listener for the heart icon
         ivLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (deal.isLiked()) {
-                    // if it was previously liked, unlike it
-                    // commented out right now, though, due to no unlikeDeal method yet
-//               ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
-//               int likesCount = deal.getLikesCount();
-//               if (likesCount != 0) {
-//                   tvLikes.setText(likesCount + "");
-//               } else {
-//                   tvLikes.setText("");
-//               }
+
+                    ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
+                    ParseInterface.getInstance(context).likeDeal(deal, false);
+
+                    int likesCount = deal.getLikesCount();
+                    if (likesCount != 0) {
+                        tvLikes.setText(likesCount + "");
+                    } else {
+                        tvLikes.setText("");
+                    }
                 } else {
                     // if it was previously not liked, like it
                     ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
-                    ParseInterface.getInstance(context).likeDeal(deal);
+                    ParseInterface.getInstance(context).likeDeal(deal, true);
                     tvLikes.setText(deal.getLikesCount() + "");
                 }
             }

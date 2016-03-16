@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 
 public class NearMeFragment extends DealsListFragment {
     ArrayList<DealModel> dealsNearMe;
+    GPSHelper gpsHelper;
     private ParseInterface pi;
 
     @Override
@@ -21,6 +23,7 @@ public class NearMeFragment extends DealsListFragment {
         super.onCreate(savedInstanceState);
         // Initialize Parse
         pi = ParseInterface.getInstance(getActivity());
+        gpsHelper = new GPSHelper(getActivity());
         dealsNearMe = new ArrayList<>();
     }
 
@@ -42,8 +45,8 @@ public class NearMeFragment extends DealsListFragment {
             }
         };
 
+        pi.getDealsNear(dealsNearMe, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page, gpsHelper.getLatLng());
 
-        pi.getDeals(dealsNearMe, nfy);
     }
 
 }

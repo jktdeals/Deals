@@ -20,6 +20,7 @@ import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseImageView;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -28,7 +29,11 @@ import com.parse.SaveCallback;
 import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.ui.ParseLoginBuilder;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -99,7 +104,7 @@ public class ParseInterface {
 
 
         // User login
-        ParseUser.logOut();
+        //ParseUser.logOut();
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
         } else { // If not logged in, login as a new anonymous user
@@ -143,8 +148,24 @@ public class ParseInterface {
 
     public void publishDeal(final DealModel dealObject) {
 
+        dealObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                //Toast.makeText(MainActivity.this, "Successfully created message on Parse",
+                //        Toast.LENGTH_SHORT).show();
+
+                Log.d(TAG, "successfully saved");
+
+            }
+
+        });
+    }
+
+    public void publishDealonCreate(DealModel dealObject) {
+
         ParseACL acl = new ParseACL();
         acl.setPublicReadAccess(true);
+        acl.setPublicWriteAccess(true);
         dealObject.setACL(acl);
         dealObject.setUser(ParseUser.getCurrentUser());
 
@@ -163,6 +184,15 @@ public class ParseInterface {
             }
 
         });
+    }
+
+    public void deleteDeal(DealModel dealObject) {
+
+        try {
+            dealObject.delete();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -253,8 +283,44 @@ public class ParseInterface {
         });
     }
 
-    // Query messages from Parse so we can load them into the chat adapter
     public void getDealsPaged(final List<DealModel> dealList, final dealLoadNotifier nfy, int pageSize, int pageNumber) {
+        getDealsPaged_1(dealList, nfy, pageSize, pageNumber, null, null);
+
+    }
+
+    public void getDealsNear(final List<DealModel> dealList, final dealLoadNotifier nfy, int pageSize, int pageNumber, LatLng latLng) {
+        getDealsPaged_1(dealList, nfy, pageSize, pageNumber, null, latLng);
+
+    }
+
+    public void getDealsLiked(final List<DealModel> dealList, final dealLoadNotifier nfy, int pageSize, int pageNumber) {
+        JSONArray currentLikedDeals = ParseUser.getCurrentUser().getJSONArray(DealModel.LIKED_DEALS);
+        if (currentLikedDeals == null) return;
+        ArrayList<String> whereList = new ArrayList();
+
+        for (int i = 0; i < currentLikedDeals.length(); i++) {
+            try {
+                String objId = null;
+                objId = currentLikedDeals.getString(i);
+                if (objId != null) {
+                    whereList.add(objId);
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        getDealsPaged_1(dealList, nfy, pageSize, pageNumber, whereList, null);
+
+    }
+
+    // Query messages from Parse so we can load them into the chat adapter
+    public void getDealsPaged_1(final List<DealModel> dealList, final dealLoadNotifier nfy,
+                                int pageSize, int pageNumber, ArrayList<String> whereList, LatLng latLng) {
 
         // Construct query to execute
         ParseQuery<DealModel> query = ParseQuery.getQuery(DealModel.class);
@@ -262,6 +328,13 @@ public class ParseInterface {
         query.setLimit(pageSize);
         query.orderByDescending("createdAt");
         query.setSkip(pageSize * pageNumber);
+        if (whereList != null) {
+            query.whereContainedIn("objectId", whereList);
+        }
+
+        if (latLng != null) {
+            query.whereNear(DealModel.LAT_LANG, new ParseGeoPoint(latLng.latitude, latLng.longitude));
+        }
         // Execute query to fetch all messages from Parse asynchronously
         // This is equivalent to a SELECT query with SQL
         query.findInBackground(new FindCallback<DealModel>() {
@@ -281,33 +354,6 @@ public class ParseInterface {
         });
     }
 
-    // Query messages from Parse so we can load them into the chat adapter
-    public void getDeals(final List<DealModel> dealList, final dealLoadNotifier nfy) {
-
-        // Construct query to execute
-        ParseQuery<DealModel> query = ParseQuery.getQuery(DealModel.class);
-        // Configure limit and sort order
-        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
-        query.orderByDescending("createdAt");
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-        query.findInBackground(new FindCallback<DealModel>() {
-            public void done(List<DealModel> deals, ParseException e) {
-                if (e == null) {
-
-
-                    dealList.clear();
-                    dealList.addAll(deals);
-                    Log.d(TAG, "loaded: " + deals.size());
-                    nfy.notifyLoad(deals.size());
-
-
-                } else {
-                    Log.e(TAG, "Error Loading Messages" + e);
-                }
-            }
-        });
-    }
 
     public void updateDealImage(DealModel obj, String imageName, Bitmap bmp) {
 
@@ -383,7 +429,6 @@ public class ParseInterface {
 
         // Override Android default landscape orientation and save portrait
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
         Bitmap rotatedScaledMealImage = Bitmap.createBitmap(mealImageScaled, 0,
                 0, mealImageScaled.getWidth(), mealImageScaled.getHeight(),
                 matrix, true);
@@ -408,8 +453,12 @@ public class ParseInterface {
         });
     }
 
-    public void likeDeal(DealModel deal) {
-        deal.likeIt();
+    public void likeDeal(DealModel deal, boolean like) {
+        if (like) {
+            deal.likeIt();
+        } else {
+            deal.unLikeIt();
+        }
         publishDeal(deal);
     }
 
