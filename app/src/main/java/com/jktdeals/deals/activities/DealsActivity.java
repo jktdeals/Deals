@@ -28,6 +28,7 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 
 public class DealsActivity extends AppCompatActivity {
+    private final int REQUEST_CODE_CREATE_DEAL = 20;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private Toolbar toolbar;
@@ -35,7 +36,6 @@ public class DealsActivity extends AppCompatActivity {
     private ParseInterface pi;
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
-    private final int REQUEST_CODE_CREATE_DEAL = 20;
     private ViewPager viewPager;
     private DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
 
@@ -104,7 +104,7 @@ public class DealsActivity extends AppCompatActivity {
 
     public void refreshMyDeals() {
         MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
-        myDealsFragment.getDeals(false);
+        if (myDealsFragment != null) myDealsFragment.getDeals(false);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class DealsActivity extends AppCompatActivity {
             case R.id.nav_logout:
                 // log user out
                 com.parse.ParseUser user = ParseUser.getCurrentUser();
-                user.logOut();
+                ParseUser.logOut();
                 // restart the app to bring up the login/register activity and reload
                 // the deals lists for the next user
                 Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage( getBaseContext().getPackageName() );

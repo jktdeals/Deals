@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,6 +41,8 @@ public class GPSHelper {
         List<String> providers = locationManager.getProviders(true);
 
         Location l = null;
+        Log.d("GPS getMyLocation: ", "providersL :" + providers.size());
+
         for (int i = 0; i < providers.size(); i++) {
 
 
@@ -59,6 +62,8 @@ public class GPSHelper {
                 break;
         }
         if (l != null) {
+            Log.d("GPSHelper", "setting lt/lng: " + latitude + "/" + longitude);
+
             latitude = l.getLatitude();
             longitude = l.getLongitude();
         }
@@ -91,6 +96,10 @@ public class GPSHelper {
 
     public LatLng getLatLng() {
         getMyLocation();
-        return new LatLng(latitude, longitude);
+        LatLng ret = new LatLng(latitude, longitude);
+        Log.d("GPSHelper", ret.toString());
+        Log.d("GPSHelper", "isGPSEnabled: " + isGPSenabled());
+
+        return ret;
     }
 }
