@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -89,6 +90,8 @@ public class NearMeFragment extends DealsListFragment implements
 //            params.height = 5000;
 //            mapFragment.getView().setLayoutParams(params);
             //==================================//
+            FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frmMap);
+            frameLayout.setVisibility(View.VISIBLE);
             fm.beginTransaction().replace(R.id.frmMap, mapFragment).commit();
 
             if(mapFragment != null){
