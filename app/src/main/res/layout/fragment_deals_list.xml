@@ -7,11 +7,10 @@
         android:id="@+id/frmMap"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:visibility="gone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true">
     </FrameLayout>
-
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvDeals"
