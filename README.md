@@ -9,7 +9,8 @@
 * [x] User **remains logged in after closing and reopening the app**
 * [x] User also has the **option to log in with Facebook**
 * [x] User can **logout**
-* [ ] User can **see all deals near them displayed by location on a map**
+* [x] User can **see all deals near them displayed by location on a map**
+* [x] User can **tap a deal on the map to navigate from their current location to the deal location**
 * [x] **Deals are also displayed in a list format**
 * [x] User sees **progress indicator while deals are being loaded**
 * [x] User can **tap a Deal in the list to see more details or hide details**
@@ -17,10 +18,10 @@
   * [x] Deal **locations are set with autocomplete via the Google Places API**
   * [x] Deal details can **include an image from the android camera or photo gallery**
   * [x] **Created deal appears at the top of the My Deals list**
-* [ ] User can **manage self-created deals**
+* [x] User can **manage self-created deals**
   * [x] User can **see a list of all of their created deals**
-  * [ ] User can **edit deals they created**
-  * [ ] User can **delete deals they created**
+  * [x] User can **edit deals they created**
+  * [x] User can **delete deals they created**
 * [x] User can **like/favorite a deal**
 * [x] User can **see a list of all of their liked/favorited deals**
 * [x] App **backend using Parse hosted on Heroku**
@@ -49,13 +50,11 @@ Here are [some preliminary wireframes for our app](https://jktdeals.mybalsamiq.c
 
 ## Video Walkthrough 
 
-Here are some walkthroughs of implemented user stories:
-
-<img src='' title='Video Walkthrough' width='' alt='Video Walkthrough' />
-
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+See our video walkthroughs of some implemented user stories at https://github.com/jktdeals/Deals/issues/35
 
 ## Notes
+
+Some UI issues/behaviors need some cleaning up, but basically we have amazing functionality.
 
 ## Open-source libraries used
 
