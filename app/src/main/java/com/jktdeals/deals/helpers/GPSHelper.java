@@ -45,7 +45,6 @@ public class GPSHelper {
 
         for (int i = 0; i < providers.size(); i++) {
 
-
             if (checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                     checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
@@ -58,9 +57,11 @@ public class GPSHelper {
                 return;
             }
             l = locationManager.getLastKnownLocation(providers.get(i));
+
             if (l != null)
                 break;
         }
+
         if (l != null) {
             Log.d("GPSHelper", "setting lt/lng: " + latitude + "/" + longitude);
 

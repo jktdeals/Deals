@@ -2,6 +2,7 @@ package com.jktdeals.deals.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,13 +13,16 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.activities.CreatDealActivity;
+import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +38,8 @@ import java.util.regex.Pattern;
 public class DealsAdapter extends
         RecyclerView.Adapter<DealsAdapter.ViewHolder> {
 
+    GPSHelper gpsHelper;
+    LatLng myLatLang;
     String TAG = "DealsAdapter";
     /*****
      * Creating OnItemClickListener
@@ -66,6 +72,9 @@ public class DealsAdapter extends
         // Inflate the custom layout
         View dealView = inflater.inflate(R.layout.item_deal, parent, false);
 
+        // Initialize GPS Helper
+        gpsHelper = new GPSHelper(context.getApplicationContext());
+
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(dealView);
         return viewHolder;
@@ -84,6 +93,7 @@ public class DealsAdapter extends
         // Set item views based on the data model
         TextView tvStoreName = viewHolder.tvStoreName;
         TextView tvDealValue = viewHolder.tvDealValue;
+        TextView tvDealDistance = viewHolder.tvDealDistance;
         TextView tvDealName = viewHolder.tvDealName;
         TextView tvDealExpiration = viewHolder.tvDealExpiration;
         TextView tvDealDescription = viewHolder.tvDealDescription;
@@ -172,6 +182,33 @@ public class DealsAdapter extends
 
 //        }
         tvDealName.setText(deal.getDealAbstract());
+
+        LatLng dealLatLng = deal.getLatLang();
+        if (dealLatLng != null) {
+            gpsHelper.getMyLocation();
+            myLatLang = gpsHelper.getLatLng();
+
+            // if GPSHelper is getting a null location from the emulator and
+            // returning LatLng(0, 0), use Facebook Building 20's coordinates
+            if (myLatLang.equals(new LatLng(0, 0))) {
+                myLatLang = new LatLng(37.4829434, -122.1534673);
+            }
+
+            Location myLocation = new Location("myLocation");
+            myLocation.setLatitude(myLatLang.latitude);
+            myLocation.setLongitude(myLatLang.longitude);
+            Location dealLocation = new Location("dealLocation");
+            dealLocation.setLatitude(dealLatLng.latitude);
+            dealLocation.setLongitude(dealLatLng.longitude);
+
+            // get the "as the crow flies" distance to the deal
+            double distance = myLocation.distanceTo(dealLocation);
+            // convert from meters to miles, and format
+            DecimalFormat myFormatter = new DecimalFormat("#.#");
+            String miles = myFormatter.format(distance * 0.00062137119);
+            tvDealDistance.setText(miles + "m");
+        }
+
         String tempDate = deal.getDealExpiry();
         Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d\\d$");
         Matcher m = p.matcher(tempDate);
@@ -208,7 +245,7 @@ public class DealsAdapter extends
             ParseInterface.populateImageView(tvDealImage, deal.getDealPic());
             //ParseInterface.populateImageView(tvDealImage,new ParseFile(R.mipmap.ic_launcher));
         } else {
-            tvDealImage.setImageResource(R.mipmap.ic_launcher);
+            tvDealImage.setImageResource(R.drawable.placeholder);
 
         }
 
@@ -250,6 +287,7 @@ public class DealsAdapter extends
         public TextView tvStoreName;
         public TextView tvDealValue;
         public TextView tvDealName;
+        public TextView tvDealDistance;
         public TextView tvDealExpiration;
         public TextView tvDealDescription;
         public TextView tvDealRestrictions;
@@ -266,6 +304,7 @@ public class DealsAdapter extends
             this.tvStoreName = (TextView) itemView.findViewById(R.id.tvStoreName);
             this.tvDealValue = (TextView) itemView.findViewById(R.id.tvDealValue);
             this.tvDealName = (TextView) itemView.findViewById(R.id.tvDealName);
+            this.tvDealDistance = (TextView) itemView.findViewById(R.id.tvDealDistance);
             this.tvDealExpiration = (TextView) itemView.findViewById(R.id.tvDealExpiration);
             this.tvDealDescription = (TextView) itemView.findViewById(R.id.tvDealDescription);
             this.tvDealRestrictions = (TextView) itemView.findViewById(R.id.tvDealRestrictions);
