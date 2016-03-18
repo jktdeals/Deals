@@ -103,7 +103,11 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     public void refreshMyDeals() {
-        MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
+        // after creating a deal, show My Deals with the new deal on top
+        if (viewPager.getCurrentItem() != 1) {
+            viewPager.setCurrentItem(1);
+        }
+        MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(1);
         if (myDealsFragment != null) myDealsFragment.getDeals(false);
     }
 

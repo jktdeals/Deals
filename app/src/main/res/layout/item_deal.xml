@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/ivDealImage"
             android:layout_toRightOf="@+id/ivDealImage"
-            android:text="0.2 mi"
+            android:text=""
             android:textSize="12sp" />
 
         <TextView

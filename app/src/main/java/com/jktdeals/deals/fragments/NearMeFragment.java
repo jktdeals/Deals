@@ -77,6 +77,11 @@ public class NearMeFragment extends DealsListFragment implements
             double lon = gpsHelper.getLongitude();
 
             LatLng latLng = new LatLng(gpsHelper.getLatitude(), gpsHelper.getLongitude());
+            // if GPSHelper is getting a null location from the emulator and
+            // returning LatLng(0, 0), use Facebook Building 20's coordinates
+            if (latLng.equals(new LatLng(0, 0))) {
+                latLng = new LatLng(37.4829434, -122.1534673);
+            }
             CameraPosition cameraPosition;
             cameraPosition = CameraPosition.fromLatLngZoom(latLng, (float) 14.0);
 
@@ -129,7 +134,13 @@ public class NearMeFragment extends DealsListFragment implements
         };
 
         //pi.getDeals(dealsNearMe, nfy);
-        pi.getDealsNear(dealsNearMe, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page, gpsHelper.getLatLng());
+        LatLng myLatLang = gpsHelper.getLatLng();
+        // if GPSHelper is getting a null location from the emulator and
+        // returning LatLng(0, 0), use Facebook Building 20's coordinates
+        if (myLatLang.equals(new LatLng(0, 0))) {
+            myLatLang = new LatLng(37.4829434, -122.1534673);
+        }
+        pi.getDealsNear(dealsNearMe, nfy, DealsListFragment.DEFULT_PAGE_SIZE, this.current_page, myLatLang);
 
     }
 

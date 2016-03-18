@@ -15,7 +15,7 @@ import com.jktdeals.deals.fragments.NearMeFragment;
 // return the order of the fragments in the ViewPager
 public class DealsFragmentPagerAdapter extends FragmentPagerAdapter {
     SparseArray<Fragment> registeredFragments = new SparseArray<Fragment>();
-    private String tabTitles[] = new String[] { "My deals", "Near me", "Favorites", "Alerts" };
+    private String tabTitles[] = new String[] { "Near me", "My deals", "Favorites", "Alerts" };
     private Context context;
 
     // adapter gets the manager - insert or remove fragments from activity
@@ -28,9 +28,9 @@ public class DealsFragmentPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         if (position == 0) {
-            return new MyDealsFragment();
-        } else if (position == 1) {
             return new NearMeFragment();
+        } else if (position == 1) {
+            return new MyDealsFragment();
         } else if (position == 2) {
             return new FavoritesFragment();
         } else if (position == 3) {
