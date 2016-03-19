@@ -392,7 +392,6 @@ public class ParseInterface {
 
         // Override Android default landscape orientation and save portrait
         Matrix matrix = new Matrix();
-        matrix.postRotate(90);
         Bitmap rotatedScaledMealImage = Bitmap.createBitmap(mealImageScaled, 0,
                 0, mealImageScaled.getWidth(), mealImageScaled.getHeight(),
                 matrix, true);
