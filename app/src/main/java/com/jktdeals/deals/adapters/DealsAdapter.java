@@ -125,13 +125,16 @@ public class DealsAdapter extends
                 Intent intent = new Intent(mContext, CreatDealActivity.class);
                 Bundle bundle = new Bundle();
 
-                bundle.putParcelable("latLng", deal.getLatLang());
-                bundle.putString("storeName", deal.getStoreName());
-                bundle.putString("value", deal.getDealValue());
-                bundle.putString("abstract", deal.getDealAbstract());
-                bundle.putString("restriction", deal.getDealRestrictions());
-                bundle.putString("description", deal.getDealDescription());
-                bundle.putString("expirationDate", deal.getDealExpiry());
+                //bundle.putParcelable("latLng", deal.getLatLang());
+                //bundle.putString("storeName", deal.getStoreName());
+                // bundle.putString("value", deal.getDealValue());
+                //bundle.putString("abstract", deal.getDealAbstract());
+                // bundle.putString("restriction", deal.getDealRestrictions());
+                // bundle.putString("description", deal.getDealDescription());
+                // bundle.putString("expirationDate", deal.getDealExpiry());
+
+                bundle.putString("id", deal.getObjectId());
+                Log.d(TAG, "objid: " + deal.getObjectId());
                 //need to add categories.
                 intent.putExtras(bundle);
                 mContext.startActivity(intent);

@@ -161,6 +161,10 @@ public class ParseInterface {
         });
     }
 
+    public void updateDeal(final DealModel dealObject) {
+        publishDeal(dealObject);
+    }
+
     public void publishDealonCreate(DealModel dealObject) {
 
         ParseACL acl = new ParseACL();
@@ -256,6 +260,31 @@ public class ParseInterface {
     // Get the userId from the cached currentUser object
     private void startWithCurrentUser() {
         // TODO:
+    }
+
+    public DealModel lookupById(String id) {
+        List<DealModel> dealList = null;
+        List<String> idList = new ArrayList<String>();
+        idList.add(id);
+
+        ParseQuery<DealModel> query = ParseQuery.getQuery(DealModel.class);
+        query.whereEqualTo("objectId", id);
+
+
+        // Execute query to fetch all messages from Parse asynchronously
+        // This is equivalent to a SELECT query with SQL
+        try {
+            dealList = query.find();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if (dealList != null) {
+            if (dealList.size() != 0) {
+                return dealList.get(0);
+            }
+        }
+        return null;
     }
 
     // Query messages from Parse so we can load them into the chat adapter

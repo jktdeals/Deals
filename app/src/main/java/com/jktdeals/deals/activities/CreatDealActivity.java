@@ -1,4 +1,5 @@
 package com.jktdeals.deals.activities;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -84,18 +85,28 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         Bundle bundle = this.getIntent().getExtras();
         if(bundle != null){
             this.method = "editDeal";
+            this.dealToBeEdited = client.lookupById(bundle.getString("id"));
             //dealToBeEdited = bundle.getParcelable("DealModel");
 
-            this.latLng = bundle.getParcelable("latLng");
-            this.placeName = bundle.getString("storeName");
+            //this.latLng = bundle.getParcelable("latLng");
+            this.latLng = this.dealToBeEdited.getLatLang();
+            //this.placeName = bundle.getString("storeName");
+            this.placeName = this.dealToBeEdited.getStoreName();
             this.locationSet = true; //will get loc properties from current dealtobeedited
 
-            etDealName.setText(bundle.getString("abstract"));
-            etDealValue.setText(bundle.getString("value"));
-            etDealRestrictions.setText(bundle.getString("restriction"));
+            //etDealName.setText(bundle.getString("abstract"));
+            etDealName.setText(this.dealToBeEdited.getDealAbstract());
+            //etDealValue.setText(bundle.getString("value"));
+            etDealValue.setText(this.dealToBeEdited.getDealValue());
 
-            etDealDescriptions.setText(bundle.getString("description"));
-            tvExpirationDateDisplay.setText(bundle.getString("expirationDate"));
+            //etDealRestrictions.setText(bundle.getString("restriction"));
+            etDealRestrictions.setText(this.dealToBeEdited.getDealRestrictions());
+
+            //etDealDescriptions.setText(bundle.getString("description"));
+            etDealDescriptions.setText(this.dealToBeEdited.getDealDescription());
+
+            //tvExpirationDateDisplay.setText(bundle.getString("expirationDate"));
+            tvExpirationDateDisplay.setText(this.dealToBeEdited.getDealExpiry());
 
             //Bitmap pic = dealToBeEdited.getDealPic();
             //spDealCategory.setSelection(this.getCotegoryIndex(dealToBeEdited.getCategories().get(0).toString()));
@@ -290,7 +301,13 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
     public void onPostDeal() {
 
-        DealModel newDeal = new DealModel();
+        DealModel newDeal = null;
+        if (this.method.equals("newDeal")) {
+            newDeal = new DealModel();
+        } else {
+            newDeal = this.dealToBeEdited;
+        }
+
         newDeal.setDealAbstract(etDealName.getText().toString());
         newDeal.setDealValue(etDealValue.getText().toString());
         newDeal.setDealDescription(etDealDescriptions.getText().toString());
@@ -317,9 +334,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
             switch (this.method){
                 case "editDeal":
-                    //need to add logic to update deal
-                    // either revome current deal
-                    // and post edit deal as new deal
+                    client.updateDeal(newDeal);
                     break;
                 case "newDeal":
                     client.publishDealonCreate(newDeal);
