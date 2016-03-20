@@ -492,6 +492,12 @@ public class ParseInterface {
             deal.unLikeIt();
         }
         publishDeal(deal);
+        try {
+            ParseUser.getCurrentUser().save();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public interface dealLoadNotifier {
