@@ -1,5 +1,7 @@
 package com.jktdeals.deals.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.activities.DealsActivity;
 import com.jktdeals.deals.adapters.DealsAdapter;
 import com.jktdeals.deals.models.DealModel;
 
@@ -46,18 +50,66 @@ public abstract class DealsListFragment extends Fragment {
         linearLayoutManager = new LinearLayoutManager(getContext());
         rvDeals.setLayoutManager(linearLayoutManager);
 
-        // hook up listener for deal tap to view deal detail
+        // hook up listener for tap delete icon to delete,
+        // and also deal tap to view/hide deal detail
         adapter.setOnItemClickListener(new DealsAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
-                TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
-                if (tvDealDescription.getVisibility() == View.GONE) {
-                    tvDealDescription.setVisibility(View.VISIBLE);
-                    tvDealRestrictions.setVisibility(View.VISIBLE);
+            public void onItemClick(View view, final int position) {
+                // if the delete icon was clicked
+                if (view instanceof ImageView) {
+                    // get the deal
+                    final DealModel deal = (DealModel) deals.get(position);
+
+                    // diaplay an "Are you sure you want to delete ... " dialog
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("Are you sure you want to delete your deal \"" + deal.getDealAbstract() + "\"?");
+                    builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // they confirmed, delete the deal
+                            DealsActivity dealsActivity = (DealsActivity) getActivity();
+                            // remove it from the ArrayList
+                            deals.remove(position);
+                            // notify the adapter
+                            adapter.notifyItemRemoved(position);
+                            // and find the current tab and its fragment and have it have Parse delete the deal
+                            switch(dealsActivity.viewPager.getCurrentItem()) {
+                                case 0:
+                                    NearMeFragment nearMeFragment = (NearMeFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(0);
+                                    nearMeFragment.deleteDeal(deal);
+                                    break;
+                                case 1:
+                                    MyDealsFragment myDealsFragment = (MyDealsFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(1);
+                                    myDealsFragment.deleteDeal(deal);
+                                    break;
+                                case 2:
+                                    FavoritesFragment favoritesFragment = (FavoritesFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(2);
+                                    favoritesFragment.deleteDeal(deal);
+                                    break;
+                                case 3:
+                                    AlertsFragment alertsFragment = (AlertsFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(3);
+                                    alertsFragment.deleteDeal(deal);
+                                    break;
+                            }
+                        }
+                    });
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // they canceled, don't do anything
+                        }
+                    });
+                    builder.show();
                 } else {
-                    tvDealDescription.setVisibility(View.GONE);
-                    tvDealRestrictions.setVisibility(View.GONE);
+                    // if  they tapped the deal but not the delete icon,
+                    // then display or hide the additional details of the deal
+                    TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
+                    TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
+                    if (tvDealDescription.getVisibility() == View.GONE) {
+                        tvDealDescription.setVisibility(View.VISIBLE);
+                        tvDealRestrictions.setVisibility(View.VISIBLE);
+                    } else {
+                        tvDealDescription.setVisibility(View.GONE);
+                        tvDealRestrictions.setVisibility(View.GONE);
+                    }
                 }
             }
         });

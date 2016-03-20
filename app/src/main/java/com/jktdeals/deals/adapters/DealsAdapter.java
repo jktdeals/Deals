@@ -142,21 +142,12 @@ public class DealsAdapter extends
             }
         });
 
-        ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDeals.remove(position);
-                ParseInterface.getInstance(context).deleteDeal(deal);
-                notifyItemChanged(position);
-            }
-        });
-
         // Setup the click listener for the heart icon
         ivLikes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (deal.isLiked()) {
-
+                    // if it was already liked, unlike it
                     ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
                     ParseInterface.getInstance(context).likeDeal(deal, false);
 
@@ -252,7 +243,6 @@ public class DealsAdapter extends
 
         }
 
-        // show the edit and delete icons only for deals the user has created
         ParseUser u;
         u = deal.getUser();
         if (!u.isDataAvailable()) {
@@ -263,6 +253,7 @@ public class DealsAdapter extends
             }
         }
 
+        // show the edit and delete icons only for deals the user has created
         if (u.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
             ivEdit.setVisibility(View.VISIBLE);
             ivDelete.setVisibility(View.VISIBLE);
@@ -316,11 +307,22 @@ public class DealsAdapter extends
             this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
             this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
             this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
-            // Setup the click listener
+
+            // set a click listener for when the user clicks the delete icon
+            ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Triggers click upwards to the fragment on click
+                    if (listener != null)
+                        listener.onItemClick(v, getLayoutPosition());
+                }
+            });
+
+            // Setup the click listener for displaying/hiding the extended item details
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Triggers click upwards to the adapter on click
+                    // Triggers click upwards to the fragment on click
                     if (listener != null)
                         listener.onItemClick(itemView, getLayoutPosition());
                 }

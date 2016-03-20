@@ -230,4 +230,8 @@ public class NearMeFragment extends DealsListFragment implements
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
+    public void deleteDeal(DealModel deal) {
+        pi.getInstance(getContext()).deleteDeal(deal);
+    }
+
 }

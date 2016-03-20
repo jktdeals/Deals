@@ -36,8 +36,8 @@ public class DealsActivity extends AppCompatActivity {
     private ParseInterface pi;
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
-    private ViewPager viewPager;
-    private DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
+    public ViewPager viewPager;
+    public DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
 
 
     // ActivityOne.java, time to handle the result of the sub-activity

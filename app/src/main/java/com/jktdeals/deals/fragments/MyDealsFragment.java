@@ -41,4 +41,8 @@ public class MyDealsFragment extends DealsListFragment {
         pi.getMyDeals(dealsMy, nfy);
     }
 
+    public void deleteDeal(DealModel deal) {
+        pi.getInstance(getContext()).deleteDeal(deal);
+    }
+
 }
