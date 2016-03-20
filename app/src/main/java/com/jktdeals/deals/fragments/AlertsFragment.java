@@ -33,4 +33,8 @@ public class AlertsFragment extends DealsListFragment {
 
     }
 
+    public void deleteDeal(DealModel deal) {
+        pi.getInstance(getContext()).deleteDeal(deal);
+    }
+
 }

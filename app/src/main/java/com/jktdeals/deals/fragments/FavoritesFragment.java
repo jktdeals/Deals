@@ -42,4 +42,8 @@ public class FavoritesFragment extends DealsListFragment {
         this.current_page++;
     }
 
+    public void deleteDeal(DealModel deal) {
+        pi.getInstance(getContext()).deleteDeal(deal);
+    }
+
 }
