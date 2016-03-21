@@ -41,9 +41,47 @@ public class DealModel extends ParseObject {
     //Likes
     public static final String LIKES_COUNT = "likes";
     public static final String LIKED_DEALS = "likedDeals";
+    // Yelp related
+    public static final String DealYelpRating = "yelprating"; //ex: 3.5
+    public static final String DealYelpMobileUrl = "yelpurl"; //needed it call yelp from our app
+    public static final String DealYelpSnipUrl = "yelpsniprating";//Yelp placeholder picture in case user doesnt enter picture (ask Tane for speicifics)
+    public static final String DealYelpRatingImageUrl = "yelpratingImage"; //yelp actually stores the stars rating image
     // Category Related
     public static String CATEGORIES = "categories";
     private static String TAG = "DealModel";
+
+    public float getDealYelpRating() {
+        return Float.parseFloat((String) get(DealYelpRating));
+    }
+
+    public void setDealYelpRating(float rating) {
+        put(DealYelpRating, Float.toString(rating));
+    }
+
+    public String getDealYelpMobileUrl() {
+        return (String) get(DealYelpMobileUrl);
+    }
+
+    public void setDealYelpMobileUrl(String url) {
+        put(DealYelpMobileUrl, url);
+    }
+
+    public String getDealYelpSnipUrl() {
+        return (String) get(DealYelpSnipUrl);
+    }
+
+    public void setDealYelpSnipUrl(String url) {
+        put(DealYelpSnipUrl, url);
+    }
+
+    public void setDDealYelpRatingImageUrl(String url) {
+        put(DealYelpRatingImageUrl, url);
+    }
+
+    public String getDealYelpRatingImageUrl() {
+        return (String) get(DealYelpRatingImageUrl);
+    }
+
 
 
     public ParseUser getUser() {

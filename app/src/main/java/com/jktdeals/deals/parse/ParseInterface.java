@@ -17,6 +17,7 @@ import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseAnonymousUtils;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
@@ -34,6 +35,7 @@ import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -96,9 +98,11 @@ public class ParseInterface {
         // set applicationId and server based on the values in the Heroku settings.
         // any network interceptors must be added with the Configuration Builder given this syntax
         Parse.initialize(new Parse.Configuration.Builder(context)
-                .applicationId("crowdeal3") // should correspond to APP_ID env variable
+                // .applicationId("crowdeal3") // should correspond to APP_ID env variable
+                .applicationId("gcmtestparse")
                 .addNetworkInterceptor(new ParseLogInterceptor())
-                .server("https://parseapp3.herokuapp.com/parse/").build());
+                        // .server("https://parseapp3.herokuapp.com/parse/").build());
+                .server("https://gcmtestparse.herokuapp.com/parse/").build());
 
         ParseFacebookUtils.initialize(context, RESULT_CODE_FACEBOOK);
 
@@ -188,6 +192,11 @@ public class ParseInterface {
             }
 
         });
+
+        HashMap<String, String> test = new HashMap<>();
+        test.put("alert", "testing");
+
+        ParseCloud.callFunctionInBackground("pushChannelTest", test);
     }
 
     public void deleteDeal(DealModel dealObject) {

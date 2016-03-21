@@ -13,6 +13,15 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="com.jktdeals.deals.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.jktdeals.deals.permission.C2D_MESSAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -60,6 +69,35 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB5vEbm9P9Vi85Lkrir-k6P_-yjGlFthak" />
+        <meta-data
+            android:name="com.parse.push.gcm_sender_id"
+            android:value="id:667708520817" />
+
+
+        <service android:name="com.parse.PushService" />
+
+        <receiver
+            android:name="com.jktdeals.deals.listeners.MyCustomReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.parse.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
+                <!--
+                  IMPORTANT: Change "com.codepath.parseportpush" to match your app's package name.
+                -->
+                <category android:name="com.jktdeals.deals" />
+            </intent-filter>
+        </receiver>
     </application>
 
 
