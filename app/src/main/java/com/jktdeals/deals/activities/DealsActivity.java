@@ -1,5 +1,10 @@
 package com.jktdeals.deals.activities;
 
+import android.app.ActivityManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -10,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +28,7 @@ import com.jktdeals.deals.fragments.MyDealsFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
+import com.jktdeals.deals.services.NotificationService;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
@@ -36,6 +43,7 @@ public class DealsActivity extends AppCompatActivity {
     private ParseInterface pi;
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
+    private ArrayList<DealModel> newDeals;
     public ViewPager viewPager;
     public DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
 
@@ -55,6 +63,7 @@ public class DealsActivity extends AppCompatActivity {
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
+        mDrawer.addDrawerListener(drawerToggle);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
@@ -77,6 +86,7 @@ public class DealsActivity extends AppCompatActivity {
 
         // Allocate Deal List
         dealModelArrayList = new ArrayList<>();
+        newDeals = new ArrayList<DealModel>();
     }
 
     // `onPostCreate` called when activity start-up is complete after `onStart()`
@@ -86,6 +96,19 @@ public class DealsActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
         drawerToggle.syncState();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        processStopService(NotificationService.TAG);
+        //Toast.makeText(this, "on restarting", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        processStopService(NotificationService.TAG);
     }
 
     private void setHeaderUserData() {
@@ -127,6 +150,7 @@ public class DealsActivity extends AppCompatActivity {
         //ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
 
     }
+
     private void createSampleDeals() {
 
 
@@ -171,7 +195,7 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_items, menu);
 
         return true;
@@ -183,18 +207,147 @@ public class DealsActivity extends AppCompatActivity {
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_create_deal:
                 Intent intent = new Intent(DealsActivity.this, CreatDealActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_CREATE_DEAL);
+                return true;
+            case R.id.action_add_notification: //add notification and head chat
+                createServiceNotification();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void createServiceNotification() {
+        try {
+
+            if (isMyServiceRunning(NotificationService.class)) {
+                Log.v("NotificaitonService", "Notification service is already running");
+            } else {
+                createSampleDealsForNotification();
+                Bundle bundle = new Bundle();
+                int newDealsCount = 0;
+                for (int i = 0; i < newDeals.size(); i++) {
+                    String nameField = "deal" + i;
+                    bundle.putString(nameField + "Abstract", newDeals.get(i).getDealAbstract());
+                    bundle.putString(nameField + "Description", newDeals.get(i).getDealDescription());
+                    bundle.putString(nameField + "Value", newDeals.get(i).getDealValue());
+                    bundle.putString(nameField + "Category", "Restaurant");//method to get single
+                    newDealsCount++;
+                }
+
+                bundle.putInt("newDealsCount", newDealsCount);
+                processStartService(NotificationService.TAG, bundle);
+                createNotification(); //it will add bar notification
+
+                newDeals.clear(); //clear new deals and waiting for new ones to cone
+            }
+        } catch (Exception ex) {
+            Log.v("ChatHead", ex.getMessage());
+        }
+    }
+
+    public void createNotification() {
+        try {
+            Intent intent = new Intent(DealsActivity.this, DealsActivity.class);
+            intent.putExtra("fromNotification", true);
+            PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            Notification n = new Notification.Builder(this)
+                    .setContentTitle("New Deals")
+                    .setContentText("There are new Deals")
+                    .setSmallIcon(R.drawable.head)
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true)
+                    .build();
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.notify(0, n);
+        } catch (IllegalArgumentException ex) {
+            Log.v("CreatingNotification", ex.getMessage());
+        } catch (Exception ex) {
+            Log.v("CreatingNotification", ex.getMessage());
+        }
+    }
+
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void processStartService(final String tag, Bundle bundle) {
+        try {
+            Intent intent = new Intent(this, NotificationService.class);
+            intent.putExtras(bundle);
+            intent.addCategory(tag);
+            startService(intent);
+        } catch (Exception ex) {
+            Log.v("Service", ex.getMessage());
+        }
+
+    }
+
+    private void processStopService(final String tag) {
+        try {
+            Intent intent = new Intent(this, NotificationService.class);
+            intent.addCategory(tag);
+            stopService(intent);
+        } catch (Exception ex) {
+            Log.v("Service", ex.getMessage());
+        }
+    }
+
+    private void createSampleDealsForNotification() {
+        String dealValue = "51%";
+        String dealAbstract = "All ice cream pints half price";
+        String dealDescription = "April Fools Day is half-price day for all one-pint containers of ice cream";
+        String dealRestrictions = "April 1, 2016 only, pint containers only";
+        String dealExpiry = "April 1, 2016";
+        //LatLng latLang = new LatLng(gpsHelper.getLatitude(), gpsHelper.getLongitude());
+        String storeName = "New Leaf Market";
+        String storeAbstract = "";
+        String storeDescription = "";
+        String storeLogo = "";
+        String storePic = "";
+
+        // createDeal
+        DealModel dealObj = pi.createDealObject(dealValue, dealAbstract, dealDescription,
+                dealRestrictions, dealExpiry,
+
+                new LatLng(0, 0),
+
+                storeName, storeAbstract, storeDescription,
+                storeLogo, storePic
+        );
+
+        newDeals.add(dealObj);
+        newDeals.add(dealObj);
+
+    }
+
+
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar,
+                R.string.drawer_open, /* "open drawer" description for accessibility */
+                R.string.drawer_close /* "close drawer" description for accessibility */
+        ) {
+
+            public void onDrawerOpened(View drawerView) {
+                // I'm sticking this here because although when someone is logging in or creating
+                // an account in the first place I can get their name and set the navdrawer header
+                // in onActivityResult, but when Parse is getting the user info from LocalDatastore
+                // I'm not finding a callback or other place where I can be sure that that will
+                // have completed before calling getCurrentUser
+                setHeaderUserData();
+            }
+        };
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -209,7 +362,7 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        switch(menuItem.getItemId()) {
+        switch (menuItem.getItemId()) {
             case R.id.nav_settings:
                 break;
             case R.id.nav_logout:
@@ -218,7 +371,7 @@ public class DealsActivity extends AppCompatActivity {
                 ParseUser.logOut();
                 // restart the app to bring up the login/register activity and reload
                 // the deals lists for the next user
-                Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage( getBaseContext().getPackageName() );
+                Intent i = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
                 System.exit(0);
