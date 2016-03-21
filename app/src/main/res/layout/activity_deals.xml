@@ -6,6 +6,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    //=======================chathead - Starts =======================//
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/circular_click_area"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:orientation="horizontal" />-->
+
+    <!--<com.flipkart.chatheads.ui.ChatHeadContainer-->
+        <!--android:id="@+id/chat_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+
+    //=======================chathead - Endd =======================//
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -38,6 +54,17 @@
 
     <!-- Note that `android:layout_gravity` needs to be set to 'start' -->
 
+    <!--</com.flipkart.chatheads.ui.ChatHeadContainer>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/chat_head_label"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@drawable/black_bg"-->
+        <!--android:text="Chat head label"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:visibility="gone" />-->
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nvView"
         android:layout_width="wrap_content"
@@ -46,5 +73,7 @@
         app:headerLayout="@layout/nav_header"
         android:background="@android:color/white"
         app:menu="@menu/drawer_view" />
+
+
 
 </android.support.v4.widget.DrawerLayout>

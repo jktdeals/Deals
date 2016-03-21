@@ -28,9 +28,6 @@ import com.jktdeals.deals.parse.ParseInterface;
 
 import java.util.ArrayList;
 
-//import permissions.dispatcher.RuntimePermissions;
-//
-//@RuntimePermissions
 public class NearMeFragment extends DealsListFragment implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -90,11 +87,6 @@ public class NearMeFragment extends DealsListFragment implements
 
 
             mapFragment = SupportMapFragment.newInstance(options);
-            //===============resizing===========//
-//            ViewGroup.LayoutParams params = mapFragment.getView().getLayoutParams();
-//            params.height = 5000;
-//            mapFragment.getView().setLayoutParams(params);
-            //==================================//
             FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frmMap);
             frameLayout.setVisibility(View.VISIBLE);
             fm.beginTransaction().replace(R.id.frmMap, mapFragment).commit();
@@ -130,6 +122,7 @@ public class NearMeFragment extends DealsListFragment implements
             @Override
             public void notifyLoad(int noOfItems) {
                 addAll(dealsNearMe, append);
+
             }
         };
 
@@ -145,20 +138,6 @@ public class NearMeFragment extends DealsListFragment implements
     }
 
     private void addMarkersToMap() {
-
-//        try{
-//            LatLng ll = new LatLng(gpsHelper.getLatitude(), gpsHelper.getLongitude());
-//            BitmapDescriptor defaultMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-//            mMarkers.add(map.addMarker(new MarkerOptions()
-//                    .position(ll)
-//                    .title("MyStore")
-//                    .snippet("123 Main St.")
-//                    .icon(defaultMarker)));
-//        }
-//        catch (Exception ex){
-//            Log.v("Exception", ex.getMessage().toString());
-//        }
-
 
         //map.clear();
         for (int i = 0; i < this.deals.size(); i++) {

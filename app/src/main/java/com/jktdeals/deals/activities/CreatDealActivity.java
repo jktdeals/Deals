@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -24,13 +25,19 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.Yelp.Yelp;
 import com.jktdeals.deals.fragments.DatePickerFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -46,6 +53,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private static final int SET_LOCATION_RESULT = 100;
     public final String APP_TAG = "MyCustomApp";
     public String photoFileName = "photo.jpg";
+
 
     //private Uri photoUri;
     //private Bitmap photoBitmap;
@@ -68,10 +76,17 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private String placePhoneNumber;
     private float placeRatings;
     private String method = "newDeal";
+
+    private String yelpMobileUrl;
+    private double yelpRating;
+    private String yelpSmallRatingImgUrl;
+    private String yelpSnipUrl;
+
     private DealModel dealToBeEdited;
     private Uri photoUri;
     private Bitmap photoBitmap;
 
+    private Yelp yelp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +157,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         client = ParseInterface.getInstance(this);
         gpsHelper = new GPSHelper(getApplicationContext());
         photoBitmap = null;
+        yelp = Yelp.getYelp(this);
 
         etDealName = (EditText) findViewById(R.id.etDealName);
         etDealValue = (EditText) findViewById(R.id.etDealValue);
@@ -264,6 +280,25 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                         placePhoneNumber = bundle.getString("phoneNumber");
                         placeRatings = bundle.getFloat("ratings");
                         locationSet = true;
+
+                        final String category = spDealCategory.getSelectedItem().toString();
+                        new AsyncTask<Void, Void, String>() {
+                            @Override
+                            protected String doInBackground(Void... params) {
+                                String businesses = yelp.search(placeName, placeAddress, "1");
+                                try {
+                                    return processJson(businesses);
+                                } catch (JSONException e) {
+                                    return businesses;
+                                }
+                            }
+
+                            @Override
+                            protected void onPostExecute(String result) {
+                                //yelpUrl = result;
+                                Log.v("YELP", result);//mSearchResultsText.setText(result);
+                            }
+                        }.execute();
                     }
                     catch (Exception ex){
                         Log.v("Execption", ex.getMessage().toString());
@@ -273,6 +308,28 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
             }
         }
+    }
+
+    String processJson(String jsonStuff) throws JSONException {
+        Log.v("ResultRaw", jsonStuff.toString());
+        JSONObject json = new JSONObject(jsonStuff);
+        JSONArray businesses = json.getJSONArray("businesses");
+        ArrayList<String> businessNames = new ArrayList<String>(businesses.length());
+        ArrayList<String> mobileUrl = new ArrayList<String>(businesses.length());
+        for (int i = 0; i < businesses.length(); i++) {
+            JSONObject business = businesses.getJSONObject(i);
+            Log.v("Result1", business.toString());
+
+            yelpMobileUrl = business.getString("mobile_url");
+            yelpRating = business.getDouble("rating");
+            yelpSnipUrl = business.getString("snippet_image_url");
+            yelpSmallRatingImgUrl = business.getString("rating_img_url_small");
+
+
+            businessNames.add(business.getString("name"));
+            mobileUrl.add(business.getString("mobile_url"));
+        }
+        return mobileUrl.get(0);
     }
 
     public void SetExpirationDate(View view) {
@@ -292,11 +349,8 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     }
 
     public void onCancel () {
-
         Intent cancelIntent = new Intent(this, DealsActivity.class);
         startActivity(cancelIntent);
-
-
     }
 
     public void onPostDeal() {
@@ -313,6 +367,11 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealDescription(etDealDescriptions.getText().toString());
         newDeal.setDealRestrictions(etDealRestrictions.getText().toString());
         newDeal.setDealExpiry(tvExpirationDateDisplay.getText().toString());
+        newDeal.setDealYelpMobileUrl(yelpMobileUrl);
+        newDeal.setDealYelpRating((float)yelpRating);
+        newDeal.setDealYelpSnipUrl(yelpSnipUrl);
+        newDeal.setDDealYelpRatingImageUrl(yelpSmallRatingImgUrl);
+
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic
         if (photoBitmap != null){
             client.updateDealImage(newDeal,"dealpic",photoBitmap);
@@ -398,4 +457,9 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         Intent i = new Intent(this, SuggestedPlaces.class );
         startActivityForResult(i, SET_LOCATION_REQUEST);
     }
+
+//    public void onOpenYelp(View view) {
+//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(yelpUrl));
+//        startActivity(browserIntent);
+//    }
 }
