@@ -63,7 +63,10 @@ public class DealModel extends ParseObject {
     }
 
     public void setDealYelpMobileUrl(String url) {
-        put(DealYelpMobileUrl, url);
+        if (url != null) {
+            put(DealYelpMobileUrl, url);
+
+        }
     }
 
     public String getDealYelpSnipUrl() {
@@ -71,11 +74,17 @@ public class DealModel extends ParseObject {
     }
 
     public void setDealYelpSnipUrl(String url) {
-        put(DealYelpSnipUrl, url);
+        if (url != null) {
+            put(DealYelpSnipUrl, url);
+
+        }
     }
 
     public void setDDealYelpRatingImageUrl(String url) {
-        put(DealYelpRatingImageUrl, url);
+        if (url != null) {
+            put(DealYelpRatingImageUrl, url);
+
+        }
     }
 
     public String getDealYelpRatingImageUrl() {

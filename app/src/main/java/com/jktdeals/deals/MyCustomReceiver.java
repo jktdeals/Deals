@@ -9,6 +9,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.jktdeals.deals.activities.DealsActivity;
+import com.jktdeals.deals.models.DealModel;
+import com.jktdeals.deals.parse.ParseInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +18,9 @@ import org.json.JSONObject;
 import java.util.Iterator;
 
 public class MyCustomReceiver extends BroadcastReceiver {
-    private static final String TAG = "MyCustomReceiver";
     public static final String intentAction = "com.parse.push.intent.RECEIVE";
+    public static final int NOTIFICATION_ID = 45;
+    private static final String TAG = "MyCustomReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -36,11 +39,12 @@ public class MyCustomReceiver extends BroadcastReceiver {
             String channel = intent.getExtras().getString("com.parse.Channel");
             try {
                 JSONObject json = new JSONObject(intent.getExtras().getString("com.parse.Data"));
+                Log.d(TAG, json.toString());
                 Log.d(TAG, "got action " + action + " on channel " + channel + " with:");
                 // Iterate the parse keys if needed
                 Iterator<String> itr = json.keys();
                 while (itr.hasNext()) {
-                    String key = (String) itr.next();
+                    String key = itr.next();
                     String value = json.getString(key);
                     Log.d(TAG, "..." + key + " => " + value);
                     // Extract custom push data
@@ -61,12 +65,18 @@ public class MyCustomReceiver extends BroadcastReceiver {
         }
     }
 
-    public static final int NOTIFICATION_ID = 45;
     // Create a local dashboard notification to tell user about the event
     // See: http://guides.codepath.com/android/Notifications
     private void createNotification(Context context, String datavalue) {
+
+        DealModel dealO = ParseInterface.getInstance(context).lookupById(datavalue);
+        String notificationText = "New Deal Added!";
+        if (dealO != null) {
+            notificationText = notificationText + " " + dealO.getDealAbstract();
+        }
+
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
-                R.drawable.ic_edit).setContentTitle("Notification: " + datavalue).setContentText("Pushed!");
+                R.drawable.ic_favorite_red_18dp).setContentTitle("Deal Notification: " + datavalue).setContentText(notificationText);
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());

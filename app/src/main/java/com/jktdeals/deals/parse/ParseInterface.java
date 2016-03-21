@@ -14,7 +14,6 @@ import com.jktdeals.deals.models.DealModel;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseAnonymousUtils;
 import com.parse.ParseCloud;
@@ -23,12 +22,9 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseImageView;
-import com.parse.ParseInstallation;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.interceptors.ParseLogInterceptor;
 import com.parse.ui.ParseLoginBuilder;
 
 import org.json.JSONArray;
@@ -91,25 +87,8 @@ public class ParseInterface {
 
     private void init() {
 
-        // Register your parse models here
-        ParseObject.registerSubclass(DealModel.class);
-        Parse.enableLocalDatastore(context);
 
-
-        // set applicationId and server based on the values in the Heroku settings.
-        // any network interceptors must be added with the Configuration Builder given this syntax
-        Parse.initialize(new Parse.Configuration.Builder(context.getApplicationContext())
-                // .applicationId("crowdeal3") // should correspond to APP_ID env variable
-                .applicationId("gcmtestparse")
-                .addNetworkInterceptor(new ParseLogInterceptor())
-                        // .server("https://parseapp3.herokuapp.com/parse/").build());
-                .server("https://gcmtestparse.herokuapp.com/parse/").build());
-
-        // Need to register GCM token
-        ParseInstallation.getCurrentInstallation().saveInBackground();
-
-        ParseFacebookUtils.initialize(context.getApplicationContext (), RESULT_CODE_FACEBOOK);
-
+        ParseFacebookUtils.initialize(context.getApplicationContext(), RESULT_CODE_FACEBOOK);
 
         // User login
         //ParseUser.logOut();
@@ -120,7 +99,6 @@ public class ParseInterface {
             //loginFBLink(new ParseUser());
             //loginAnonymous();
         }
-
 
 
     }
@@ -175,7 +153,7 @@ public class ParseInterface {
         publishDeal(dealObject);
     }
 
-    public void publishDealonCreate(DealModel dealObject) {
+    public void publishDealonCreate(final DealModel dealObject) {
 
         ParseACL acl = new ParseACL();
         acl.setPublicReadAccess(true);
@@ -190,6 +168,8 @@ public class ParseInterface {
                 //        Toast.LENGTH_SHORT).show();
 
                 Log.d(TAG, "successfully saved");
+                pushDealCreation(dealObject);
+
 
                 // when a deal is created, update My Deals
                 DealsActivity dealsActivity = context;
@@ -199,10 +179,15 @@ public class ParseInterface {
 
         });
 
-        HashMap<String, String> test = new HashMap<>();
-        test.put("alert", "testing");
+    }
 
-        ParseCloud.callFunctionInBackground("pushChannelTest", test);
+    private void pushDealCreation(DealModel dealObject) {
+
+        HashMap<String, String> message = new HashMap<>();
+        message.put("customData", dealObject.getObjectId());
+
+        ParseCloud.callFunctionInBackground("pushChannelTest", message);
+
     }
 
     public void deleteDeal(DealModel dealObject) {
