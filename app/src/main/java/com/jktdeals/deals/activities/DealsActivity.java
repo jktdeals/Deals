@@ -36,6 +36,8 @@ import java.util.ArrayList;
 
 public class DealsActivity extends AppCompatActivity {
     private final int REQUEST_CODE_CREATE_DEAL = 20;
+    public ViewPager viewPager;
+    public DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
     private DrawerLayout mDrawer;
     private NavigationView nvDrawer;
     private Toolbar toolbar;
@@ -44,9 +46,6 @@ public class DealsActivity extends AppCompatActivity {
     private ArrayList<DealModel> dealModelArrayList;
     private GPSHelper gpsHelper;
     private ArrayList<DealModel> newDeals;
-    public ViewPager viewPager;
-    public DealsFragmentPagerAdapter dealsFragmentPagerAdapter;
-
 
     // ActivityOne.java, time to handle the result of the sub-activity
     @Override
@@ -219,6 +218,7 @@ public class DealsActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     private void createServiceNotification() {
         try {

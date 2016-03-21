@@ -15,6 +15,7 @@ import com.jktdeals.deals.parse.ParseInterface;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MyCustomReceiver extends BroadcastReceiver {
@@ -73,8 +74,12 @@ public class MyCustomReceiver extends BroadcastReceiver {
         String notificationText = "New Deal Added!";
         if (dealO != null) {
             notificationText = notificationText + " " + dealO.getDealAbstract();
+            ArrayList<DealModel> newDeals = new ArrayList<>();
+            newDeals.add(dealO);
+            createServiceNotification(newDeals);
         }
 
+        //TODO: remove below code after Jose displays the deals viachat head
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
                 R.drawable.ic_favorite_red_18dp).setContentTitle("Deal Notification: " + datavalue).setContentText(notificationText);
         NotificationManager mNotificationManager = (NotificationManager) context
@@ -98,5 +103,9 @@ public class MyCustomReceiver extends BroadcastReceiver {
         Intent intent = new Intent(intentAction);
         intent.putExtra("data", datavalue);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    public void createServiceNotification(ArrayList<DealModel> newDealList) {
+        //TODO: To Jose to handle
     }
 }
