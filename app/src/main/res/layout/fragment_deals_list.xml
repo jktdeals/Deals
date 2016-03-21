@@ -18,6 +18,8 @@
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:background="#ACCCFF"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
         android:layout_below="@id/frmMap" />
 
     <ProgressBar

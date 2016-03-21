@@ -116,7 +116,7 @@ public class DealsAdapter extends
         if (deal.isLiked()) {
             ivLikes.setImageResource(R.drawable.ic_favorite_red_18dp);
         } else {
-            ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
+            ivLikes.setImageResource(R.drawable.ic_favorite_outline_white_18dp);
         }
 
         ivEdit.setOnClickListener(new View.OnClickListener(){
@@ -148,7 +148,7 @@ public class DealsAdapter extends
             public void onClick(View v) {
                 if (deal.isLiked()) {
                     // if it was already liked, unlike it
-                    ivLikes.setImageResource(R.drawable.ic_favorite_outline_grey600_18dp);
+                    ivLikes.setImageResource(R.drawable.ic_favorite_outline_white_18dp);
                     ParseInterface.getInstance(context).likeDeal(deal, false);
 
                     int likesCount = deal.getLikesCount();
@@ -227,10 +227,10 @@ public class DealsAdapter extends
             SimpleDateFormat mfdf = new SimpleDateFormat(moreFriendlyDateFormat, Locale.ENGLISH);
             mfdf.setLenient(true);
 
-            tvDealExpiration.setText("Expires: " + mfdf.format(date));
+            tvDealExpiration.setText("Exp: " + mfdf.format(date));
         } else {
             // otherwise just put whatever value is there
-            tvDealExpiration.setText("Expires: " + tempDate);
+            tvDealExpiration.setText("Exp: " + tempDate);
         }
         tvDealDescription.setText(deal.getDealDescription());
         tvDealRestrictions.setText("Restrictions: " + deal.getDealRestrictions());

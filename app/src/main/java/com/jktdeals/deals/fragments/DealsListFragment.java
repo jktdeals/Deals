@@ -4,7 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +28,7 @@ public abstract class DealsListFragment extends Fragment {
     RecyclerView rvDeals;
     ArrayList<DealModel> deals;
     DealsAdapter adapter;
-    LinearLayoutManager linearLayoutManager;
+    GridLayoutManager gridLayoutManager;
     String TAG = "DealsList";
 
     @Override
@@ -46,9 +46,10 @@ public abstract class DealsListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_deals_list, container, false);
         rvDeals = (RecyclerView) view.findViewById(R.id.rvDeals);
         rvDeals.setAdapter(adapter);
+        // Define 2 column grid layout
+        gridLayoutManager = new GridLayoutManager(getActivity(), 2);
         // Set layout manager to position the items
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        rvDeals.setLayoutManager(linearLayoutManager);
+        rvDeals.setLayoutManager(gridLayoutManager);
 
         // hook up listener for tap delete icon to delete,
         // and also deal tap to view/hide deal detail
@@ -151,7 +152,7 @@ public abstract class DealsListFragment extends Fragment {
         // notify the adapter
         adapter.notifyItemInserted(0);
         // and scroll up to display the new deal
-        linearLayoutManager.scrollToPositionWithOffset(0, 0);
+        gridLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
 }
