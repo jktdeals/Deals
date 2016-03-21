@@ -55,6 +55,7 @@ public class DealsActivity extends AppCompatActivity {
         // Find our drawer view
         mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = setupDrawerToggle();
+        mDrawer.addDrawerListener(drawerToggle);
         nvDrawer = (NavigationView) findViewById(R.id.nvView);
         // Setup drawer view
         setupDrawerContent(nvDrawer);
@@ -194,7 +195,19 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
-        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, mDrawer, toolbar,
+                R.string.drawer_open, /* "open drawer" description for accessibility */
+                R.string.drawer_close /* "close drawer" description for accessibility */
+        ) {
+
+            public void onDrawerOpened(View drawerView) {
+                // I'm sticking this here because although when someone is logging in or creating
+                // an account in the first place I can get their name and set the navdrawer header
+                // in onActivityResult, but when Parse is getting the user info from LocalDatastore
+                // I'm not finding a callback or other place where I can be sure that that will
+                // have completed before calling getCurrentUser
+                setHeaderUserData();            }
+        };
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
