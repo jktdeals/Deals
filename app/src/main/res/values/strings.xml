@@ -7,6 +7,8 @@
     <string name="my_deals_none">There are no current deals that you created.</string>
     <string name="favorite_deals_none">There are no current deals that you have favorited.</string>
     <string name="facebook_app_id">1024827677577646</string>
+    <string name="email_address">Email address</string>
+    <string name="forgot_your_password">Forgot your password?</string>
     <string-array name="deals_category">
         <item>Cafe</item>
         <item>Bar</item>
