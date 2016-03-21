@@ -83,7 +83,7 @@
         <service android:name="com.parse.PushService" />
 
         <receiver
-            android:name="com.jktdeals.deals.listeners.MyCustomReceiver"
+            android:name="com.jktdeals.deals.MyCustomReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />

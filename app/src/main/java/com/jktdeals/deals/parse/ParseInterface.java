@@ -23,6 +23,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseImageView;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -97,14 +98,17 @@ public class ParseInterface {
 
         // set applicationId and server based on the values in the Heroku settings.
         // any network interceptors must be added with the Configuration Builder given this syntax
-        Parse.initialize(new Parse.Configuration.Builder(context)
+        Parse.initialize(new Parse.Configuration.Builder(context.getApplicationContext())
                 // .applicationId("crowdeal3") // should correspond to APP_ID env variable
                 .applicationId("gcmtestparse")
                 .addNetworkInterceptor(new ParseLogInterceptor())
                         // .server("https://parseapp3.herokuapp.com/parse/").build());
                 .server("https://gcmtestparse.herokuapp.com/parse/").build());
 
-        ParseFacebookUtils.initialize(context, RESULT_CODE_FACEBOOK);
+        // Need to register GCM token
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        ParseFacebookUtils.initialize(context.getApplicationContext (), RESULT_CODE_FACEBOOK);
 
 
         // User login
@@ -116,6 +120,8 @@ public class ParseInterface {
             //loginFBLink(new ParseUser());
             //loginAnonymous();
         }
+
+
 
     }
 
