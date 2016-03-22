@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.adapters.DealsFragmentPagerAdapter;
@@ -98,6 +99,14 @@ public class DealsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Logs 'app deactivate' App Event.
+        AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         processStopService(NotificationService.TAG);
@@ -108,6 +117,9 @@ public class DealsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         processStopService(NotificationService.TAG);
+        // Logs 'install' and 'app activate' App Events.
+        AppEventsLogger.activateApp(this);
+
     }
 
     private void setHeaderUserData() {
