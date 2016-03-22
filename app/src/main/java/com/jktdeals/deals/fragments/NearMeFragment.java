@@ -7,10 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -40,7 +40,7 @@ public class NearMeFragment extends DealsListFragment implements
     private ParseInterface pi;
     private SupportMapFragment mapFragment;
     private GoogleMap map;
-
+    GoogleMapOptions options;
     private GPSHelper gpsHelper;
 
 
@@ -65,7 +65,7 @@ public class NearMeFragment extends DealsListFragment implements
 //            frameLayout.addView(map1);
 
             FragmentManager fm = getChildFragmentManager();
-            GoogleMapOptions options = new GoogleMapOptions();
+            options = new GoogleMapOptions();
 
             gpsHelper = new GPSHelper(getContext());
             gpsHelper.getMyLocation();
@@ -87,6 +87,10 @@ public class NearMeFragment extends DealsListFragment implements
 
 
             mapFragment = SupportMapFragment.newInstance(options);
+            //adding new
+            //map.getUiSettings().setMyLocationButtonEnabled(true);
+            //map.setMyLocationEnabled(true);
+            //
             FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.frmMap);
             frameLayout.setVisibility(View.VISIBLE);
             fm.beginTransaction().replace(R.id.frmMap, mapFragment).commit();
@@ -106,12 +110,16 @@ public class NearMeFragment extends DealsListFragment implements
         }
     }
 
+    private void focusMapCamara(DealModel deal){
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(deal.getLatLang(), (float)14.0));
+    }
+
     protected void loadMap(GoogleMap googleMap){
         map = googleMap;
         if(map != null){
-            Toast.makeText(getContext(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
-
+            //Toast.makeText(getContext(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             addMarkersToMap();
+            //map.setMyLocationEnabled(true);
         }
     }
 
@@ -164,8 +172,9 @@ public class NearMeFragment extends DealsListFragment implements
                             .snippet(this.deals.get(i).getStoreName())
                             .icon(defaultMarker)));
 
-                    Log.v(TAG,"Deal "+i+"  was added " +mMarkers.get(mMarkers.size()-1).getId());
+                    Log.v(TAG,"Deal "+i+"  was added " +mMarkers.get(mMarkers.size() - 1).getId());
                 }
+
 
             }
             catch (Exception ex){
