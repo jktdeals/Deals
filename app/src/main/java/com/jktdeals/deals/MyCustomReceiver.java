@@ -1,16 +1,20 @@
 package com.jktdeals.deals;
 
+import android.app.ActivityManager;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.jktdeals.deals.activities.DealsActivity;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
+import com.jktdeals.deals.services.NotificationService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -76,16 +80,17 @@ public class MyCustomReceiver extends BroadcastReceiver {
             notificationText = notificationText + " " + dealO.getDealAbstract();
             ArrayList<DealModel> newDeals = new ArrayList<>();
             newDeals.add(dealO);
-            createServiceNotification(newDeals);
+            createServiceNotification(context, newDeals);
         }
 
         //TODO: remove below code after Jose displays the deals viachat head
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
-                R.drawable.ic_favorite_red_18dp).setContentTitle("Deal Notification: " + datavalue).setContentText(notificationText);
-        NotificationManager mNotificationManager = (NotificationManager) context
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context).setSmallIcon(
+//                R.drawable.ic_favorite_red_18dp).setContentTitle("Deal Notification: " + datavalue).setContentText(notificationText);
+//        NotificationManager mNotificationManager = (NotificationManager) context
+//                .getSystemService(Context.NOTIFICATION_SERVICE);
+//        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
     }
+
 
     // Handle push notification by invoking activity directly
     // See: http://guides.codepath.com/android/Using-Intents-to-Create-Flows
@@ -105,7 +110,68 @@ public class MyCustomReceiver extends BroadcastReceiver {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
-    public void createServiceNotification(ArrayList<DealModel> newDealList) {
+    public void createServiceNotification(Context context, ArrayList<DealModel> newDealList) {
         //TODO: To Jose to handle
+        if(!isMyServiceRunning(context, NotificationService.class)){
+
+            Bundle bundle = new Bundle();
+            int newDealsCount = 0;
+            for (int i = 0; i < newDealList.size(); i++) {
+                String nameField = "deal" + i;
+                bundle.putString(nameField + "Abstract", newDealList.get(i).getDealAbstract());
+                bundle.putString(nameField + "Description", newDealList.get(i).getDealDescription());
+                bundle.putString(nameField + "Value", newDealList.get(i).getDealValue());
+                bundle.putString(nameField + "Category", "Restaurant");//method to get single
+                newDealsCount++;
+            }
+
+            bundle.putInt("newDealsCount", newDealsCount);
+            processStartService(context, NotificationService.TAG, bundle);
+            createNotification(context);
+        }
+    }
+
+    public void createNotification(Context context) {
+        try {
+            Intent intent = new Intent(context, DealsActivity.class);
+            intent.putExtra("fromNotification", true);
+            PendingIntent pIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            Notification n = new Notification.Builder(context)
+                    .setContentTitle("New Deals")
+                    .setContentText("There are new Deals")
+                    .setSmallIcon(R.drawable.head)
+                    .setContentIntent(pIntent)
+                    .setAutoCancel(true)
+                    .build();
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            notificationManager.notify(0, n);
+        } catch (IllegalArgumentException ex) {
+            Log.v("CreatingNotification", ex.getMessage());
+        } catch (Exception ex) {
+            Log.v("CreatingNotification", ex.getMessage());
+        }
+    }
+
+    private boolean isMyServiceRunning(Context context,Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void processStartService(Context contex, final String tag, Bundle bundle) {
+        try {
+            Intent intent = new Intent(contex, NotificationService.class);
+            intent.putExtras(bundle);
+            intent.addCategory(tag);
+            contex.startService(intent);
+        } catch (Exception ex) {
+            Log.v("Service", ex.getMessage());
+        }
     }
 }

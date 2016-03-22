@@ -291,7 +291,6 @@ public class DealsActivity extends AppCompatActivity {
         } catch (Exception ex) {
             Log.v("Service", ex.getMessage());
         }
-
     }
 
     private void processStopService(final String tag) {

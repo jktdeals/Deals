@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -99,6 +100,7 @@ public class NearMeFragment extends DealsListFragment implements
                 mapFragment.getMapAsync(new OnMapReadyCallback() {
                     @Override
                     public void onMapReady(GoogleMap map) {
+                        //map.setMyLocationEnabled(true);
                         loadMap(map);
                     }
                 });
@@ -117,7 +119,7 @@ public class NearMeFragment extends DealsListFragment implements
     protected void loadMap(GoogleMap googleMap){
         map = googleMap;
         if(map != null){
-            //Toast.makeText(getContext(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Map Fragment was loaded properly!", Toast.LENGTH_SHORT).show();
             addMarkersToMap();
             //map.setMyLocationEnabled(true);
         }
