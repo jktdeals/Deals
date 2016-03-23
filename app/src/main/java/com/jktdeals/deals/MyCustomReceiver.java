@@ -55,6 +55,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
                     // Extract custom push data
                     if (key.equals("customdata")) {
                         // create a local notification
+
                         createNotification(context, value);
                     } else if (key.equals("launch")) {
                         // Handle push notification by invoking activity directly
@@ -77,10 +78,14 @@ public class MyCustomReceiver extends BroadcastReceiver {
         DealModel dealO = ParseInterface.getInstance(context).lookupById(datavalue);
         String notificationText = "New Deal Added!";
         if (dealO != null) {
-            notificationText = notificationText + " " + dealO.getDealAbstract();
-            ArrayList<DealModel> newDeals = new ArrayList<>();
-            newDeals.add(dealO);
-            createServiceNotification(context, newDeals);
+            // No Notification for creator
+            if (dealO.getUser().getUsername() != dealO.getUser().getUsername()) {
+                ArrayList<DealModel> newDeals = new ArrayList<>();
+                newDeals.add(dealO);
+                createServiceNotification(context, newDeals);
+
+            }
+
         }
 
         //TODO: remove below code after Jose displays the deals viachat head
@@ -147,7 +152,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
                     .setAutoCancel(true)
                     .build();
 
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(0, n);
         } catch (IllegalArgumentException ex) {
             Log.v("CreatingNotification", ex.getMessage());
