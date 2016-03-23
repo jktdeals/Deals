@@ -48,6 +48,7 @@ public class DealModel extends ParseObject {
     public static final String DealYelpRatingImageUrl = "yelpratingImage"; //yelp actually stores the stars rating image
     // Category Related
     public static String CATEGORIES = "categories";
+    public static String CATSTRING = "catstring";
     private static String TAG = "DealModel";
 
     public float getDealYelpRating() {
@@ -117,6 +118,14 @@ public class DealModel extends ParseObject {
 
     public void setDealAbstract(String dealAbstract) {
         put(DEAL_ABSTRACT, dealAbstract);
+    }
+
+    public String getCATSTRING() {
+        return getString((CATSTRING));
+    }
+
+    public void setCATSTRING(String cat) {
+        if (cat != null) put(CATSTRING, cat);
     }
 
     public String getDealRestrictions() {
