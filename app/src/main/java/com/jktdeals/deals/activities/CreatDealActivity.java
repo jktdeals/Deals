@@ -322,9 +322,9 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
             yelpMobileUrl = business.getString("mobile_url");
             yelpRating = business.getDouble("rating");
-            yelpSnipUrl = business.getString("snippet_image_url");
+            //yelpSnipUrl = business.getString("snippet_image_url");
+            yelpSnipUrl = business.getString("image_url");
             yelpSmallRatingImgUrl = business.getString("rating_img_url_small");
-
 
             businessNames.add(business.getString("name"));
             mobileUrl.add(business.getString("mobile_url"));
