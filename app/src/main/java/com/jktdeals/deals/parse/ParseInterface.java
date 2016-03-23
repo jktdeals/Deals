@@ -52,6 +52,7 @@ public class ParseInterface {
     private static String TAG = "ParseInterface";
     private DealsActivity context;
     private int MAX_CHAT_MESSAGES_TO_SHOW = 50;
+    private int nearRadius = 2; // Miles
 
     private ParseInterface(Context context) {
         this.context = (DealsActivity) context;
@@ -383,14 +384,17 @@ public class ParseInterface {
         ParseQuery<DealModel> query = ParseQuery.getQuery(DealModel.class);
         // Configure limit and sort order
         query.setLimit(pageSize);
-        query.orderByDescending("createdAt");
         query.setSkip(pageSize * pageNumber);
         if (whereList != null) {
             query.whereContainedIn("objectId", whereList);
         }
 
         if (latLng != null) {
-            query.whereNear(DealModel.LAT_LANG, new ParseGeoPoint(latLng.latitude, latLng.longitude));
+            //query.whereNear(DealModel.LAT_LANG, new ParseGeoPoint(latLng.latitude, latLng.longitude));
+            query.whereWithinMiles(DealModel.LAT_LANG, new ParseGeoPoint(latLng.latitude, latLng.longitude), nearRadius);
+        } else {
+            query.orderByDescending("createdAt");
+
         }
         // Execute query to fetch all messages from Parse asynchronously
         // This is equivalent to a SELECT query with SQL
