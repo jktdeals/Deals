@@ -261,6 +261,10 @@ public class DealsActivity extends AppCompatActivity {
                     bundle.putString(nameField + "Description", newDeals.get(i).getDealDescription());
                     bundle.putString(nameField + "Value", newDeals.get(i).getDealValue());
                     bundle.putString(nameField + "Category", "Restaurant");//method to get single
+
+                    //JSONArray cats = newDeals.get(i).getCategories();
+                    //ArrayList<DealModel.Category> category = newDeals.get(i).getCategoriesList();
+
                     newDealsCount++;
                 }
 
@@ -351,6 +355,8 @@ public class DealsActivity extends AppCompatActivity {
                 storeName, storeAbstract, storeDescription,
                 storeLogo, storePic
         );
+
+        dealObj.setCategory(DealModel.Category.Cafe);
 
         newDeals.add(dealObj);
         newDeals.add(dealObj);

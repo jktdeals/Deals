@@ -16,6 +16,7 @@ import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.jktdeals.deals.services.NotificationService;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -122,6 +123,9 @@ public class MyCustomReceiver extends BroadcastReceiver {
                 bundle.putString(nameField + "Description", newDealList.get(i).getDealDescription());
                 bundle.putString(nameField + "Value", newDealList.get(i).getDealValue());
                 bundle.putString(nameField + "Category", "Restaurant");//method to get single
+
+                JSONArray categories = newDealList.get(i).getCategories();
+
                 newDealsCount++;
             }
 
