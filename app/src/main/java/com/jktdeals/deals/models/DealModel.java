@@ -29,11 +29,11 @@ public class DealModel extends ParseObject {
     public static final String DEAL_RESTRICTIONS = "dealRestrictions";
     public static final String DEAL_EXPIRY = "dealExpiry";
     public static final String DEAL_PIC = "dealPic1";
-    //Location related
+    //location related
     public static final String LAT_LANG = "latLang";
     //Store Related
     public static final String STORE_NAME = "storeName";
-    //Location related
+    //location related
     public static final String STORE_ABSTRACT = "storeAbstract";
     public static final String STORE_DESCRIPTION = "storeDescription";
     public static final String STORE_LOGO = "storeLogo";

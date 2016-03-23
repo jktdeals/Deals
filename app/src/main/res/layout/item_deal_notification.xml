@@ -11,13 +11,15 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:id="@+id/imageView"
-            android:src="@drawable/com_facebook_favicon_white"/>
+            android:id="@+id/ivDealPictureCategory"
+            android:src="@drawable/com_facebook_favicon_white"
+            android:layout_marginLeft="20dp" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="25dp">
 
             <TextView
                 android:layout_width="wrap_content"

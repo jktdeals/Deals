@@ -15,10 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.Yelp.Yelp;
+import com.jktdeals.deals.adapters.CategoryAdapter;
 import com.jktdeals.deals.fragments.DatePickerFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
@@ -64,10 +65,13 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     EditText etDealRestrictions;
     EditText etDealDescriptions;
     TextView tvExpirationDateDisplay;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yy/MM/dd");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
     Spinner spDealCategory;
     Date expirationDate;
-    // Location propertioes
+    ImageView ivDealImage;
+    TextView tvStoreName;
+    TextView tvAddress;
+    // location propertioes
     private boolean locationSet = false;
     private LatLng latLng;
     private String placeName;
@@ -87,6 +91,9 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
     private Bitmap photoBitmap;
 
     private Yelp yelp;
+    private String[] categoryList = { "Cafe", "Bar", "Restaurant", "Hotel",
+            "Beauty", "Entertainment", "Pets", "Activities", "Massage", "Apparel"
+            , "Groceries", "Local Services", "Home Services", "Health" };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +159,29 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         return 0;
     }
 
+    private DealModel.Category getCategory(String value){
+        switch (value){
+            case "Cafe": return DealModel.Category.Cafe;
+            case "Bar": return DealModel.Category.Bar;
+            case "Restaurant": return DealModel.Category.Restaurant;
+            case "Hotel": return DealModel.Category.Hotel;
+            case "Beauty": return DealModel.Category.Beauty;
+            case "Entertainment": return DealModel.Category.Entertainment;
+            case "Pets": return DealModel.Category.Pets;
+            case "Activities": return DealModel.Category.Activities;
+            case "Massage": return DealModel.Category.Massage;
+            case "Apparel": return DealModel.Category.Apparel;
+            case "Groceries": return DealModel.Category.Groceries;
+            case "Local Services": return DealModel.Category.Local_Services;
+            case "Home Services": return DealModel.Category.Home_Services;
+            case "Health": return DealModel.Category.Health;
+
+        }
+
+        return DealModel.Category.Activities;
+    }
+
+
     private void loadDisplaySettings(){
 
         client = ParseInterface.getInstance(this);
@@ -165,9 +195,14 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         etDealDescriptions = (EditText) findViewById(R.id.etDealDescription);
         tvExpirationDateDisplay = (TextView) findViewById(R.id.tvExpirationDateDisplay);
         spDealCategory = (Spinner) findViewById(R.id.spDealCategory);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deals_category, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spDealCategory.setAdapter(adapter);
+        ivDealImage = (ImageView) findViewById(R.id.ivDealImage);
+        tvStoreName = (TextView) findViewById(R.id.tvStoreName);
+        tvAddress = (TextView) findViewById(R.id.tvAddress);
+        //ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.deals_category, android.R.layout.simple_spinner_item);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //spDealCategory.setAdapter(adapter);
+
+        spDealCategory.setAdapter(new CategoryAdapter(CreatDealActivity.this, R.layout.item_category, categoryList));
 
         final AlertDialog.Builder ad = new AlertDialog.Builder(this);
         //ad.setTitle("What do you Like ?");
@@ -186,12 +221,21 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
             }
         });
 
-        final Button btn = (Button) findViewById(R.id.btDealPhoto);
-        btn.setOnClickListener(new OnClickListener() {
+//        final Button btn = (Button) findViewById(R.id.btDealPhoto);
+//        btn.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View arg0) {
+//                // TODO Auto-generated method stub
+//                ad.show();
+//            }
+//        });
+
+        final ImageView dealImageView = (ImageView) findViewById(R.id.ivDealImage);
+        dealImageView.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                ad.show();
+            public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    ad.show();
             }
         });
 
@@ -258,7 +302,13 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                 cropPhoto(photoUri);
             } else if (requestCode == CROP_PHOTO_CODE) {
                 //postDeal();
+
+                Toast.makeText(this, "got crop_photo_code", Toast.LENGTH_SHORT).show();
+
+                //Picasso.with(this).load(photoFileName).into(ivDealImage);
+
                 photoBitmap = data.getParcelableExtra("data");
+                ivDealImage.setImageBitmap(photoBitmap);
                 //startPreviewPhotoActivity();
             } else if (requestCode == POST_PHOTO_CODE) {
                 //reloadPhotos();
@@ -280,6 +330,9 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                         placePhoneNumber = bundle.getString("phoneNumber");
                         placeRatings = bundle.getFloat("ratings");
                         locationSet = true;
+
+                        tvStoreName.setText(placeName);
+                        tvAddress.setText(placeAddress);
 
                         final String category = spDealCategory.getSelectedItem().toString();
                         new AsyncTask<Void, Void, String>() {
@@ -368,10 +421,10 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealRestrictions(etDealRestrictions.getText().toString());
         newDeal.setDealExpiry(tvExpirationDateDisplay.getText().toString());
         newDeal.setDealYelpMobileUrl(yelpMobileUrl);
-        newDeal.setDealYelpRating((float)yelpRating);
+        newDeal.setDealYelpRating((float) yelpRating);
         newDeal.setDealYelpSnipUrl(yelpSnipUrl);
         newDeal.setDDealYelpRatingImageUrl(yelpSmallRatingImgUrl);
-
+        newDeal.setCategory(getCategory(spDealCategory.getSelectedItem().toString()));
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic
         if (photoBitmap != null){
             client.updateDealImage(newDeal,"dealpic",photoBitmap);
@@ -457,9 +510,4 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         Intent i = new Intent(this, SuggestedPlaces.class );
         startActivityForResult(i, SET_LOCATION_REQUEST);
     }
-
-//    public void onOpenYelp(View view) {
-//        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(yelpUrl));
-//        startActivity(browserIntent);
-//    }
 }
