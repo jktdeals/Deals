@@ -533,6 +533,22 @@ public class ParseInterface {
 
     }
 
+    public String getDisplayName() {
+        String ret = null;
+
+        ParseUser user = ParseUser.getCurrentUser();
+        if (user != null) {
+            ret = user.getString("name");
+            if (ret == null) {
+                ret = user.getUsername();
+                if (ret == null) {
+                    ret = "Anonymous";
+                }
+            }
+        }
+        return ret;
+    }
+
     public interface dealLoadNotifier {
 
         void notifyLoad(int noOfItems);

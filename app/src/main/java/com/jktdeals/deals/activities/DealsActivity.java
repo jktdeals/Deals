@@ -129,17 +129,7 @@ public class DealsActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nvView);
         View headerLayout = navigationView.getHeaderView(0);
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
-        String userName = user.getUsername();
-        String name = user.getString("name");
-        if (name != null) {
-            Log.d("facebook", "facebook name: " + name);
-            userName = name;
-        }
-        if (userName == null) {
-            tvUserName.setText("(Anonymous user)");
-        } else {
-            tvUserName.setText(userName);
-        }
+        tvUserName.setText(pi.getDisplayName());
     }
 
     public void refreshMyDeals() {
