@@ -44,6 +44,7 @@ public class NotificationService extends Service {
     private final float SCROLL_THRESHOLD = 10;
 
     private ArrayList<DealModel> myNewDeals;
+    private DealNotificationAdapter dealNotificationAdapter;
 
     private ParseInterface pi;
     private GPSHelper gpsHelper;
@@ -95,6 +96,7 @@ public class NotificationService extends Service {
         params.x = 0;
         params.y = 100;
         myNewDeals = new ArrayList<DealModel>();
+        dealNotificationAdapter = new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals);
 
         windowManager.addView(chatHead, params);
 
@@ -114,7 +116,12 @@ public class NotificationService extends Service {
                             long pressTime = System.currentTimeMillis();
                             if (pressTime - lastPressTime <= 300) {
                                 //createNotification();
-                                myNewDeals.clear();
+                                //myNewDeals.clear();
+
+                                if(dealNotificationAdapter != null){
+                                    dealNotificationAdapter.clear();
+                                }
+
                                 NotificationService.this.stopSelf();
                                 mHasDoubleClicked = true;
                             } else {     // If not double click....
@@ -178,8 +185,10 @@ public class NotificationService extends Service {
             Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             ListPopupWindow popup = new ListPopupWindow(this);
             popup.setAnchorView(anchor);
-            popup.setWidth((int) (display.getWidth()/(1.5)));
-            popup.setAdapter(new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals));
+            popup.setWidth((int) (display.getWidth() / (2.0)));
+            //dealNotificationAdapter = new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals);
+            popup.setAdapter(dealNotificationAdapter);
+            //popup.setAdapter(new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals));
             popup.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
@@ -208,7 +217,14 @@ public class NotificationService extends Service {
     public void onDestroy() {
         try{super.onDestroy();
             //Toast.makeText(this, "Removing..", Toast.LENGTH_SHORT).show();
-            if (chatHead != null) windowManager.removeView(chatHead);}
+            if (chatHead != null)
+            {
+//                if(dealNotificationAdapter != null){
+//                    dealNotificationAdapter.clear();
+//                }
+                //dealNotificationAdapter.clear();
+                windowManager.removeView(chatHead);
+            }}
         catch (Exception ex){
             Log.v("ChatHeadClosing", ex.getMessage());
         }
