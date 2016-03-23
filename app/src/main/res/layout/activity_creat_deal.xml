@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/etDealName"
-                android:hint="Abstract"
+                android:hint="Deal title"
                 android:textSize="15dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="5dp" />
@@ -64,15 +64,43 @@
 
     </LinearLayout>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/etDealRestrictions"
-        android:layout_gravity="center_horizontal"
-        android:hint="Restriction"
-        android:textSize="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp" />
+    <!--<EditText-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/etDealRestrictions"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:hint="Restriction"-->
+        <!--android:textSize="15dp"-->
+        <!--android:layout_marginTop="5dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:maxLines="2" />-->
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="30dp"
+                android:id="@+id/imageView18"
+                android:src="@drawable/restriction"
+                android:layout_gravity="center_vertical" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/etDealRestrictions"
+                android:layout_gravity="center_horizontal"
+                android:hint="Restriction"
+                android:textSize="15dp"
+                android:layout_marginLeft="20dp"
+                />
+
+        </LinearLayout>
+
 
     <LinearLayout
         android:orientation="horizontal"

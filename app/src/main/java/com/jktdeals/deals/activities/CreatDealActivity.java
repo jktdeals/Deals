@@ -137,49 +137,49 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
 
     }
 
-    private int getCotegoryIndex(String value){
-        switch (value){
-            case "Cafe": return 0;
-            case "Bar": return 1;
-            case "Restaurant": return 2;
-            case "Hotel": return 3;
-            case "Beauty": return 4;
-            case "Entertainment": return 5;
-            case "Pets": return 6;
-            case "Activities": return 7;
-            case "Massage": return 8;
-            case "Apparel": return 9;
-            case "Groceries": return 10;
-            case "Local_Services": return 11;
-            case "Home_Services": return 12;
-            case "Health": return 13;
-
-        }
-
-        return 0;
-    }
-
-    private DealModel.Category getCategory(String value){
-        switch (value){
-            case "Cafe": return DealModel.Category.Cafe;
-            case "Bar": return DealModel.Category.Bar;
-            case "Restaurant": return DealModel.Category.Restaurant;
-            case "Hotel": return DealModel.Category.Hotel;
-            case "Beauty": return DealModel.Category.Beauty;
-            case "Entertainment": return DealModel.Category.Entertainment;
-            case "Pets": return DealModel.Category.Pets;
-            case "Activities": return DealModel.Category.Activities;
-            case "Massage": return DealModel.Category.Massage;
-            case "Apparel": return DealModel.Category.Apparel;
-            case "Groceries": return DealModel.Category.Groceries;
-            case "Local Services": return DealModel.Category.Local_Services;
-            case "Home Services": return DealModel.Category.Home_Services;
-            case "Health": return DealModel.Category.Health;
-
-        }
-
-        return DealModel.Category.Activities;
-    }
+//    private int getCotegoryIndex(String value){
+//        switch (value){
+//            case "Cafe": return 0;
+//            case "Bar": return 1;
+//            case "Restaurant": return 2;
+//            case "Hotel": return 3;
+//            case "Beauty": return 4;
+//            case "Entertainment": return 5;
+//            case "Pets": return 6;
+//            case "Activities": return 7;
+//            case "Massage": return 8;
+//            case "Apparel": return 9;
+//            case "Groceries": return 10;
+//            case "Local_Services": return 11;
+//            case "Home_Services": return 12;
+//            case "Health": return 13;
+//
+//        }
+//
+//        return 0;
+//    }
+//
+//    private DealModel.Category getCategory(String value){
+//        switch (value){
+//            case "Cafe": return DealModel.Category.Cafe;
+//            case "Bar": return DealModel.Category.Bar;
+//            case "Restaurant": return DealModel.Category.Restaurant;
+//            case "Hotel": return DealModel.Category.Hotel;
+//            case "Beauty": return DealModel.Category.Beauty;
+//            case "Entertainment": return DealModel.Category.Entertainment;
+//            case "Pets": return DealModel.Category.Pets;
+//            case "Activities": return DealModel.Category.Activities;
+//            case "Massage": return DealModel.Category.Massage;
+//            case "Apparel": return DealModel.Category.Apparel;
+//            case "Groceries": return DealModel.Category.Groceries;
+//            case "Local Services": return DealModel.Category.Local_Services;
+//            case "Home Services": return DealModel.Category.Home_Services;
+//            case "Health": return DealModel.Category.Health;
+//
+//        }
+//
+//        return DealModel.Category.Activities;
+//    }
 
 
     private void loadDisplaySettings(){
@@ -334,6 +334,7 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                         tvStoreName.setText(placeName);
                         tvAddress.setText(placeAddress);
 
+
                         final String category = spDealCategory.getSelectedItem().toString();
                         new AsyncTask<Void, Void, String>() {
                             @Override
@@ -424,7 +425,10 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealYelpRating((float) yelpRating);
         newDeal.setDealYelpSnipUrl(yelpSnipUrl);
         newDeal.setDDealYelpRatingImageUrl(yelpSmallRatingImgUrl);
-        newDeal.setCategory(getCategory(spDealCategory.getSelectedItem().toString()));
+        newDeal.setStoreAbstract(placeUri);
+        newDeal.setStoreDescription(placePhoneNumber);
+        newDeal.setCATSTRING(spDealCategory.getSelectedItem().toString());
+        //newDeal.setCategory(getCategory(spDealCategory.getSelectedItem().toString()));
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic
         if (photoBitmap != null){
             client.updateDealImage(newDeal,"dealpic",photoBitmap);

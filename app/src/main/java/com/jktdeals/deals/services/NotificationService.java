@@ -70,6 +70,7 @@ public class NotificationService extends Service {
 
                 DealModel newDeal = pi.createDealObject(dealValue, dealAbstract, dealDescription,
                         "", "", new LatLng(0,0), "", "", "", "", "" );
+                newDeal.setCATSTRING(dealCathegory);
                 this.myNewDeals.add(newDeal);
             }
         }
@@ -159,8 +160,7 @@ public class NotificationService extends Service {
           Log.v("ChatHead", ex.getMessage());
         }
 
-
-        chatHead.setImageResource(R.drawable.head);
+        chatHead.setImageResource(R.drawable.ic_circle_large);
     }
 
     private void onClick() {
@@ -191,6 +191,8 @@ public class NotificationService extends Service {
                     intent.putExtras(bundle);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                     startActivity(intent);
+
+                    //myNewDeals.clear();
                 }
             });
 

@@ -261,7 +261,7 @@ public class DealsActivity extends AppCompatActivity {
                     bundle.putString(nameField + "Abstract", newDeals.get(i).getDealAbstract());
                     bundle.putString(nameField + "Description", newDeals.get(i).getDealDescription());
                     bundle.putString(nameField + "Value", newDeals.get(i).getDealValue());
-                    bundle.putString(nameField + "Category", "Restaurant");//method to get single
+                    bundle.putString(nameField + "Category", newDeals.get(i).getCATSTRING());//method to get single
 
                     //JSONArray cats = newDeals.get(i).getCategories();
                     //ArrayList<DealModel.Category> category = newDeals.get(i).getCategoriesList();
@@ -288,8 +288,9 @@ public class DealsActivity extends AppCompatActivity {
 
             Notification n = new Notification.Builder(this)
                     .setContentTitle("New Deals")
-                    .setContentText("There are new Deals")
-                    .setSmallIcon(R.drawable.head)
+                    .setContentText("Touch to view New Deals")
+                    //.setSmallIcon(R.drawable.head)
+                    .setSmallIcon(R.drawable.ic_circle_d)
                     .setContentIntent(pIntent)
                     .setAutoCancel(true)
                     .build();
@@ -348,7 +349,7 @@ public class DealsActivity extends AppCompatActivity {
         String storePic = "";
 
         // createDeal
-        DealModel dealObj = pi.createDealObject(dealValue, dealAbstract, dealDescription,
+        DealModel dealObj01 = pi.createDealObject(dealValue, dealAbstract, dealDescription,
                 dealRestrictions, dealExpiry,
 
                 new LatLng(0, 0),
@@ -357,10 +358,19 @@ public class DealsActivity extends AppCompatActivity {
                 storeLogo, storePic
         );
 
-        dealObj.setCategory(DealModel.Category.Cafe);
+        DealModel dealObj02 = pi.createDealObject("5.00", "Burrito for less", "50% off",
+                dealRestrictions, dealExpiry,
 
-        newDeals.add(dealObj);
-        newDeals.add(dealObj);
+                new LatLng(0, 0),
+
+                storeName, storeAbstract, storeDescription,
+                storeLogo, storePic
+        );
+
+        dealObj01.setCATSTRING("Home Services");
+        dealObj02.setCATSTRING("Restaurant");
+        newDeals.add(dealObj01);
+        newDeals.add(dealObj02);
 
     }
 

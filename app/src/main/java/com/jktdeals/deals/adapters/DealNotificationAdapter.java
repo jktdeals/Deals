@@ -45,52 +45,52 @@ public class DealNotificationAdapter extends ArrayAdapter {
         // Populate the data into the template view using the data object
         tvDealTitle.setText(deal.getDealAbstract());
         tvDealDescription.setText(deal.getDealDescription());
-        ivDealPictureCategory.setImageResource(R.drawable.restaurant);
+        //ivDealPictureCategory.setImageResource(R.drawable.restaurant);
 
-//        switch (deal.getCategories().toString()){
-//            case "Cafe":
-//                ivDealPictureCategory.setImageResource(R.drawable.coffee);
-//                break;
-//            case "Bar":
-//                ivDealPictureCategory.setImageResource(R.drawable.bar);
-//                break;
-//            case "Restaurant":
-//                ivDealPictureCategory.setImageResource(R.drawable.restaurant);
-//                break;
-//            case "Hotel":
-//                ivDealPictureCategory.setImageResource(R.drawable.hotel);
-//                break;
-//            case "Beauty":
-//                ivDealPictureCategory.setImageResource(R.drawable.beauty);
-//                break;
-//            case "Entertainment":
-//                ivDealPictureCategory.setImageResource(R.drawable.entertainment);
-//                break;
-//            case "Pets":
-//                ivDealPictureCategory.setImageResource(R.drawable.pets);
-//                break;
-//            case "Activities":
-//                ivDealPictureCategory.setImageResource(R.drawable.activities);
-//                break;
-//            case "Massage":
-//                ivDealPictureCategory.setImageResource(R.drawable.massage);
-//                break;
-//            case "Apparel":
-//                ivDealPictureCategory.setImageResource(R.drawable.apparel);
-//                break;
-//            case "Groceries":
-//                ivDealPictureCategory.setImageResource(R.drawable.groceries);
-//                break;
-//            case "Local Services":
-//                ivDealPictureCategory.setImageResource(R.drawable.localservice);
-//                break;
-//            case "Home Services":
-//                ivDealPictureCategory.setImageResource(R.drawable.homeservice);
-//                break;
-//            case "Health":
-//                ivDealPictureCategory.setImageResource(R.drawable.health);
-//                break;
-//        }
+        switch (deal.getCATSTRING()){
+            case "Cafe":
+                ivDealPictureCategory.setImageResource(R.drawable.coffee);
+                break;
+            case "Bar":
+                ivDealPictureCategory.setImageResource(R.drawable.bar);
+                break;
+            case "Restaurant":
+                ivDealPictureCategory.setImageResource(R.drawable.restaurant);
+                break;
+            case "Hotel":
+                ivDealPictureCategory.setImageResource(R.drawable.hotel);
+                break;
+            case "Beauty":
+                ivDealPictureCategory.setImageResource(R.drawable.beauty);
+                break;
+            case "Entertainment":
+                ivDealPictureCategory.setImageResource(R.drawable.entertainment);
+                break;
+            case "Pets":
+                ivDealPictureCategory.setImageResource(R.drawable.pets);
+                break;
+            case "Activities":
+                ivDealPictureCategory.setImageResource(R.drawable.activities);
+                break;
+            case "Massage":
+                ivDealPictureCategory.setImageResource(R.drawable.massage);
+                break;
+            case "Apparel":
+                ivDealPictureCategory.setImageResource(R.drawable.apparel);
+                break;
+            case "Groceries":
+                ivDealPictureCategory.setImageResource(R.drawable.groceries);
+                break;
+            case "Local Services":
+                ivDealPictureCategory.setImageResource(R.drawable.localservice);
+                break;
+            case "Home Services":
+                ivDealPictureCategory.setImageResource(R.drawable.homeservice);
+                break;
+            case "Health":
+                ivDealPictureCategory.setImageResource(R.drawable.health);
+                break;
+        }
 
 
         // Return the completed view to render on screen
