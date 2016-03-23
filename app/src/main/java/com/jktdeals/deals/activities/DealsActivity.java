@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.adapters.DealsFragmentPagerAdapter;
 import com.jktdeals.deals.fragments.MyDealsFragment;
+import com.jktdeals.deals.fragments.NearMeFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
@@ -147,6 +148,15 @@ public class DealsActivity extends AppCompatActivity {
         }
         MyDealsFragment myDealsFragment = (MyDealsFragment) dealsFragmentPagerAdapter.getRegisteredFragment(1);
         if (myDealsFragment != null) myDealsFragment.getDeals(false);
+    }
+
+    public void refreshNearMe() {
+        // after creating a deal, show Near Me with the new deal included
+        if (viewPager.getCurrentItem() != 0) {
+            viewPager.setCurrentItem(0);
+        }
+        NearMeFragment nearMeFragment = (NearMeFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
+        if (nearMeFragment != null) nearMeFragment.getDeals(false);
     }
 
     @Override

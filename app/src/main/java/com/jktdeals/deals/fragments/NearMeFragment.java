@@ -132,7 +132,7 @@ public class NearMeFragment extends DealsListFragment implements
             @Override
             public void notifyLoad(int noOfItems) {
                 addAll(dealsNearMe, append);
-
+                addMarkersToMap();
             }
         };
 

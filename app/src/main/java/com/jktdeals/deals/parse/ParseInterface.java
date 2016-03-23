@@ -197,11 +197,14 @@ public class ParseInterface {
                 Log.d(TAG, "successfully saved");
                 pushDealCreation(dealObject);
 
-
-                // when a deal is created, update My Deals
+                // when a deal is created, update the Near Me tab/map if it's the current tab
+                // or update My Deals if it isn't
                 DealsActivity dealsActivity = context;
-                dealsActivity.refreshMyDeals();
-
+                if (dealsActivity.viewPager.getCurrentItem() == 0) {
+                    dealsActivity.refreshNearMe();
+                } else {
+                    dealsActivity.refreshMyDeals();
+                }
             }
 
         });
