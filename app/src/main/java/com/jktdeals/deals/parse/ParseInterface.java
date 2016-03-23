@@ -1,9 +1,13 @@
 package com.jktdeals.deals.parse;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.ByteArrayOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +94,9 @@ public class ParseInterface {
     private void init() {
 
 
+
         ParseFacebookUtils.initialize(context.getApplicationContext(), RESULT_CODE_FACEBOOK);
+        facebookHashKey();
 
         // User login
         //ParseUser.logOut();
@@ -101,6 +109,24 @@ public class ParseInterface {
         }
 
 
+    }
+
+    private void facebookHashKey() {
+
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo("com.jktdeals.deals", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                String hashCode = Base64.encodeToString(md.digest(), Base64.DEFAULT);
+                System.out.println("Print the hashKey for Facebook :" + hashCode);
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+
+        } catch (NoSuchAlgorithmException e) {
+
+        }
     }
 
     public DealModel createDealObject(String dealValue, String dealAbstract, String dealDescription,

@@ -129,6 +129,10 @@ public class DealsActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         String userName = user.getUsername();
+        String name = user.getString("name");
+        if (user.getString("name") != null) {
+            userName = name;
+        }
         if (userName == null) {
             tvUserName.setText("(Anonymous user)");
         } else {
