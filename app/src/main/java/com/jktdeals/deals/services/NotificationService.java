@@ -186,6 +186,7 @@ public class NotificationService extends Service {
             ListPopupWindow popup = new ListPopupWindow(this);
             popup.setAnchorView(anchor);
             popup.setWidth((int) (display.getWidth() / (2.0)));
+            //popup.setBackgroundDrawable(R.drawable.white_round);
             //dealNotificationAdapter = new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals);
             popup.setAdapter(dealNotificationAdapter);
             //popup.setAdapter(new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals));

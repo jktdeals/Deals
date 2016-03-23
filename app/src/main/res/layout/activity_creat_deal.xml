@@ -15,12 +15,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="7dp"
-        android:background="@drawable/search_place_write_text">
+        android:background="@drawable/search_place_write_text"
+        android:verticalScrollbarPosition="right"
+        android:scrollIndicators="right">
 
-        <!--<ImageView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:src="@drawable/mediumbarcode"/>-->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mediumbarcode"/>
 
     <LinearLayout
         android:orientation="horizontal"
