@@ -131,13 +131,14 @@ public class DealsActivity extends AppCompatActivity {
         TextView tvUserName = (TextView) headerLayout.findViewById(R.id.tvUserName);
         String userName = user.getUsername();
         String name = user.getString("name");
-        if (user.getString("name") != null) {
+        if (name != null) {
+            Log.d("facebook", "facebook name: " + name);
             userName = name;
         }
         if (userName == null) {
             tvUserName.setText("(Anonymous user)");
         } else {
-            tvUserName.setText(user.getUsername());
+            tvUserName.setText(userName);
         }
     }
 
