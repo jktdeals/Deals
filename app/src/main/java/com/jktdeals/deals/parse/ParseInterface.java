@@ -52,7 +52,7 @@ public class ParseInterface {
     private static String TAG = "ParseInterface";
     private DealsActivity context;
     private int MAX_CHAT_MESSAGES_TO_SHOW = 50;
-    private int nearRadius = 2; // Miles
+    private int nearRadius = 5; // Miles
 
     private ParseInterface(Context context) {
         this.context = (DealsActivity) context;
