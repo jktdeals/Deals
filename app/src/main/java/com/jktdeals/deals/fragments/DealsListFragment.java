@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.activities.DealsActivity;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DealsListFragment extends Fragment {
-    public static int DEFULT_PAGE_SIZE = 10;
+    public static int DEFULT_PAGE_SIZE = 20;
     protected int current_page = 0;
     RecyclerView rvDeals;
     ArrayList<DealModel> deals;
@@ -56,13 +56,13 @@ public abstract class DealsListFragment extends Fragment {
         adapter.setOnItemClickListener(new DealsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
+                // get the deal
+                final DealModel deal = (DealModel) deals.get(position);
                 // if the delete icon was clicked
                 if (view instanceof ImageView) {
-                    // get the deal
-                    final DealModel deal = (DealModel) deals.get(position);
-
                     // diaplay an "Are you sure you want to delete ... " dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle(R.string.app_name);
                     builder.setMessage("Are you sure you want to delete your deal \"" + deal.getDealAbstract() + "\"?");
                     builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -102,15 +102,18 @@ public abstract class DealsListFragment extends Fragment {
                 } else {
                     // if  they tapped the deal but not the delete icon,
                     // then display or hide the additional details of the deal
-                    TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
-                    TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
-                    if (tvDealDescription.getVisibility() == View.GONE) {
-                        tvDealDescription.setVisibility(View.VISIBLE);
-                        tvDealRestrictions.setVisibility(View.VISIBLE);
-                    } else {
-                        tvDealDescription.setVisibility(View.GONE);
-                        tvDealRestrictions.setVisibility(View.GONE);
-                    }
+//                    TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
+//                    TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
+//                    if (tvDealDescription.getVisibility() == View.GONE) {
+//                        tvDealDescription.setVisibility(View.VISIBLE);
+//                        tvDealRestrictions.setVisibility(View.VISIBLE);
+//                    } else {
+//                        tvDealDescription.setVisibility(View.GONE);
+//                        tvDealRestrictions.setVisibility(View.GONE);
+//                    }
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal);
+                    dealDetailFragment.show(fm, "fragment_deal_detail");
                 }
             }
         });

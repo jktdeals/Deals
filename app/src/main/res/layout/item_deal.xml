@@ -9,7 +9,6 @@
     card_view:cardCornerRadius="4dp"
     card_view:cardElevation="4dp">
 
-
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +22,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/bake_sale" />
+            android:src="@drawable/placeholder" />
 
         <ImageView
             android:id="@+id/ivLikes"

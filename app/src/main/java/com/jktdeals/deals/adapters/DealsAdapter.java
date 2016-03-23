@@ -19,17 +19,13 @@ import com.jktdeals.deals.activities.CreatDealActivity;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
+import com.jktdeals.deals.utility.ExpirationDate;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // based on http://guides.codepath.com/android/Using-the-RecyclerView
 
@@ -89,7 +85,6 @@ public class DealsAdapter extends
         Log.d(TAG, "onBindViewHolder getItemCount: " + mDeals.size());
         final Context context = viewHolder.context;
 
-
         // Set item views based on the data model
         TextView tvStoreName = viewHolder.tvStoreName;
         TextView tvDealValue = viewHolder.tvDealValue;
@@ -102,7 +97,7 @@ public class DealsAdapter extends
         final ImageView ivLikes = viewHolder.ivLikes;
         ImageView ivEdit = viewHolder.ivEdit;
         ImageView ivDelete = viewHolder.ivDelete;
-        ImageView tvDealImage = viewHolder.tvDealImage;
+        ImageView ivDealImage = viewHolder.ivDealImage;
 
         tvStoreName.setText(deal.getStoreName());
 
@@ -172,8 +167,6 @@ public class DealsAdapter extends
 //            tvDealValue.setText("null");
 //        } else {
         tvDealValue.setText(tempValue + " off");
-
-
 //        }
         tvDealName.setText(deal.getDealAbstract());
 
@@ -203,44 +196,20 @@ public class DealsAdapter extends
             tvDealDistance.setText(miles + "m");
         }
 
-        String tempDate = deal.getDealExpiry();
-        Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d\\d$");
-        Matcher m = p.matcher(tempDate);
-        if (m.matches()) {
-            // if the expiration date uses the yy/mm/dd format from Jose's
-            // CreatDealActivity, parse it
-            Date date;
-            long dateMillis = 0;
-            date = new Date(dateMillis);
-            String yymmddFormat = "yy/MM/dd";
-            SimpleDateFormat sf = new SimpleDateFormat(yymmddFormat, Locale.ENGLISH);
-            sf.setLenient(true);
+        tvDealExpiration.setText("Exp: " + ExpirationDate.formatExpirationDate(deal.getDealExpiry()));
 
-            try {
-                dateMillis = sf.parse(tempDate).getTime();
-                date = new Date(dateMillis);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            String moreFriendlyDateFormat = "MMM d, yyyy";
-            SimpleDateFormat mfdf = new SimpleDateFormat(moreFriendlyDateFormat, Locale.ENGLISH);
-            mfdf.setLenient(true);
-
-            tvDealExpiration.setText("Exp: " + mfdf.format(date));
-        } else {
-            // otherwise just put whatever value is there
-            tvDealExpiration.setText("Exp: " + tempDate);
-        }
         tvDealDescription.setText(deal.getDealDescription());
         tvDealRestrictions.setText("Restrictions: " + deal.getDealRestrictions());
 
         if (deal.getDealPic() != null) {
-            ParseInterface.populateImageView(tvDealImage, deal.getDealPic());
-            //ParseInterface.populateImageView(tvDealImage,new ParseFile(R.mipmap.ic_launcher));
+            ParseInterface.populateImageView(ivDealImage, deal.getDealPic());
+            //ParseInterface.populateImageView(ivDealImage,new ParseFile(R.mipmap.ic_launcher));
         } else {
-            tvDealImage.setImageResource(R.drawable.placeholder);
-
+            //ivDealImage.setImageResource(R.drawable.placeholder);
+            String yelpSnipUrl = deal.getDealYelpSnipUrl();
+            if (yelpSnipUrl != null) {
+                Picasso.with(ivDealImage.getContext()).load(yelpSnipUrl).fit().centerCrop().into(ivDealImage);
+            }
         }
 
         ParseUser u;
@@ -289,7 +258,7 @@ public class DealsAdapter extends
         public ImageView ivLikes;
         public ImageView ivEdit;
         public ImageView ivDelete;
-        public ParseImageView tvDealImage;
+        public ParseImageView ivDealImage;
         public RadioButton tvLikeButton;
         private Context context;
 
@@ -306,7 +275,7 @@ public class DealsAdapter extends
             this.ivLikes = (ImageView) itemView.findViewById(R.id.ivLikes);
             this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
             this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
-            this.tvDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
+            this.ivDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
 
             // set a click listener for when the user clicks the delete icon
             ivDelete.setOnClickListener(new View.OnClickListener() {
