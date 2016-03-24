@@ -9,6 +9,9 @@
     <string name="facebook_app_id">1024827677577646</string>
     <string name="email_address">Email address</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="map">MAP</string>
+    <string name="call">CALL</string>
+    <string name="website">WEBSITE</string>
     <string-array name="deals_category">
         <item>Cafe</item>
         <item>Bar</item>

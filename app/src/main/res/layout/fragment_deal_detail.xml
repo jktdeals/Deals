@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/line1"
+        android:layout_below="@+id/btnCall"
         android:padding="10dp"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.2"
@@ -96,7 +96,7 @@
         android:text="Deal name"
         android:background="@color/colorPrimary"
         android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView
@@ -109,6 +109,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:textSize="13dp"
         android:text="Deal description" />
 
     <TextView
@@ -120,6 +121,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="13dp"
         android:text="Deal restrictions" />
 
     <TextView
@@ -131,6 +133,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="13dp"
         android:text="Deal restrictions" />
 
     <TextView
@@ -142,7 +145,7 @@
         android:layout_margin="10dp"
         android:text="hkkjhkj"
         android:visibility="invisible"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/tvDealExpiration"
@@ -152,6 +155,78 @@
         android:layout_below="@id/tvDealPostedBy"
         android:textColor="@color/colorAccent"
         android:layout_margin="10dp"
+        android:textSize="13dp"
         android:text="Expiration" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:text="@string/call"
+        android:id="@+id/btnCall"
+        android:background="@android:color/white"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/ivCall"
+        android:textSize="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/ivCall"
+        android:layout_below="@+id/line1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="-6dp"
+        android:layout_alignLeft="@+id/btnCall"
+        android:layout_alignRight="@+id/btnCall"
+        android:gravity="center_horizontal"
+        android:src="@mipmap/ic_call" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:text="@string/map"
+        android:id="@+id/btnMap"
+        android:background="@android:color/white"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/ivMap"
+        android:textSize="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/ivMap"
+        android:layout_below="@+id/line1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="-6dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:src="@mipmap/ic_map" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:text="@string/website"
+        android:id="@+id/btnWeb"
+        android:background="@android:color/white"
+        android:textColor="@color/colorPrimary"
+        android:layout_below="@+id/ivCall"
+        android:textSize="10dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_alignParentRight="true" />
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/ivWeb"
+        android:layout_below="@+id/line1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="-6dp"
+        android:layout_alignLeft="@+id/btnWeb"
+        android:layout_alignRight="@+id/btnWeb"
+        android:gravity="center_horizontal"
+        android:src="@mipmap/ic_web_site" />
 
 </RelativeLayout>
