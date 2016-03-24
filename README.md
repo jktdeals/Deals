@@ -36,9 +36,9 @@
 
 ## Optional User Stories
 
-* [ ] Floating notifications widget (like Facebook Messenger) 
+* [x] Floating notifications widget (like Facebook Messenger) 
 * [ ] User can configure notifications/alerts
-* [ ] Background service notifies user of deals as they are added 
+* [x] Background service notifies user of deals as they are added 
 * [ ] Background service notifies user as location changes bring user into proximity with different deals
 * [ ] User can see a list of all their notifications/alerts
 * [ ] App supports deals that can be redeemed within the app in addition to general informational deals
