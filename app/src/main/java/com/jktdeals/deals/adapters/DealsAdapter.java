@@ -163,11 +163,13 @@ public class DealsAdapter extends
 
 
         String tempValue = deal.getDealValue();
-//        if (tempValue == null) {
-//            tvDealValue.setText("null");
-//        } else {
-        tvDealValue.setText(tempValue + " off");
-//        }
+        if (tempValue.equals("")) {
+            tvDealValue.setVisibility(View.INVISIBLE);
+        } else {
+            tvDealValue.setVisibility(View.VISIBLE);
+            tvDealValue.setText("Save " + tempValue);
+        }
+
         tvDealName.setText(deal.getDealAbstract());
 
         LatLng dealLatLng = deal.getLatLang();
