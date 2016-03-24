@@ -15,6 +15,7 @@ import com.jktdeals.deals.activities.DealsActivity;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.jktdeals.deals.services.NotificationService;
+import com.parse.ParseUser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -79,7 +80,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
         String notificationText = "New Deal Added!";
         if (dealO != null) {
             // No Notification for creator
-            if (dealO.getUser().getUsername() != dealO.getUser().getUsername()) {
+            if (!dealO.getUser().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
                 ArrayList<DealModel> newDeals = new ArrayList<>();
                 newDeals.add(dealO);
                 createServiceNotification(context, newDeals);
