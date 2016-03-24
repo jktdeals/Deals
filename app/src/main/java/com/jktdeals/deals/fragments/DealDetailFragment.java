@@ -1,9 +1,14 @@
 package com.jktdeals.deals.fragments;
 
+import android.Manifest;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.TextView;
 
 import com.jktdeals.deals.R;
 import com.jktdeals.deals.models.DealModel;
+import com.jktdeals.deals.utility.Constants;
 import com.jktdeals.deals.utility.ExpirationDate;
 import com.parse.ParseFile;
 import com.squareup.picasso.Picasso;
@@ -37,6 +43,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         }
         args.putString("dealValue", deal.getDealValue());
         args.putString("storeName", deal.getStoreName());
+        args.putString("storePhoneNumber", deal.getStoreDescription());
         args.putString("storeWebSite", deal.getStoreAbstract());
         args.putString("dealName", deal.getDealAbstract());
         args.putString("dealDescription", deal.getDealDescription());
@@ -137,20 +144,13 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         ivCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                try {
-//                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-//                    callIntent.setData(Uri.parse("tel:"+txtPhn.getText().toString()));
-//                    startActivity(callIntent);
-//                } catch (ActivityNotFoundException activityException) {
-//                    Log.e("Calling a Phone Number", "Call failed", activityException);
-//                }
-                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+                callStorePhoneNumberIfWeHaveOrCanGetPermission();
             }
         });
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+                callStorePhoneNumberIfWeHaveOrCanGetPermission();
             }
         });
 
@@ -172,22 +172,66 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         ivWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String storeWebSite = getArguments().getString("storeWebSite");
-                if (storeWebSite != null) {
-                    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(storeWebSite)));
-                }
+                goToStoreWebsite();
             }
         });
         btnWeb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String storeWebSite = getArguments().getString("storeWebSite");
-                if (storeWebSite != null) {
-                    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(storeWebSite)));
-                }
+                goToStoreWebsite();
             }
         });
+    }
 
+    private void callStorePhoneNumberIfWeHaveOrCanGetPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.CALL_PHONE);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            // if we already have permission, go ahead and call
+            callStorePhoneNumber();
+        } else {
+            // if we don't have permission, and it's an Android M phone,
+            // request permission
+            requestPermissions(new String[] { Manifest.permission.CALL_PHONE },
+                    Constants.MY_PERMISSIONS_REQUEST_CALL_PHONE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            // the callback from asking permission on an Android M phone
+            case Constants.MY_PERMISSIONS_REQUEST_CALL_PHONE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, go ahead and call
+                    callStorePhoneNumber();
+                }
+                return;
+            }
+        }
+    }
+
+    private void callStorePhoneNumber() {
+        // once we have permission, go ahead and make the call
+        String storePhone = getArguments().getString("storePhoneNumber");
+        if (storePhone != null) {
+            try {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse("tel:" + storePhone));
+                startActivity(callIntent);
+            } catch (ActivityNotFoundException activityException) {
+                Log.e("Calling a Phone Number", "Call failed", activityException);
+            }
+        }
+    }
+
+    private void goToStoreWebsite() {
+        String storeWeb = getArguments().getString("storeWebSite");
+        if (storeWeb != null) {
+            startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(storeWeb)));
+        }
     }
 
 }
