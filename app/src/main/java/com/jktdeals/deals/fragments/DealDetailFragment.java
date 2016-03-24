@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         }
         args.putString("dealValue", deal.getDealValue());
         args.putString("storeName", deal.getStoreName());
+        args.putString("storeWebSite", deal.getStoreAbstract());
         args.putString("dealName", deal.getDealAbstract());
         args.putString("dealDescription", deal.getDealDescription());
         args.putString("dealRestrictions", deal.getDealRestrictions());
@@ -70,6 +72,12 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         TextView tvDealExpiration = (TextView) view.findViewById(R.id.tvDealExpiration);
         ImageView ivYelpLogo = (ImageView) view.findViewById(R.id.ivYelpLogo);
         ImageView ivYelpRating = (ImageView) view.findViewById(R.id.ivYelpRating);
+        Button btnCall = (Button) view.findViewById(R.id.btnCall);
+        ImageView ivCall = (ImageView) view.findViewById(R.id.ivCall);
+        Button btnMap = (Button) view.findViewById(R.id.btnMap);
+        ImageView ivMap = (ImageView) view.findViewById(R.id.ivMap);
+        Button btnWeb = (Button) view.findViewById(R.id.btnWeb);
+        ImageView ivWeb = (ImageView) view.findViewById(R.id.ivWeb);
 
         // get values from bundle
 
@@ -80,7 +88,14 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
             Picasso.with(getContext()).load(uriString).fit().centerCrop().into(ivDealImage);
         }
 
-        tvDealValue.setText(getArguments().getString("dealValue") + " off");
+        String tempValue = getArguments().getString("dealValue");
+        if (tempValue.equals("")) {
+            tvDealValue.setVisibility(View.INVISIBLE);
+        } else {
+            tvDealValue.setVisibility(View.VISIBLE);
+            tvDealValue.setText("Save " + tempValue);
+        }
+
         tvStoreName.setText(getArguments().getString("storeName"));
         tvDealName.setText(getArguments().getString("dealName"));
         tvDescription.setText(getArguments().getString("dealDescription"));
@@ -115,6 +130,61 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+            }
+        });
+
+        // Store phone
+        ivCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                try {
+//                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+//                    callIntent.setData(Uri.parse("tel:"+txtPhn.getText().toString()));
+//                    startActivity(callIntent);
+//                } catch (ActivityNotFoundException activityException) {
+//                    Log.e("Calling a Phone Number", "Call failed", activityException);
+//                }
+                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+            }
+        });
+        btnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+            }
+        });
+
+        // Store oon the map
+        ivMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+            }
+        });
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+            }
+        });
+
+        // Store website
+        ivWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String storeWebSite = getArguments().getString("storeWebSite");
+                if (storeWebSite != null) {
+                    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(storeWebSite)));
+                }
+            }
+        });
+        btnWeb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String storeWebSite = getArguments().getString("storeWebSite");
+                if (storeWebSite != null) {
+                    startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(storeWebSite)));
+                }
             }
         });
 
