@@ -83,7 +83,6 @@ public class NotificationService extends Service {
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         chatHead = new ImageView(this);
 
-        //createSampleDeals();
 
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
@@ -118,9 +117,9 @@ public class NotificationService extends Service {
                                 //createNotification();
                                 //myNewDeals.clear();
 
-                                if(dealNotificationAdapter != null){
-                                    dealNotificationAdapter.clear();
-                                }
+//                                if(dealNotificationAdapter != null){
+//                                    dealNotificationAdapter.clear();
+//                                }
 
                                 NotificationService.this.stopSelf();
                                 mHasDoubleClicked = true;
@@ -173,7 +172,7 @@ public class NotificationService extends Service {
     private void onClick() {
         try {
             initiatePopupWindow(chatHead);
-
+            //initiatePopupWindowOwnLayout(chatHead);
         } catch (Exception ex) {
             Log.v("ChatHeadSevice", ex.getMessage());
         }
@@ -186,6 +185,7 @@ public class NotificationService extends Service {
             ListPopupWindow popup = new ListPopupWindow(this);
             popup.setAnchorView(anchor);
             popup.setWidth((int) (display.getWidth() / (2.0)));
+            popup.setBackgroundDrawable(null);
             //popup.setBackgroundDrawable(R.drawable.white_round);
             //dealNotificationAdapter = new DealNotificationAdapter(getApplicationContext(), R.layout.item_deal_notification, myNewDeals);
             popup.setAdapter(dealNotificationAdapter);
@@ -220,9 +220,9 @@ public class NotificationService extends Service {
             //Toast.makeText(this, "Removing..", Toast.LENGTH_SHORT).show();
             if (chatHead != null)
             {
-//                if(dealNotificationAdapter != null){
-//                    dealNotificationAdapter.clear();
-//                }
+                if(dealNotificationAdapter != null){
+                    dealNotificationAdapter.clear();
+                }
                 //dealNotificationAdapter.clear();
                 windowManager.removeView(chatHead);
             }}

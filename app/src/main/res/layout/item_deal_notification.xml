@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_weight="0.08">
+        android:layout_weight="0.08"
+        android:background="@drawable/white_round">
 
         <ImageView
             android:layout_width="50dp"
@@ -25,19 +26,26 @@
             android:layout_marginLeft="25dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Buy 1 get 1 free"
-                android:id="@+id/tvDealTitle" />
+                android:id="@+id/tvDealTitle"
+                android:textColor="#FFFFFF"
+                android:background="#3F51B5"
+                android:layout_gravity="center_horizontal"
+                android:paddingLeft="15dp" />
 
             <TextView
-                android:layout_width="261dp"
+                android:layout_width="match_parent"
                 android:layout_height="63dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="deals description"
                 android:id="@+id/tvDealDescription"
-                android:maxLines="2" />
+                android:maxLines="2"
+                android:textColor="#000000"
+                android:background="#AAFFFFFF"
+                android:paddingLeft="15dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
