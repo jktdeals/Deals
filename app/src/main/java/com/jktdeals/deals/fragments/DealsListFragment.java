@@ -52,7 +52,7 @@ public abstract class DealsListFragment extends Fragment {
         rvDeals.setLayoutManager(gridLayoutManager);
 
         // hook up listener for tap delete icon to delete,
-        // and also deal tap to view/hide deal detail
+        // and also deal tap to bring up deal detail fragment
         adapter.setOnItemClickListener(new DealsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
@@ -112,7 +112,7 @@ public abstract class DealsListFragment extends Fragment {
 //                        tvDealRestrictions.setVisibility(View.GONE);
 //                    }
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal);
+                    DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal, position);
                     dealDetailFragment.show(fm, "fragment_deal_detail");
                 }
             }
@@ -158,4 +158,9 @@ public abstract class DealsListFragment extends Fragment {
         gridLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
+    public void focusMapOnDeal(int position) {
+        // the user tapped Map on the Deal Detail fragment
+        DealsActivity dealsActivity = (DealsActivity) getActivity();
+        dealsActivity.focusMapOnDeal(deals.get(position));
+    }
 }

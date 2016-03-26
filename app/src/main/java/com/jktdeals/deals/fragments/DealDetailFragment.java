@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jktdeals.deals.R;
+import com.jktdeals.deals.activities.DealsActivity;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.utility.Constants;
 import com.jktdeals.deals.utility.ExpirationDate;
@@ -30,7 +31,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         // Required empty public constructor
     }
 
-    public static DealDetailFragment newInstance(DealModel deal) {
+    public static DealDetailFragment newInstance(DealModel deal, int position) {
         DealDetailFragment dealDetailFragment = new DealDetailFragment();
         Bundle args = new Bundle();
         ParseFile dealPhoto = deal.getDealPic();
@@ -52,6 +53,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         args.putString("dealExpirationDate", deal.getDealExpiry());
         args.putString("dealYelpUrl", deal.getDealYelpMobileUrl());
         args.putString("dealYelpRatingImageUrl", deal.getDealYelpRatingImageUrl());
+        args.putInt("position", position);
         dealDetailFragment.setArguments(args);
         return dealDetailFragment;
     }
@@ -158,13 +160,13 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         ivMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+                focusMapOnDeal();
             }
         });
         btnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(getArguments().getString("dealYelpUrl"))));
+                focusMapOnDeal();
             }
         });
 
@@ -225,6 +227,32 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
                 Log.e("Calling a Phone Number", "Call failed", activityException);
             }
         }
+    }
+
+    private void focusMapOnDeal() {
+        // find out which tab/fragment is active, and tell it which deal to focus the map on
+        int whichDeal = getArguments().getInt("position");
+        DealsActivity dealsActivity = (DealsActivity) getActivity();
+        switch(dealsActivity.viewPager.getCurrentItem()) {
+            case 0:
+                NearMeFragment nearMeFragment = (NearMeFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(0);
+                nearMeFragment.focusMapOnDeal(whichDeal);
+                break;
+            case 1:
+                MyDealsFragment myDealsFragment = (MyDealsFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(1);
+                myDealsFragment.focusMapOnDeal(whichDeal);
+                break;
+            case 2:
+                FavoritesFragment favoritesFragment = (FavoritesFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(2);
+                favoritesFragment.focusMapOnDeal(whichDeal);
+                break;
+            case 3:
+                AlertsFragment alertsFragment = (AlertsFragment) dealsActivity.dealsFragmentPagerAdapter.getRegisteredFragment(3);
+                alertsFragment.focusMapOnDeal(whichDeal);
+                break;
+        }
+        // and close the Deal Detail fragment
+        getDialog().dismiss();
     }
 
     private void goToStoreWebsite() {
