@@ -111,7 +111,8 @@ public class NearMeFragment extends DealsListFragment implements
         }
     }
 
-    private void focusMapCamara(DealModel deal){
+    public void focusMapCamara(DealModel deal){
+        // if the user tapped Map in the Deal Detail display, focus the Near Me map on that deal
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(deal.getLatLang(), (float)14.0));
     }
 
@@ -123,7 +124,6 @@ public class NearMeFragment extends DealsListFragment implements
             //map.setMyLocationEnabled(true);
         }
     }
-
 
     // getDeals
     public void getDeals(final boolean append) {

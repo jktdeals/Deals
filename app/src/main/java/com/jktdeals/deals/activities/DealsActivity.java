@@ -150,6 +150,17 @@ public class DealsActivity extends AppCompatActivity {
         if (nearMeFragment != null) nearMeFragment.getDeals(false);
     }
 
+    public void focusMapOnDeal(DealModel deal) {
+        // the user tapped Map on the Deal Detail fragment
+        // switch to the Near Me tab if it's not already selected
+        if (viewPager.getCurrentItem() != 0) {
+            viewPager.setCurrentItem(0);
+        }
+        NearMeFragment nearMeFragment = (NearMeFragment) dealsFragmentPagerAdapter.getRegisteredFragment(0);
+        // and focus the map on the deal the user had selected for Deal Detail
+        nearMeFragment.focusMapCamara(deal);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
