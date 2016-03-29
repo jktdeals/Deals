@@ -39,7 +39,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:id="@+id/ivDealImage"
-            android:src="@drawable/deals_logo"
+            android:src="@drawable/add_photo_placeholder"
             android:background="@drawable/white_round"
             android:clickable="true"/>
 

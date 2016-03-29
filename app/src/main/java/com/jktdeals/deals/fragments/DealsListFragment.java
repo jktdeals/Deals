@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.jktdeals.deals.R;
@@ -59,10 +58,10 @@ public abstract class DealsListFragment extends Fragment {
                 // get the deal
                 final DealModel deal = (DealModel) deals.get(position);
                 // if the delete icon was clicked
-                if (view instanceof ImageView) {
+                if (view.getTag().equals("Delete")) {
                     // diaplay an "Are you sure you want to delete ... " dialog
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle(R.string.app_name);
+                    builder.setTitle(R.string.delete_deal);
                     builder.setMessage("Are you sure you want to delete your deal \"" + deal.getDealAbstract() + "\"?");
                     builder.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
@@ -100,17 +99,8 @@ public abstract class DealsListFragment extends Fragment {
                     });
                     builder.show();
                 } else {
-                    // if  they tapped the deal but not the delete icon,
-                    // then display or hide the additional details of the deal
-//                    TextView tvDealDescription = (TextView) view.findViewById(R.id.tvDealDescription);
-//                    TextView tvDealRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
-//                    if (tvDealDescription.getVisibility() == View.GONE) {
-//                        tvDealDescription.setVisibility(View.VISIBLE);
-//                        tvDealRestrictions.setVisibility(View.VISIBLE);
-//                    } else {
-//                        tvDealDescription.setVisibility(View.GONE);
-//                        tvDealRestrictions.setVisibility(View.GONE);
-//                    }
+                    // if they tapped the deal aside from the edit or delete icons,
+                    // bring up the deal detail fragment
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal, position);
                     dealDetailFragment.show(fm, "fragment_deal_detail");
