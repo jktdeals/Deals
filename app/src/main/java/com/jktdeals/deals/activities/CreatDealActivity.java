@@ -1,16 +1,19 @@
 package com.jktdeals.deals.activities;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.jktdeals.deals.fragments.DatePickerFragment;
 import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
+import com.jktdeals.deals.utility.Constants;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -211,7 +215,8 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
             public void onClick(DialogInterface arg0, int arg1) {
                 switch (arg1) {
                     case 0: //take picture using camera
-                        onTakePicture();
+                        // and for Android M we have to get permission first
+                        takePictureIfWeHaveOrCanGetPermission();
                         break;
 
                     case 1: //load existing photo
@@ -256,6 +261,36 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
                 onCancel();
             }
         });
+    }
+
+    public void takePictureIfWeHaveOrCanGetPermission() {
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA);
+        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            // if we already have permission, go ahead and take the photo
+            onTakePicture();
+        } else {
+            // if we don't have permission, and it's an Android M phone,
+            // request permission
+            requestPermissions(new String[] { Manifest.permission.CAMERA },
+                    Constants.MY_PERMISSIONS_CAMERA);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            // the callback from asking permission on an Android M phone
+            case Constants.MY_PERMISSIONS_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, go ahead and take the photo
+                    onTakePicture();
+                }
+                return;
+            }
+        }
     }
 
     public void onTakePicture(){

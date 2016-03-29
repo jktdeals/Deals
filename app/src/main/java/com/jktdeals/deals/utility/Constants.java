@@ -8,4 +8,7 @@ public class Constants {
     public static final String SOMETHING_WENT_WRONG = "OOPs!!! Something went wrong...";
     public static String PlacesTag = "Google Places Auto Complete";
     public static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
+    public static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 2;
+    public static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 3;
+    public static final int MY_PERMISSIONS_CAMERA = 4;
 }
