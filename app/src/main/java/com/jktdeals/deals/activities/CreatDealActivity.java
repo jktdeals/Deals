@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -272,7 +273,8 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         } else {
             // if we don't have permission, and it's an Android M phone,
             // request permission
-            requestPermissions(new String[] { Manifest.permission.CAMERA },
+            ActivityCompat.requestPermissions(this,
+                    new String[] {Manifest.permission.CAMERA},
                     Constants.MY_PERMISSIONS_CAMERA);
         }
     }
