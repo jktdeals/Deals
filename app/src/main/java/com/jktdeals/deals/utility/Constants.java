@@ -11,4 +11,6 @@ public class Constants {
     public static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 2;
     public static final int MY_PERMISSIONS_ACCESS_FINE_LOCATION = 3;
     public static final int MY_PERMISSIONS_CAMERA = 4;
+    public static final int MY_PERMISSIONS_READ_EXTERNAL_STORAGE = 5;
+    public static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 6;
 }
