@@ -1,15 +1,19 @@
 package com.jktdeals.deals.activities;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,6 +35,7 @@ import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.jktdeals.deals.services.NotificationService;
+import com.jktdeals.deals.utility.Constants;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
@@ -88,6 +93,32 @@ public class DealsActivity extends AppCompatActivity {
         // Allocate Deal List
         dealModelArrayList = new ArrayList<>();
         newDeals = new ArrayList<DealModel>();
+
+        // get location permissions from Android 6/M devices
+        getLocationPermissions();
+    }
+
+    private void getLocationPermissions() {
+        // get location permissions from Android 6/M devices
+        int permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // if we don't have permission, and it's an Android M phone,
+            // request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    Constants.MY_PERMISSIONS_ACCESS_FINE_LOCATION);
+        }
+
+        permissionCheck = ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+            // if we don't have permission, and it's an Android M phone,
+            // request permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    Constants.MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        }
     }
 
     // `onPostCreate` called when activity start-up is complete after `onStart()`
@@ -290,7 +321,7 @@ public class DealsActivity extends AppCompatActivity {
             Notification n = new Notification.Builder(this)
                     .setContentTitle("New Deals")
                     .setContentText("Touch to view New Deals")
-                    //.setSmallIcon(R.drawable.head)
+                            //.setSmallIcon(R.drawable.head)
                     .setSmallIcon(R.drawable.ic_circle_d)
                     .setContentIntent(pIntent)
                     .setAutoCancel(true)
