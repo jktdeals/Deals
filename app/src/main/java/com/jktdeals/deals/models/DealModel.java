@@ -81,7 +81,7 @@ public class DealModel extends ParseObject {
         }
     }
 
-    public void setDDealYelpRatingImageUrl(String url) {
+    public void setDealYelpRatingImageUrl(String url) {
         if (url != null) {
             put(DealYelpRatingImageUrl, url);
 
@@ -180,7 +180,7 @@ public class DealModel extends ParseObject {
     }
 
     public void setStoreAbstract(String storeAbstract) {
-        put(STORE_ABSTRACT, storeAbstract);
+        if (storeAbstract != null) put(STORE_ABSTRACT, storeAbstract);
     }
 
     public String getStoreName() {

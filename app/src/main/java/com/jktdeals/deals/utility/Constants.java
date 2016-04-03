@@ -13,4 +13,5 @@ public class Constants {
     public static final int MY_PERMISSIONS_CAMERA = 4;
     public static final int MY_PERMISSIONS_READ_EXTERNAL_STORAGE = 5;
     public static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 6;
+    public static final int MY_PERMISSIONS_DRAW_OVERLAYS = 7;
 }

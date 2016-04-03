@@ -46,49 +46,78 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/ivDealImage"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Store Name"
+        android:textStyle="bold"
         android:textColor="#111111"
         android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/ivYelpLogo"
+        android:id="@+id/ivCategory"
+        android:layout_height="30dp"
+        android:layout_width="30dp"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ivDealImage"
+        android:layout_marginTop="6dp"
+        android:paddingRight="10dp"
+        android:src="@drawable/groceries" />
+
+    <TextView
+        android:id="@+id/tvStoreAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvStoreName"
-        android:layout_margin="10dp"
-        android:clickable="true"
-        android:src="@mipmap/yelp_logo_xsmall" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="13dp"
+        android:textColor="#444444"
+        android:text="Store Address" />
+
+    <TextView
+        android:id="@+id/tvStoreDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/tvStoreName"
+        android:paddingRight="10dp"
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/ivYelpRating"
         android:layout_width="84dp"
         android:layout_height="17dp"
-        android:layout_below="@+id/tvStoreName"
-        android:layout_toRightOf="@+id/ivYelpLogo"
-        android:layout_marginTop="15dp"
+        android:layout_below="@+id/tvStoreAddress"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="9dp"
         android:clickable="true"
         android:onClick="" />
 
-    <View
-        android:id="@+id/line1"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/ivYelpLogo"
-        android:background="#DDDDDD"
-        android:minHeight="1px" />
+    <ImageView
+        android:id="@+id/ivYelpLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvStoreAddress"
+        android:layout_toRightOf="@+id/ivYelpRating"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginBottom="8dp"
+        android:clickable="true"
+        android:src="@mipmap/yelp_logo_xsmall" />
 
     <TextView
         android:id="@+id/tvDealName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btnCall"
+        android:layout_below="@+id/ivYelpLogo"
         android:padding="10dp"
         android:ellipsize="end"
         android:lineSpacingMultiplier="1.2"
@@ -106,10 +135,9 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tvDealName"
         android:lineSpacingMultiplier="1.2"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_margin="10dp"
         android:textSize="13dp"
+        android:textColor="#444444"
         android:text="Deal description" />
 
     <TextView
@@ -120,43 +148,18 @@
         android:layout_below="@+id/tvDealDescription"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:textSize="13dp"
+        android:textColor="#444444"
         android:text="Deal restrictions" />
 
-    <TextView
-        android:id="@+id/tvDealPostedBy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvDealRestrictions"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:textSize="13dp"
-        android:text="Deal restrictions" />
-
-    <TextView
-        android:id="@+id/tvDealDistance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tvDealPostedBy"
-        android:layout_margin="10dp"
-        android:text="hkkjhkj"
-        android:visibility="invisible"
-        android:textSize="13sp" />
-
-    <TextView
-        android:id="@+id/tvDealExpiration"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/tvDealPostedBy"
-        android:textColor="@color/colorAccent"
-        android:layout_margin="10dp"
-        android:textSize="13dp"
-        android:text="Expiration" />
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/tvDealRestrictions"
+        android:background="#D7D7D7"
+        android:minHeight="1px" />
 
     <Button
         android:layout_width="wrap_content"
@@ -228,5 +231,38 @@
         android:layout_alignRight="@+id/btnWeb"
         android:gravity="center_horizontal"
         android:src="@mipmap/ic_web_site" />
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/btnCall"
+        android:background="#D7D7D7"
+        android:minHeight="1px" />
+
+    <TextView
+        android:id="@+id/tvDealPostedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/line2"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:textSize="12dp"
+        android:textColor="#444444"
+        android:text="Deal restrictions" />
+
+    <TextView
+        android:id="@+id/tvDealExpiration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/line2"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="8dp"
+        android:paddingRight="10dp"
+        android:textSize="12dp"
+        android:text="Expiration" />
 
 </RelativeLayout>

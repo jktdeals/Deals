@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -98,6 +99,7 @@ public class DealsAdapter extends
         ImageView ivEdit = viewHolder.ivEdit;
         ImageView ivDelete = viewHolder.ivDelete;
         ImageView ivDealImage = viewHolder.ivDealImage;
+        CardView cvDeal = viewHolder.cvDeal;
 
         tvStoreName.setText(deal.getStoreName());
 
@@ -196,6 +198,9 @@ public class DealsAdapter extends
             DecimalFormat myFormatter = new DecimalFormat("#.#");
             String miles = myFormatter.format(distance * 0.00062137119);
             tvDealDistance.setText(miles + "m");
+            // set the CardView tag to the distance as well, for an easy
+            // way to pass it to Deal Detail when a deal is tapped
+            cvDeal.setTag(miles + "m");
         }
 
         tvDealExpiration.setText("Exp: " + ExpirationDate.formatExpirationDate(deal.getDealExpiry()));
@@ -262,6 +267,7 @@ public class DealsAdapter extends
         public ImageView ivDelete;
         public ParseImageView ivDealImage;
         public RadioButton tvLikeButton;
+        public CardView cvDeal;
         private Context context;
 
         public ViewHolder(final View itemView) {
@@ -278,6 +284,7 @@ public class DealsAdapter extends
             this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
             this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
             this.ivDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
+            this.cvDeal = (CardView) itemView.findViewById(R.id.cvDeal);
 
             // set a click listener for when the user clicks the delete icon
             ivDelete.setOnClickListener(new View.OnClickListener() {
