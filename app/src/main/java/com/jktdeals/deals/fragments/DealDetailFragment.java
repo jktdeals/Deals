@@ -31,7 +31,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         // Required empty public constructor
     }
 
-    public static DealDetailFragment newInstance(DealModel deal, int position) {
+    public static DealDetailFragment newInstance(DealModel deal, int position, String distance) {
         DealDetailFragment dealDetailFragment = new DealDetailFragment();
         Bundle args = new Bundle();
         ParseFile dealPhoto = deal.getDealPic();
@@ -42,9 +42,21 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         } else {
             args.putString("dealImageUrl", deal.getDealYelpSnipUrl());
         }
+
         args.putString("dealValue", deal.getDealValue());
         args.putString("storeName", deal.getStoreName());
-        args.putString("storePhoneNumber", deal.getStoreDescription());
+        args.putString("storeDistance", distance);
+
+        // I have the store phone number and address in the STORE_DESCRIPTION
+        // field as a bar-delimited string
+        String[] storePhoneAndAddress = deal.getStoreDescription().split("\\|");
+        args.putString("storePhoneNumber", storePhoneAndAddress[0]);
+        if (storePhoneAndAddress.length > 1) {
+            args.putString("storeAddress", storePhoneAndAddress[1]);
+        } else {
+            args.putString("storeAddress", null);
+        }
+
         args.putString("storeWebSite", deal.getStoreAbstract());
         args.putString("dealName", deal.getDealAbstract());
         args.putString("dealDescription", deal.getDealDescription());
@@ -53,6 +65,7 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         args.putString("dealExpirationDate", deal.getDealExpiry());
         args.putString("dealYelpUrl", deal.getDealYelpMobileUrl());
         args.putString("dealYelpRatingImageUrl", deal.getDealYelpRatingImageUrl());
+        args.putString("dealCategory", deal.getCATSTRING());
         args.putInt("position", position);
         dealDetailFragment.setArguments(args);
         return dealDetailFragment;
@@ -72,8 +85,11 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         // Get fields from view
         ImageView ivDealImage = (ImageView) view.findViewById(R.id.ivDealImage);
         ImageView ivClose = (ImageView) view.findViewById(R.id.ivClose);
+        ImageView ivCategory = (ImageView) view.findViewById(R.id.ivCategory);
         TextView tvDealValue = (TextView) view.findViewById(R.id.tvDealValue);
         TextView tvStoreName = (TextView) view.findViewById(R.id.tvStoreName);
+        TextView tvStoreAddress = (TextView) view.findViewById(R.id.tvStoreAddress);
+        TextView tvStoreDistance = (TextView) view.findViewById(R.id.tvStoreDistance);
         TextView tvDealName = (TextView) view.findViewById(R.id.tvDealName);
         TextView tvDescription = (TextView) view.findViewById(R.id.tvDealDescription);
         TextView tvRestrictions = (TextView) view.findViewById(R.id.tvDealRestrictions);
@@ -105,7 +121,66 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
             tvDealValue.setText("Save " + tempValue);
         }
 
+        tempValue = getArguments().getString("storeAddress");
+        if (tempValue == null) {
+            tvStoreAddress.setVisibility(View.GONE);
+        } else {
+            // the store address is comma-delimited and even includes state, zip code,
+            // and country -- just display the first two parts
+            String[] parts = tempValue.split(",\\s");
+            tvStoreAddress.setVisibility(View.VISIBLE);
+            tvStoreAddress.setText(parts[0] + ", " + parts[1]);
+        }
+
         tvStoreName.setText(getArguments().getString("storeName"));
+        tvStoreDistance.setText(getArguments().getString("storeDistance"));
+
+        // set the category icon
+        switch(getArguments().getString("dealCategory")) {
+            case "Cafe":
+                ivCategory.setImageResource(R.drawable.coffee);
+                break;
+            case "Bar":
+                ivCategory.setImageResource(R.drawable.bar);
+                break;
+            case "Restaurant":
+                ivCategory.setImageResource(R.drawable.restaurant);
+                break;
+            case "Hotel":
+                ivCategory.setImageResource(R.drawable.hotel);
+                break;
+            case "Beauty":
+                ivCategory.setImageResource(R.drawable.beauty);
+                break;
+            case "Entertainment":
+                ivCategory.setImageResource(R.drawable.entertainment);
+                break;
+            case "Pets":
+                ivCategory.setImageResource(R.drawable.pets);
+                break;
+            case "Activities":
+                ivCategory.setImageResource(R.drawable.activities);
+                break;
+            case "Massage":
+                ivCategory.setImageResource(R.drawable.massage);
+                break;
+            case "Apparel":
+                ivCategory.setImageResource(R.drawable.apparel);
+                break;
+            case "Groceries":
+                ivCategory.setImageResource(R.drawable.groceries);
+                break;
+            case "Local Services":
+                ivCategory.setImageResource(R.drawable.localservice);
+                break;
+            case "Home Services":
+                ivCategory.setImageResource(R.drawable.homeservice);
+                break;
+            case "Health":
+                ivCategory.setImageResource(R.drawable.health);
+                break;
+        };
+
         tvDealName.setText(getArguments().getString("dealName"));
         tvDescription.setText(getArguments().getString("dealDescription"));
 
@@ -115,8 +190,8 @@ public class DealDetailFragment extends android.support.v4.app.DialogFragment {
         } else {
             tvRestrictions.setText("Restrictions: " + restrictions);
         }
-        tvDealPostedBy.setText("Deal posted by " + getArguments().getString("dealPostedBy"));
-        tvDealExpiration.setText("Expiration date: " + ExpirationDate.formatExpirationDate(getArguments().getString("dealExpirationDate")));
+        tvDealPostedBy.setText("Posted by " + getArguments().getString("dealPostedBy"));
+        tvDealExpiration.setText("Exp: " + ExpirationDate.formatExpirationDate(getArguments().getString("dealExpirationDate")));
 
         Picasso.with(getContext()).load(getArguments().getString("dealYelpRatingImageUrl")).into(ivYelpRating);
 

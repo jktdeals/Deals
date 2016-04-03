@@ -1,6 +1,7 @@
 package com.jktdeals.deals.activities;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -9,7 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -94,8 +98,13 @@ public class DealsActivity extends AppCompatActivity {
         dealModelArrayList = new ArrayList<>();
         newDeals = new ArrayList<DealModel>();
 
-        // get location permissions from Android 6/M devices
-        getLocationPermissions();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // get location permissions from Android 6/M devices
+            getLocationPermissions();
+            // and with Android 6/M you also need permission to draw
+            // overlay windows like the chathead/notifications
+            getOverlayPermission();
+        }
     }
 
     private void getLocationPermissions() {
@@ -118,6 +127,15 @@ public class DealsActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     Constants.MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void getOverlayPermission() {
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, Constants.MY_PERMISSIONS_DRAW_OVERLAYS);
         }
     }
 

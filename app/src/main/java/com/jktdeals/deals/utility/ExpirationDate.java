@@ -10,16 +10,16 @@ import java.util.regex.Pattern;
 public class ExpirationDate {
 
     public static String formatExpirationDate(String expirationDate) {
-        Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d\\d$");
+        Pattern p = Pattern.compile("^\\d\\d/\\d\\d/\\d{4}$");
         Matcher m = p.matcher(expirationDate);
         if (m.matches()) {
-            // if the expiration date uses the yy/mm/dd format from Jose's
+            // if the expiration date uses the mm/dd/yyyy format from Jose's
             // CreatDealActivity, parse it
             Date date;
             long dateMillis = 0;
             date = new Date(dateMillis);
-            String yymmddFormat = "yy/MM/dd";
-            SimpleDateFormat sf = new SimpleDateFormat(yymmddFormat, Locale.ENGLISH);
+            String mmddyyyy = "MM/dd/yyyy";
+            SimpleDateFormat sf = new SimpleDateFormat(mmddyyyy, Locale.ENGLISH);
             sf.setLenient(true);
 
             try {

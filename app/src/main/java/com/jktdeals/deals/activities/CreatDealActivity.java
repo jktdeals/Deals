@@ -461,9 +461,11 @@ public class CreatDealActivity extends AppCompatActivity implements DatePickerDi
         newDeal.setDealYelpMobileUrl(yelpMobileUrl);
         newDeal.setDealYelpRating((float) yelpRating);
         newDeal.setDealYelpSnipUrl(yelpSnipUrl);
-        newDeal.setDDealYelpRatingImageUrl(yelpSmallRatingImgUrl);
+        newDeal.setDealYelpRatingImageUrl(yelpSmallRatingImgUrl);
         newDeal.setStoreAbstract(placeUri);
-        newDeal.setStoreDescription(placePhoneNumber);
+        // I'm storing both the store phone number and address in the STORE_DESCRIPTION
+        // field as a bar-delimited string
+        newDeal.setStoreDescription(placePhoneNumber + "|" + placeAddress);
         newDeal.setCATSTRING(spDealCategory.getSelectedItem().toString());
         //newDeal.setCategory(getCategory(spDealCategory.getSelectedItem().toString()));
         //newDeal.setDealPic(photoUri.toString()); // or can pass photoBitmapt is already load with the pic

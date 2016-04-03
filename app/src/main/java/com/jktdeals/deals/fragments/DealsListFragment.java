@@ -102,7 +102,7 @@ public abstract class DealsListFragment extends Fragment {
                     // if they tapped the deal aside from the edit or delete icons,
                     // bring up the deal detail fragment
                     FragmentManager fm = getActivity().getSupportFragmentManager();
-                    DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal, position);
+                    DealDetailFragment dealDetailFragment = DealDetailFragment.newInstance(deal, position, view.getTag().toString());
                     dealDetailFragment.show(fm, "fragment_deal_detail");
                 }
             }
