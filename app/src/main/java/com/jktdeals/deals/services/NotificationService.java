@@ -155,7 +155,11 @@ public class NotificationService extends Service {
                                 isOnClick = false;
                             }
 
-                            isOnClick = false;
+                            // I'm assuming this was just here for testing -- I commented it out
+                            // because with Android 6/M devices ACTION_MOVE is always firing when
+                            // you tap the chathead, so this is keeping the deal info from being
+                            // displayed, when the if statement above should suffice
+                            // isOnClick = false;
 
                             break;
                     }
