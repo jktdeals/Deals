@@ -2,6 +2,7 @@ package com.jktdeals.deals.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -21,6 +22,7 @@ import com.jktdeals.deals.helpers.GPSHelper;
 import com.jktdeals.deals.models.DealModel;
 import com.jktdeals.deals.parse.ParseInterface;
 import com.jktdeals.deals.utility.ExpirationDate;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.parse.ParseImageView;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
@@ -99,6 +101,7 @@ public class DealsAdapter extends
         ImageView ivEdit = viewHolder.ivEdit;
         ImageView ivDelete = viewHolder.ivDelete;
         ImageView ivDealImage = viewHolder.ivDealImage;
+        RoundedImageView ivDealCategory = viewHolder.ivDealCategory;
         CardView cvDeal = viewHolder.cvDeal;
 
         tvStoreName.setText(deal.getStoreName());
@@ -171,6 +174,55 @@ public class DealsAdapter extends
             tvDealValue.setVisibility(View.VISIBLE);
             tvDealValue.setText("Save " + tempValue);
         }
+
+        ivDealCategory.mutateBackground(true);
+        ivDealCategory.setOval(true);
+        ivDealCategory.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        // set the category icon
+        switch(deal.getCATSTRING()) {
+            case "Cafe":
+                ivDealCategory.setImageResource(R.drawable.coffee);
+                break;
+            case "Bar":
+                ivDealCategory.setImageResource(R.drawable.bar);
+                break;
+            case "Restaurant":
+                ivDealCategory.setImageResource(R.drawable.restaurant);
+                break;
+            case "Hotel":
+                ivDealCategory.setImageResource(R.drawable.hotel);
+                break;
+            case "Beauty":
+                ivDealCategory.setImageResource(R.drawable.beauty);
+                break;
+            case "Entertainment":
+                ivDealCategory.setImageResource(R.drawable.entertainment);
+                break;
+            case "Pets":
+                ivDealCategory.setImageResource(R.drawable.pets);
+                break;
+            case "Activities":
+                ivDealCategory.setImageResource(R.drawable.activities);
+                break;
+            case "Massage":
+                ivDealCategory.setImageResource(R.drawable.massage);
+                break;
+            case "Apparel":
+                ivDealCategory.setImageResource(R.drawable.apparel);
+                break;
+            case "Groceries":
+                ivDealCategory.setImageResource(R.drawable.groceries);
+                break;
+            case "Local Services":
+                ivDealCategory.setImageResource(R.drawable.localservice);
+                break;
+            case "Home Services":
+                ivDealCategory.setImageResource(R.drawable.homeservice);
+                break;
+            case "Health":
+                ivDealCategory.setImageResource(R.drawable.health);
+                break;
+        };
 
         tvDealName.setText(deal.getDealAbstract());
 
@@ -265,6 +317,7 @@ public class DealsAdapter extends
         public ImageView ivLikes;
         public ImageView ivEdit;
         public ImageView ivDelete;
+        public RoundedImageView ivDealCategory;
         public ParseImageView ivDealImage;
         public RadioButton tvLikeButton;
         public CardView cvDeal;
@@ -284,6 +337,7 @@ public class DealsAdapter extends
             this.ivEdit = (ImageView) itemView.findViewById(R.id.ivEdit);
             this.ivDelete = (ImageView) itemView.findViewById(R.id.ivDelete);
             this.ivDealImage = (ParseImageView) itemView.findViewById(R.id.ivDealImage);
+            this.ivDealCategory = (RoundedImageView) itemView.findViewById(R.id.ivDealCategory);
             this.cvDeal = (CardView) itemView.findViewById(R.id.cvDeal);
 
             // set a click listener for when the user clicks the delete icon
