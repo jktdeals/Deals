@@ -126,6 +126,7 @@ public class MyCustomReceiver extends BroadcastReceiver {
                 String nameField = "deal" + i;
                 bundle.putString(nameField + "Abstract", newDealList.get(i).getDealAbstract());
                 bundle.putString(nameField + "Description", newDealList.get(i).getDealDescription());
+                bundle.putString(nameField + "StoreName", newDealList.get(i).getStoreName());
                 bundle.putString(nameField + "Value", newDealList.get(i).getDealValue());
                 bundle.putString(nameField + "Category", newDealList.get(i).getCATSTRING());//method to get single
 

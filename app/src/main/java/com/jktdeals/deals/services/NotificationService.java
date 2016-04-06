@@ -67,10 +67,11 @@ public class NotificationService extends Service {
                 String dealAbstract = extras.getString(nameField+"Abstract");
                 String dealValue = extras.getString(nameField+"Value");
                 String dealDescription = extras.getString(nameField+"Description");
+                String storeName = extras.getString(nameField+"StoreName");
                 String dealCathegory = extras.getString(nameField+"Category");
 
                 DealModel newDeal = pi.createDealObject(dealValue, dealAbstract, dealDescription,
-                        "", "", new LatLng(0,0), "", "", "", "", "" );
+                        "", "", new LatLng(0,0), storeName, "", "", "", "" );
                 newDeal.setCATSTRING(dealCathegory);
                 this.myNewDeals.add(newDeal);
             }

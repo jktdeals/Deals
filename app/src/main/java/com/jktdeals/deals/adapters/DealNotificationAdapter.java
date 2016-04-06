@@ -40,11 +40,11 @@ public class DealNotificationAdapter extends ArrayAdapter {
         DealModel deal = (DealModel) getItem(position);
 
         TextView tvDealTitle = (TextView) convertView.findViewById(R.id.tvDealTitle);
-        TextView tvDealDescription = (TextView) convertView.findViewById(R.id.tvDealDescription);
+        TextView tvDealStoreName = (TextView) convertView.findViewById(R.id.tvDealStoreName);
         ImageView ivDealPictureCategory = (ImageView) convertView.findViewById(R.id.ivDealPictureCategory);
         // Populate the data into the template view using the data object
         tvDealTitle.setText(deal.getDealAbstract());
-        tvDealDescription.setText(deal.getDealDescription());
+        tvDealStoreName.setText(deal.getStoreName());
         //ivDealPictureCategory.setImageResource(R.drawable.restaurant);
 
         switch (deal.getCATSTRING()){

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_create_deal"
-        android:icon="@android:drawable/ic_input_add"
+        android:icon="@drawable/ic_add"
         android:orderInCategory="100"
         android:title="Create Deal"
         app:showAsAction="always" />

@@ -310,6 +310,7 @@ public class DealsActivity extends AppCompatActivity {
                     String nameField = "deal" + i;
                     bundle.putString(nameField + "Abstract", newDeals.get(i).getDealAbstract());
                     bundle.putString(nameField + "Description", newDeals.get(i).getDealDescription());
+                    bundle.putString(nameField + "StoreName", newDeals.get(i).getStoreName());
                     bundle.putString(nameField + "Value", newDeals.get(i).getDealValue());
                     bundle.putString(nameField + "Category", newDeals.get(i).getCATSTRING());//method to get single
 
@@ -413,7 +414,7 @@ public class DealsActivity extends AppCompatActivity {
 
                 new LatLng(0, 0),
 
-                storeName, storeAbstract, storeDescription,
+                "Chipotle Mexican Grill", storeAbstract, storeDescription,
                 storeLogo, storePic
         );
 
